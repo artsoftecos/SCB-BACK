@@ -1,0 +1,36 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Proyecto SCB",
+		"_postman_id": "d570e2bc-a228-fb6a-b6da-fcbeded7cd52",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Crear solicitante",
+			"request": {
+				"url": "http://localhost:8080/applicant",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"documentNumber\": \"1014207335\",\n\t\"documentType\": {\n\t\t\"id\" : 1\n\t},\n\t\"email\" : \"walteralonso20@yahoo.com\",\n\t\"firstName\": \"Waalter\",\n\t\"secondName\": \"Javier\",\n\t\"firstLastName\": \"Alonso\",\n\t\"secondLastName\": \"Javier\",\n\t\"password\": \"hola\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
