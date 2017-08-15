@@ -31,6 +31,26 @@
 				"description": ""
 			},
 			"response": []
+		},
+		{
+			"name": "Oferente",
+			"request": {
+				"url": "",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"email\": \"wlonso\",\r\n\t\"nit\" : \"1014207335\",\r\n\t\"name\": \"walter\",\r\n\t\"address\": \"direccion\",\r\n\t\"telephone\": \"4300012\",\r\n\t\"legalRepresentative\": \"Yo\",\r\n\t\"password\": \"password\"\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }
