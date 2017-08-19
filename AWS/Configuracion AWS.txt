@@ -236,6 +236,11 @@ sudo nano catalina.out
 Problemas comunes:
 la configuracion de la bd.
 
+8. Conectar mysql.
+
+9. Conectar oracle:
+https://www.mkyong.com/spring-boot/spring-boot-spring-data-jpa-oracle-example/
+
 
 8. links:
 
