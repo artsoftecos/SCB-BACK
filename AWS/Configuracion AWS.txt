@@ -218,6 +218,7 @@ cd SCB-BACK
 git checkout development
 mvn clean install
 cp -avr /home/SCB-BACK/target/SCB-Back-1.war /opt/tomcat/webapps
+cd /opt/tomcat/webapps
 mv SCB-Back-1.war SCB-Back.war
 
 Para remover:
