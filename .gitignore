@@ -25,6 +25,6 @@ nbdist/
 
 release.properties
 application-dev.properties
-src/main/resources/application.properties
+#src/main/resources/application.properties
 .aws/credentials
 src/main/resources/application-dev.properties

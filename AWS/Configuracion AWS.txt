@@ -217,11 +217,24 @@ git clone https://github.com/artsoftecos/SCB-BACK.git
 cd SCB-BACK
 git checkout development
 mvn clean install
-cp -avr /home/SCB-BACK/target/SCB-Back-0.0.1-SNAPSHOT.war /opt/tomcat/webapps
+cp -avr /home/SCB-BACK/target/SCB-Back-1.war /opt/tomcat/webapps
+mv SCB-Back-1.war SCB-Back.war
 
 Para remover:
 rm -R SCB
-mv build SCB
+
+7.7 Desplegar aplicacion
+Ir a la direccion ip publica de la maquina y abrir en el navegador:
+http://54.198.54.100:8080
+
+7.8 Errores en despliegue
+Si la aplicacion no se logra desplegar, se puede ir a los logs en tomcat y revisarla,
+
+cd /opt/tomcat/logs 
+sudo nano catalina.out
+
+Problemas comunes:
+la configuracion de la bd.
 
 
 8. links:
