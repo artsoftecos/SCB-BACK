@@ -1,20 +1,24 @@
 package com.artsoft.scb.model.entity;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -69,6 +73,10 @@ public class Applicant {
 	@Column(name = "FechaRegistro")
 	private Timestamp dateRegister;	
 	
+	@JsonBackReference(value = "applicantDocument-applicant")
+	@OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL)
+	private Set<ApplicantDocument> applicantDocuments = new HashSet<ApplicantDocument>();
+		
 	public String getEmail() {
 		return email;
 	}
@@ -163,6 +171,14 @@ public class Applicant {
 
 	public void setDateRegister(Timestamp dateRegister) {
 		this.dateRegister = dateRegister;
+	}
+
+	public Set<ApplicantDocument> getApplicantDocuments() {
+		return applicantDocuments;
+	}
+
+	public void setApplicantDocuments(Set<ApplicantDocument> applicantDocuments) {
+		this.applicantDocuments = applicantDocuments;
 	}
 }
 

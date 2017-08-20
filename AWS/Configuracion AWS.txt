@@ -164,6 +164,14 @@ y dar click en connect (esto abre una modal.. ir a ejemplo y tomar la parte que 
 *En connection -> Data -> Auto-Login name : Colocar el user name (en este caso es el del Host, el que esta antes del "@")
 - Click en Open.
 
+7. Configurar el acceso por programacion con las credenciales:
+Para poder subir los documentos a s3, se debe autenticar y utilizar los servicios.
+Esto se hace llendo a la consola, usuarios de IAM y ver los token de seguridad, aca lo explican:
+http://docs.aws.amazon.com/es_es/cli/latest/userguide/cli-chap-getting-started.html
+
+Aca indican como obtener o configurar las credenciales obtenidas:
+http://docs.aws.amazon.com/es_es/sdk-for-java/v1/developer-guide/credentials.html
+
 
 7. Configurar maquina creada por Launch instance:
 
