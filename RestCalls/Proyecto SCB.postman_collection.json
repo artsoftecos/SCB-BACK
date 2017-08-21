@@ -35,7 +35,7 @@
 		{
 			"name": "Oferente",
 			"request": {
-				"url": "",
+				"url": "http://localhost:8080/oferent",
 				"method": "POST",
 				"header": [
 					{
@@ -145,6 +145,17 @@
 				"header": [],
 				"body": {},
 				"description": "Obtiene todos lo tipos de documento"
+			},
+			"response": []
+		},
+		{
+			"name": "- applicant - aprobar registro token",
+			"request": {
+				"url": "http://localhost:8080/applicant/welcome/[B@77a79666",
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": "recibe el token por parametro y lo aprueba"
 			},
 			"response": []
 		}
