@@ -63,9 +63,9 @@
 					"formdata": [
 						{
 							"key": "file",
-							"value": "",
 							"description": "",
-							"type": "file"
+							"type": "file",
+							"src": "Soy pdf.pdf"
 						},
 						{
 							"key": "email",
@@ -75,7 +75,7 @@
 						},
 						{
 							"key": "name",
-							"value": "Cedula",
+							"value": "Cedulas",
 							"description": "",
 							"type": "text"
 						}
@@ -134,6 +134,17 @@
 				"header": [],
 				"body": {},
 				"description": "Borra documento segun id de la bd y lo borra en  s3 tambn"
+			},
+			"response": []
+		},
+		{
+			"name": "Document type - Get all document types",
+			"request": {
+				"url": "http://localhost:8080/documentType/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Obtiene todos lo tipos de documento"
 			},
 			"response": []
 		}
