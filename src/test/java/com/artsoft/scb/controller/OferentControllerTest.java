@@ -13,10 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.artsoft.scb.model.bll.ApplicantService;
 import com.artsoft.scb.model.bll.OferentService;
-import com.artsoft.scb.model.entity.Applicant;
-import com.artsoft.scb.model.entity.DocumentType;
 import com.artsoft.scb.model.entity.Oferent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

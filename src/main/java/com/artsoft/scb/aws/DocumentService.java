@@ -5,14 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
@@ -26,9 +26,8 @@ import com.amazonaws.services.s3.transfer.Download;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
-import com.artsoft.scb.model.bll.IDocumentService;
+import com.artsoft.scb.model.bll.interfaces.IDocumentService;
 
-@Service
 public class DocumentService implements IDocumentService {
 	
 	private String domainName;
@@ -52,22 +51,26 @@ public class DocumentService implements IDocumentService {
 		this.domainName = domainName;
 	}
 	
-	public void upload(File file, String fileName, String folderName) throws AmazonServiceException, AmazonClientException, InterruptedException {
+	public void upload(File file, String fileName, String folderName, HttpServletRequest request) throws AmazonServiceException, AmazonClientException, InterruptedException {
 		String pathfile = folderName + "/"+ fileName;
-		PutObjectRequest request = new PutObjectRequest(domainName, pathfile, file);
-		Upload upload = tx.upload(request);
+		PutObjectRequest putRequest = new PutObjectRequest(domainName, pathfile, file);
+		Upload upload = tx.upload(putRequest);
 		if (!this.isFileStorageAsync) {
 			upload.waitForUploadResult();			
 		} 	
 	}
 	
-	public File get(String fileName, String folderName, String extension) throws Exception {
+	
+	public File get(String fileName, String folderName, HttpServletRequest request) throws Exception {
 		File file = null;
 		try {			
-			file = File.createTempFile(fileName, extension);	
-			String pathFile = folderName + "/" + fileName + extension;
-			GetObjectRequest request = new GetObjectRequest(domainName, pathFile);
-			Download download = tx.download(request, file);
+			String name = FilenameUtils.getBaseName(fileName);		
+			String extension = FilenameUtils.getExtension(fileName);
+			
+			file = File.createTempFile(name, "."+extension);	
+			String pathFile = folderName + "/" + fileName;
+			GetObjectRequest getRequest = new GetObjectRequest(domainName, pathFile);
+			Download download = tx.download(getRequest, file);
 			download.waitForCompletion();			
 
 			boolean success = file.exists() && file.canRead();
@@ -85,7 +88,7 @@ public class DocumentService implements IDocumentService {
 		}
 	}
 	
-	public ArrayList<String> getFiles(String folderName) throws Exception {
+	public ArrayList<String> getFiles(String folderName, HttpServletRequest request) throws Exception {
 		ArrayList<String> Files = new ArrayList<String>();
 		try {
 			ObjectListing listing = tx.getAmazonS3Client().listObjects(domainName, folderName+"/");
@@ -101,9 +104,10 @@ public class DocumentService implements IDocumentService {
 		return Files;
 	}
 
-	public void delete(String key) throws Exception {		
+	public void delete(String folderName, String fileName, HttpServletRequest request ) throws Exception {		
 		try {
-			tx.getAmazonS3Client().deleteObject(domainName,key);
+			String file = folderName + "/" + fileName;
+			tx.getAmazonS3Client().deleteObject(domainName,file);
 		}
 		catch (AmazonServiceException e) {
 			throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);

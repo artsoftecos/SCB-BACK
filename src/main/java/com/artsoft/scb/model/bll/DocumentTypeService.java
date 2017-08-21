@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.artsoft.scb.model.bll.interfaces.IDocumentTypeService;
 import com.artsoft.scb.model.dao.DocumentTypeRepository;
 import com.artsoft.scb.model.entity.DocumentType;
 

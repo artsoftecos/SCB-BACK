@@ -25,10 +25,10 @@ import com.artsoft.scb.model.entity.DocumentType;
 public class ApplicantServiceTest {
 
 	@TestConfiguration
-    static class EmployeeServiceImplTestContextConfiguration {
+    static class ApplicantServiceTestContextConfiguration {
   
         @Bean
-        public ApplicantService employeeService() {
+        public ApplicantService applicantService() {
             return new ApplicantService();
         }
     }

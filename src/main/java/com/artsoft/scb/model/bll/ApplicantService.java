@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.artsoft.scb.model.bll.interfaces.IApplicantService;
 import com.artsoft.scb.model.dao.ApplicantRepository;
 import com.artsoft.scb.model.dao.DocumentTypeRepository;
 import com.artsoft.scb.model.entity.Applicant;

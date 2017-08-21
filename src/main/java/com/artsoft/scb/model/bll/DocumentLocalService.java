@@ -1,38 +1,25 @@
 package com.artsoft.scb.model.bll;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ListObjectsRequest;
-import com.amazonaws.services.s3.model.ObjectListing;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
-import com.amazonaws.services.s3.transfer.Download;
-import com.amazonaws.services.s3.transfer.TransferManager;
-import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
-import com.amazonaws.services.s3.transfer.Upload;
+import com.artsoft.scb.model.bll.interfaces.IDocumentService;
 
-@Service
 public class DocumentLocalService implements IDocumentService {
 	
 	private String domainName;
 	private boolean isFileStorageAsync;	
-	private static TransferManager tx;
 	
 	public DocumentLocalService(@Value("#{ @environment['Document.AsyncUpload'] ?: 0 }")boolean isAsync) {
 		this.isFileStorageAsync = isAsync;
@@ -42,89 +29,75 @@ public class DocumentLocalService implements IDocumentService {
 		this.domainName = domainName;
 	}
 	
-	public void upload(File file, String fileName, String folderName) throws AmazonServiceException, AmazonClientException, InterruptedException {
-		String pathfile = folderName + "/"+ fileName;
-		PutObjectRequest request = new PutObjectRequest(domainName, pathfile, file);
-		Upload upload = tx.upload(request);
-		if (!this.isFileStorageAsync) {
-			upload.waitForUploadResult();			
-		} 	
-	}
-	
-	public File get(String fileName, String folderName, String extension) throws Exception {
-		File file = null;
+	public void upload(File file, String fileName, String folderName, HttpServletRequest request) 
+			throws AmazonServiceException, AmazonClientException, InterruptedException, IOException {	
 		try {			
-			file = File.createTempFile(fileName, extension);	
-			String pathFile = folderName + "/" + fileName + extension;
-			GetObjectRequest request = new GetObjectRequest(domainName, pathFile);
-			Download download = tx.download(request, file);
-			download.waitForCompletion();			
-
-			boolean success = file.exists() && file.canRead();
-			if (!success) {				
-				throw new Exception("It was not possible to find the requested file, exists: " + file.exists()
-						+ ", possible to read: " + file.canRead());
+			String path = request.getSession().getServletContext().getRealPath("/")+this.domainName;		
+			File folder = new File(path);
+			if (!folder.exists()) {
+				folder.mkdir(); 
 			}
-			return file;			
-		} catch (AmazonServiceException e) {			
-			throw new AmazonServiceException("error: " + e.getErrorMessage() + ", " + e.getMessage(), e);
-		} catch (FileNotFoundException e) {			
-			throw new FileNotFoundException("error: " + e.getMessage() + e.toString());
-		} catch (IOException e) {			
+			path = path +"/"+ folderName;
+			folder = new File(path);
+			if (!folder.exists()) {
+				folder.mkdir(); 
+			}
+			
+			String filePath = path + "/" + fileName;
+			byte[] bytes = Files.readAllBytes(file.toPath());
+			Path finalPath = Paths.get(filePath);
+			Files.write(finalPath, bytes);
+		}
+		catch(Exception e) {
 			throw new IOException("error: " + e.getMessage() + e.toString());
 		}
 	}
 	
-	public ArrayList<String> getFiles(String folderName) throws Exception {
-		ArrayList<String> Files = new ArrayList<String>();
-		try {
-			ObjectListing listing = tx.getAmazonS3Client().listObjects(domainName, folderName+"/");
-			for (S3ObjectSummary objectSummary : listing.getObjectSummaries()) {
-				Files.add(objectSummary.getKey());
-			}
+	public File get(String fileName, String folderName, HttpServletRequest request) 
+			throws Exception {
+		File file = null;
+		try {			
+			String path = request.getSession().getServletContext().getRealPath("/")+this.domainName+"/"+folderName;		
+			file = new File(path + "/" +fileName);
+			
+			return file;
+		} catch (Exception e) {			
+			throw new IOException("error: " + e.getMessage() + e.toString());
 		}
-		catch (AmazonServiceException e) {
-			throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);
-		} catch (Exception e) {
+	}
+	
+	public ArrayList<String> getFiles(String folderName, HttpServletRequest request) throws Exception {
+		ArrayList<String> Files = new ArrayList<String>();
+		try {			
+			String path = request.getSession().getServletContext().getRealPath("/")+this.domainName+"/"+folderName;
+			File folder = new File(path);
+			if (!folder.exists()) {
+				return Files;
+			}
+			
+			File[] files = folder.listFiles();
+			for(File file : files) {
+				Files.add(file.getName());
+			}			
+		}
+		catch (Exception e) {
 			throw new Exception("error : " + e.getMessage(), e);
 		}
 		return Files;
 	}
 
-	public void delete(String key) throws Exception {		
+	public void delete(String folderName, String fileName, HttpServletRequest request) throws Exception {		
 		try {
-			tx.getAmazonS3Client().deleteObject(domainName,key);
+			String file = folderName + "/" + fileName;
+			String path = request.getSession().getServletContext().getRealPath("/")+this.domainName+"/"+file;
+			File currentfile = new File(path);
+			if (!currentfile.exists()) {
+				throw new Exception("Archivo " + file + "no existe.");
+			}
+			currentfile.delete();			
 		}
-		catch (AmazonServiceException e) {
-			throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);
-		} catch (Exception e) {
+		catch (Exception e) {
 			throw new Exception("error : " + e.getMessage(), e);
 		}
-	}
-	
-	public void createBucket() {
-		if (tx.getAmazonS3Client().doesBucketExist(domainName) == false) {
-			tx.getAmazonS3Client().createBucket(domainName);
-		}
-	}
-
-	public ArrayList<String> getBuckets() throws Exception {
-		ArrayList<String> bucketsAndFiles = new ArrayList<String>();
-		try {
-			for (Bucket bucket : tx.getAmazonS3Client().listBuckets()) {
-				bucketsAndFiles.add(bucket.getName());
-			}
-
-			ObjectListing objectListing = tx.getAmazonS3Client().listObjects(new ListObjectsRequest().withBucketName(domainName));
-						
-			for (S3ObjectSummary objectSummary : objectListing.getObjectSummaries()) {
-				bucketsAndFiles.add(objectSummary.getKey() + "  " + "(size = " + objectSummary.getSize() + ")");
-			}
-		} catch (AmazonServiceException e) {
-			throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);
-		} catch (Exception e) {
-			throw new Exception("error : " + e.getMessage(), e);
-		}
-		return bucketsAndFiles;
 	}
 }
