@@ -20,9 +20,6 @@ public class ScbBackApplication{
 	
 	
 	public static void main(String[] args) {
-		/*AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-		 ctx.register(DocumentServiceConfig.class);
-		 ctx.refresh();*/		 
 		SpringApplication.run(ScbBackApplication.class, args);
 	}
 }

@@ -7,10 +7,12 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -72,11 +74,16 @@ public class Applicant {
 	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")	
 	@Column(name = "FechaRegistro")
 	private Timestamp dateRegister;	
+		 
+	@OneToOne(fetch=FetchType.LAZY)
+	@JsonBackReference(value = "applicant-user")	
+	@JoinColumn(name="IdUsuario")
+	private User user; 
 	
 	@JsonBackReference(value = "applicantDocument-applicant")
 	@OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL)
 	private Set<ApplicantDocument> applicantDocuments = new HashSet<ApplicantDocument>();
-		
+	
 	public String getEmail() {
 		return email;
 	}
@@ -179,6 +186,14 @@ public class Applicant {
 
 	public void setApplicantDocuments(Set<ApplicantDocument> applicantDocuments) {
 		this.applicantDocuments = applicantDocuments;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }
 

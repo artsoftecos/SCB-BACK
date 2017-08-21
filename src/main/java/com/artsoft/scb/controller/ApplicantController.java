@@ -26,6 +26,6 @@ public class ApplicantController {
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body("Solicitante creado");
+		return ResponseEntity.status(HttpStatus.OK).body("Solicitante creado, le debe llegar correo de bienvenida");
 	}
 }

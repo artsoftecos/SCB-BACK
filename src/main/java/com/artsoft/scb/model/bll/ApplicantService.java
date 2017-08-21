@@ -1,6 +1,10 @@
 package com.artsoft.scb.model.bll;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -9,13 +13,16 @@ import javax.validation.Validator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.artsoft.scb.model.bll.interfaces.IApplicantService;
 import com.artsoft.scb.model.dao.ApplicantRepository;
 import com.artsoft.scb.model.dao.DocumentTypeRepository;
+import com.artsoft.scb.model.dao.UserRepository;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.DocumentType;
+import com.artsoft.scb.model.entity.User;
 
 @Service
 public class ApplicantService implements IApplicantService {
@@ -26,11 +33,23 @@ public class ApplicantService implements IApplicantService {
 	@Autowired
 	private DocumentTypeRepository documentTypeRepository;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
 	/**
 	 * Repository of applicant.
 	 */
 	@Autowired
 	private ApplicantRepository applicantRepository;
+	
+	@Autowired
+	private HelperService helperService;
+	
+	@Value("${Email.SubjectWelcome}")
+	private String subjectWelcomeEmail;
+	
+	@Value("${Email.NameHtmlWelcome}")
+	private String pathHtmlWelcomeEmail;
 	
 	/**
 	 * Crea el solicitante
@@ -43,13 +62,46 @@ public class ApplicantService implements IApplicantService {
 		setDocumentType(applicant);
 		applicant.setDateRegister(new java.sql.Timestamp(System.currentTimeMillis()));
 		
-		Applicant applicantSaved = applicantRepository.save(applicant);
+		String token = helperService.getGeneratedToken();
+		setUser(applicant, token);		
+		Applicant applicantSaved = applicantRepository.save(applicant);		
 		if (applicantSaved == null) {
 			return false;
 		}
 		
+		sendWelcomeEmail(applicant, token);
 		return true;
 	}
+	
+	private void setUser(Applicant applicant, String token) {
+		
+		User user = new User();
+		user.setEnabled(false);
+		user.setPassword(applicant.getPassword());
+		user.setToken(token);
+		
+		user = userRepository.save(user);		
+		applicant.setUser(user);
+	}
+	
+	private void sendWelcomeEmail(Applicant applicant, String token) throws IOException {
+		String link = helperService.getBaseUrl();
+		
+		Hashtable<String, String>  parameters = new Hashtable<String, String>();
+		String name = applicant.getFirstName();
+		parameters.put("[NAME]", name);
+		parameters.put("[URLROOTSYSTEM]", link);
+		parameters.put("[TOKEN]", token);
+		
+		subjectWelcomeEmail = subjectWelcomeEmail.replace("[NAME]", name);
+		String bodyEmailToSend = helperService.getEmail(pathHtmlWelcomeEmail, parameters);
+		List<String> destinies = new ArrayList<String>();
+		destinies.add(applicant.getEmail());		
+		
+
+		//sendEmail(bodyEmailToSend, destinies)		
+	}
+	
 	
 	/**
 	 * asocia el tipo de documento al solicitante
