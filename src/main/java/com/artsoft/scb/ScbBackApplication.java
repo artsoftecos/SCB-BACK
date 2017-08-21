@@ -17,7 +17,7 @@ public class ScbBackApplication{
 
 	@GetMapping("/")
 	public String hola(){
-		return "Hola mundo!";
+		return "Artsoft rules!";
 	}
 	
 	
