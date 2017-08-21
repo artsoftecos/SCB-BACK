@@ -7,4 +7,5 @@ import com.artsoft.scb.model.entity.User;
 
 public interface UserRepository extends CrudRepository<User, String> {
 	User findByApplicant(Applicant applicant);
+	User findByToken(String token);
 }

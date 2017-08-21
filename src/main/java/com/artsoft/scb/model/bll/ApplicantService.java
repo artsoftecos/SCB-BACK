@@ -73,6 +73,22 @@ public class ApplicantService implements IApplicantService {
 		return true;
 	}
 	
+	public void approveRegisterApplicant(String token) throws Exception {
+		User user = userRepository.findByToken(token);
+		if (user == null) {
+			throw new Exception("El usuario no se encontro con ese token");
+		}
+		
+		if (user.isEnabled()) {
+			throw new Exception("El usuario ya está habilitado");
+		}
+		
+		user.setEnabled(true);
+		user.setToken(null);
+		
+		userRepository.save(user);
+	}
+	
 	private void setUser(Applicant applicant, String token) {
 		
 		User user = new User();

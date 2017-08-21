@@ -56,4 +56,15 @@ public class ApplicantControllerTest {
         		.contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
     }
+    
+    @Test
+    public void ApproveApplicant_whenApproveApplicant_thenReturnOk()
+      throws Exception {
+         
+    	Mockito.doNothing().when(applicantService).approveRegisterApplicant("12");        
+        mvc.perform(post("/applicant/welcome/12")
+        		.accept(MediaType.APPLICATION_JSON)
+        		.contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk());
+    }
 }
