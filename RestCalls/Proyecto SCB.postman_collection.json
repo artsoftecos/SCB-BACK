@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "Proyecto SCB",
-		"_postman_id": "d570e2bc-a228-fb6a-b6da-fcbeded7cd52",
+		"_postman_id": "0fd83b19-bc17-87a8-1aad-fcbfc28b6c2f",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -65,7 +65,8 @@
 							"key": "file",
 							"description": "",
 							"type": "file",
-							"src": "Soy pdf.pdf"
+							"src": "Soy pdf.pdf",
+							"value": ""
 						},
 						{
 							"key": "email",
@@ -110,7 +111,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": "trae los documentos de un aplicante"
 			},
 			"response": []
@@ -121,7 +125,10 @@
 				"url": "http://localhost:8080/applicantDocument/1",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": "obtiene un documento segun el id"
 			},
 			"response": []
@@ -132,7 +139,10 @@
 				"url": "http://localhost:8080/applicantDocument/1",
 				"method": "DELETE",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": "Borra documento segun id de la bd y lo borra en  s3 tambn"
 			},
 			"response": []
@@ -143,7 +153,10 @@
 				"url": "http://localhost:8080/documentType/",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": "Obtiene todos lo tipos de documento"
 			},
 			"response": []
@@ -151,8 +164,8 @@
 		{
 			"name": "- applicant - aprobar registro token",
 			"request": {
-				"url": "http://localhost:8080/applicant/welcome/[B@77a79666",
-				"method": "POST",
+				"url": "http://localhost:8080/applicant/welcome/[B@469dc4ba",
+				"method": "GET",
 				"header": [],
 				"body": {},
 				"description": "recibe el token por parametro y lo aprueba"
