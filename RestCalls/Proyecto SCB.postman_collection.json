@@ -35,7 +35,7 @@
 		{
 			"name": "Oferente",
 			"request": {
-				"url": "",
+				"url": "http://localhost:8080/oferent",
 				"method": "POST",
 				"header": [
 					{
@@ -49,6 +49,113 @@
 					"raw": "{\r\n\t\"email\": \"wlonso\",\r\n\t\"nit\" : \"1014207335\",\r\n\t\"name\": \"walter\",\r\n\t\"address\": \"direccion\",\r\n\t\"telephone\": \"4300012\",\r\n\t\"legalRepresentative\": \"Yo\",\r\n\t\"password\": \"password\"\r\n}"
 				},
 				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "applicantDocument - Upload document",
+			"request": {
+				"url": "http://localhost:8080/applicantDocument",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"description": "",
+							"type": "file",
+							"src": "Soy pdf.pdf"
+						},
+						{
+							"key": "email",
+							"value": "walteralonso20@yahoo.com",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Cedulas",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": "upload document"
+			},
+			"response": []
+		},
+		{
+			"name": "applicantDocument - Get documents of applicant",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/applicantDocument?email=walteralonso20@yahoo.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"applicantDocument"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "walteralonso20@yahoo.com",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "trae los documentos de un aplicante"
+			},
+			"response": []
+		},
+		{
+			"name": "applicantDocument - Get document",
+			"request": {
+				"url": "http://localhost:8080/applicantDocument/1",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "obtiene un documento segun el id"
+			},
+			"response": []
+		},
+		{
+			"name": "applicantDocument - Delete document",
+			"request": {
+				"url": "http://localhost:8080/applicantDocument/1",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": "Borra documento segun id de la bd y lo borra en  s3 tambn"
+			},
+			"response": []
+		},
+		{
+			"name": "Document type - Get all document types",
+			"request": {
+				"url": "http://localhost:8080/documentType/",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Obtiene todos lo tipos de documento"
+			},
+			"response": []
+		},
+		{
+			"name": "- applicant - aprobar registro token",
+			"request": {
+				"url": "http://localhost:8080/applicant/welcome/[B@77a79666",
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": "recibe el token por parametro y lo aprueba"
 			},
 			"response": []
 		}

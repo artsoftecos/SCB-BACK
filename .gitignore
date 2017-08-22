@@ -28,5 +28,10 @@ application-dev.properties
 src/main/resources/application.properties
 .aws/credentials
 src/main/resources/application-dev.properties
+<<<<<<< HEAD
 
 .aws
+=======
+.aws/credentials
+.aws/
+>>>>>>> 4372a7e55784c29e30f29d12d9548ea90a19389a

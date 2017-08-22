@@ -7,5 +7,5 @@ import com.artsoft.scb.model.entity.DocumentType;
 
 public interface ApplicantRepository extends CrudRepository<Applicant, String> {	
 	Applicant findByEmail(String email);
-	Applicant findByDocumentTypeAndDocumentNumber(DocumentType documentType, String documentNumber);
+	Applicant findByDocumentTypeAndDocumentNumber(DocumentType documentType, String documentNumber);	
 }

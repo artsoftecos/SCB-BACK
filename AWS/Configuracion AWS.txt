@@ -1,4 +1,18 @@
-﻿1. Publicar aplicación:
+﻿1. Descarga de AWS cLI
+Para poder configurar las llaves access_key, secret key, el cual se usa para poder usar servicios como subir archivos a S3
+dado que se necesita autenticar.
+
+puede buscar: "download aws cli for windows..":
+http://docs.aws.amazon.com/cli/latest/userguide/awscli-install-windows.html
+https://www.cyberciti.biz/faq/osx-installing-the-aws-command-line-interface-using-brew/
+
+En mac:
+https://www.clickhost.com/how-to-install-aws-cli-on-a-mac-in-3-easy-steps/
+
+Seguir las instrucciones, al final debe quedar con la variable de entorno AWSCLI apuntando a su directorio, o en dado caso
+la crea.
+
+1. Publicar aplicación:
 
 Se debe crear una instancia por Elastick beanstalk.
 El tipo debe ser "Web Server environment"
@@ -163,6 +177,14 @@ y dar click en connect (esto abre una modal.. ir a ejemplo y tomar la parte que 
 *En connection -> SSH -> Auth (Browse a la private key generada).
 *En connection -> Data -> Auto-Login name : Colocar el user name (en este caso es el del Host, el que esta antes del "@")
 - Click en Open.
+
+7. Configurar el acceso por programacion con las credenciales:
+Para poder subir los documentos a s3, se debe autenticar y utilizar los servicios.
+Esto se hace llendo a la consola, usuarios de IAM y ver los token de seguridad, aca lo explican:
+http://docs.aws.amazon.com/es_es/cli/latest/userguide/cli-chap-getting-started.html
+
+Aca indican como obtener o configurar las credenciales obtenidas:
+http://docs.aws.amazon.com/es_es/sdk-for-java/v1/developer-guide/credentials.html
 
 
 7. Configurar maquina creada por Launch instance:

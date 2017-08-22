@@ -3,6 +3,7 @@ package com.artsoft.scb.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,7 @@ public class ApplicantController {
 	
 	@Autowired
 	private ApplicantService applicantService;
-	
+		
 	@PostMapping()
 	public ResponseEntity<?> createApplicant(@RequestBody Applicant applicant) {
 		try {
@@ -26,6 +27,17 @@ public class ApplicantController {
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body("Solicitante creado");
+		return ResponseEntity.status(HttpStatus.OK).body("Solicitante creado, le debe llegar correo de bienvenida");
+	}
+	
+	@PostMapping("/welcome/{token}")
+	public ResponseEntity<?> approveApplicant(@PathVariable("token")String token) {
+		try {
+			applicantService.approveRegisterApplicant(token);			
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body("Solicitante aprovado");
 	}
 }

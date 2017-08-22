@@ -23,7 +23,7 @@ import com.artsoft.scb.model.entity.Oferent;
 	public class OferentServiceTest {
 
 		@TestConfiguration
-	    static class EmployeeServiceImplTestContextConfiguration {
+	    static class OferentServiceTestContextConfiguration {
 	  
 	        @Bean
 	        public OferentService oferentService() {
