@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.security.SecureRandom;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -52,5 +54,22 @@ public class HelperService {
 	public String getBaseUrl() {
 		return rootSystemUrl;
 	}
+	
+	 /// <summary>
+    /// Remueve todos los tags del html
+    /// </summary>
+    /// <param name="htmlText">The html text</param>
+    /// <returns>The string without the tags</returns>
+    public String RemoveHtmlTags(String htmlText)
+    {
+        if (htmlText == null || htmlText.isEmpty())
+        {
+            return htmlText;
+        }
+        
+        Pattern p = Pattern.compile("<(.|\n)*?>",
+                Pattern.DOTALL | Pattern.CASE_INSENSITIVE);
+        return p.matcher(htmlText).replaceAll("");        
+    }
 	
 }

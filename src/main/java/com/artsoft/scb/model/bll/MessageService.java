@@ -2,9 +2,9 @@ package com.artsoft.scb.model.bll;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import com.amazonaws.services.simpleemail.*;
 import com.amazonaws.services.simpleemail.model.*;
 import com.amazonaws.regions.*;
@@ -12,6 +12,9 @@ import com.amazonaws.regions.*;
 @Service
 public class MessageService implements IMessageService {
 
+	@Autowired
+	private HelperService helperService;
+	
 	// Replace sender@example.com with your "From" address.
 	// This address must be verified with Amazon SES.
 	static final String FROM = "user@goidea.com.co";
@@ -38,9 +41,10 @@ public class MessageService implements IMessageService {
 	// The subject line for the email.
 
 	@Override
-	public boolean sendMessage(String htmlBody, String textBody, List<String> destinies, String subject) throws Exception {
+	public boolean sendMessage(String htmlBody, List<String> destinies, String subject) throws Exception {
 
 		try {
+			String textBody = helperService.RemoveHtmlTags(htmlBody);			
 			AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard()
 					// Replace US_WEST_2 with the AWS Region you're using for
 					// Amazon SES.

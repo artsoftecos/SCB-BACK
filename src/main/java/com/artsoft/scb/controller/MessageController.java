@@ -22,7 +22,7 @@ public class MessageController {
 	public ResponseEntity<?> createApplicant(@RequestBody Message message) {
 		
 		try {
-			ms.sendMessage(message.getHtmlBody(), message.getTextBody(), message.getDestinies(), message.getSubject());
+			ms.sendMessage(message.getHtmlBody(), message.getDestinies(), message.getSubject());
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}

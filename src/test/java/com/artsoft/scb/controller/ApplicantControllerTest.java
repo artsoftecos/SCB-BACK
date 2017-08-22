@@ -62,7 +62,7 @@ public class ApplicantControllerTest {
       throws Exception {
          
     	Mockito.doNothing().when(applicantService).approveRegisterApplicant("12");        
-        mvc.perform(post("/applicant/welcome/12")
+        mvc.perform(get("/applicant/welcome/12")
         		.accept(MediaType.APPLICATION_JSON)
         		.contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk());
