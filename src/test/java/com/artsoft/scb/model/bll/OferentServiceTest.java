@@ -19,9 +19,10 @@ import com.artsoft.scb.model.dao.OferentRepository;
 import com.artsoft.scb.model.entity.Oferent;
 
 	//http://www.baeldung.com/spring-boot-testing
+
 	@RunWith(SpringRunner.class)
 	public class OferentServiceTest {
-
+		
 		@TestConfiguration
 	    static class OferentServiceTestContextConfiguration {
 	  
@@ -48,7 +49,7 @@ import com.artsoft.scb.model.entity.Oferent;
 	    	boolean isCreated = false;	        
 	    	Oferent alex = new Oferent();
 	    	alex.setEmail("alex@hotmail.com");    
-	    	//alex.setNit("1014207");
+	    	alex.setNit("1014207");
 	    	alex.setName("Icetex");	    	
 	        alex.setPassword("hola");
 	        
@@ -66,7 +67,7 @@ import com.artsoft.scb.model.entity.Oferent;
 	    	
 	    	boolean isCreated = false;	        
 	    	Oferent alex = new Oferent();
-	    	//alex.setEmail("alex@hotmail.com");    
+	    	alex.setEmail("alex@hotmail.com");    
 	    	alex.setNit("1014207");
 	    	alex.setName("Icetex");	    	
 	        alex.setPassword("hola");
@@ -158,5 +159,6 @@ import com.artsoft.scb.model.entity.Oferent;
 			}      
 	         assertTrue(isCreated);
 	     }    
+	    
 	}
 

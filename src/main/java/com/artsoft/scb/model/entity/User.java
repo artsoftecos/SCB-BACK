@@ -2,6 +2,7 @@ package com.artsoft.scb.model.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,20 +15,54 @@ import javax.persistence.Table;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;	
+	@Column(name = "email", unique = true, nullable = false, length = 60)
+    private String email;	
 	
 	@Column(name = "password", nullable = false, length = 60)
 	private String password;
 	
-	@Column(name = "Enabled")
+	@Column(name = "enabled", nullable = false)
 	private boolean enabled;
 	
-	@Column(name = "Token")
+	@Column(name = "token")
 	private String token;
 	
 	@OneToOne(mappedBy="user")	
 	private Applicant applicant;
+
+	@OneToOne(mappedBy="user")	
+	private Oferent offerent;
+	
+	@OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
+	private UserType userType;
+
+	
+	
+	
+	public User(String email, String password, boolean enabled) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.enabled = enabled;
+	}
+
+	public User(String email, String password, boolean enabled, UserType userType) {
+		super();
+		this.email = email;
+		this.password = password;
+		this.enabled = enabled;
+		this.userType = userType;
+	}
+	
+	public User(){}
+
+	public UserType getUserType() {
+		return userType;
+	}
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
+	}
 
 	public String getPassword() {
 		return password;
@@ -60,4 +95,20 @@ public class User {
 	public void setApplicant(Applicant applicant) {
 		this.applicant = applicant;
 	} 
+	
+	public Oferent getOfferent() {
+		return offerent;
+	}
+
+	public void setOfferent(Oferent offerent) {
+		this.offerent = offerent;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 }

@@ -14,15 +14,18 @@ import javax.validation.Validator;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.artsoft.scb.model.bll.interfaces.IApplicantService;
 import com.artsoft.scb.model.dao.ApplicantRepository;
 import com.artsoft.scb.model.dao.DocumentTypeRepository;
 import com.artsoft.scb.model.dao.UserRepository;
+import com.artsoft.scb.model.dao.UserTypeRepository;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.DocumentType;
 import com.artsoft.scb.model.entity.User;
+import com.artsoft.scb.model.entity.UserType;
 
 @Service
 public class ApplicantService implements IApplicantService {
@@ -36,6 +39,8 @@ public class ApplicantService implements IApplicantService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	@Autowired
+	private UserTypeRepository userTypeRepository;
 	/**
 	 * Repository of applicant.
 	 */
@@ -51,6 +56,7 @@ public class ApplicantService implements IApplicantService {
 	@Value("${Email.NameHtmlWelcome}")
 	private String pathHtmlWelcomeEmail;
 	
+	private final String ROLE_APLICANT = "ROLE_APLICANTE";
 	/**
 	 * Crea el solicitante
 	 * @param applicant el solicitante.
@@ -80,7 +86,7 @@ public class ApplicantService implements IApplicantService {
 		}
 		
 		if (user.isEnabled()) {
-			throw new Exception("El usuario ya está habilitado");
+			throw new Exception("El usuario ya estï¿½ habilitado");
 		}
 		
 		user.setEnabled(true);
@@ -91,12 +97,22 @@ public class ApplicantService implements IApplicantService {
 	
 	private void setUser(Applicant applicant, String token) {
 		
+		
+		
 		User user = new User();
 		user.setEnabled(false);
-		user.setPassword(applicant.getPassword());
+		user.setPassword(helperService.encryptPassword(applicant.getPassword()));
 		user.setToken(token);
+		user.setEmail(applicant.getEmail());
+		//user.setUserType(userType);
 		
 		user = userRepository.save(user);		
+			
+		UserType userType = new UserType();
+		userType.setRol(ROLE_APLICANT);
+		userType.setUser(user);
+		userType = userTypeRepository.save(userType);
+		
 		applicant.setUser(user);
 	}
 	

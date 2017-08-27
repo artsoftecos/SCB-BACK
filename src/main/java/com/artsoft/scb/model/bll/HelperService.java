@@ -2,12 +2,15 @@ package com.artsoft.scb.model.bll;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -49,8 +52,26 @@ public class HelperService {
 		return file;	
 	}
 	
+	public String encryptPassword(String password){
+		BCryptPasswordEncoder pe = new BCryptPasswordEncoder();
+		return pe.encode(password);
+	}
+	
 	public String getBaseUrl() {
 		return rootSystemUrl;
+	}
+	
+	public String returnEmail(String credentialsEncoded){
+		String [] credenciales = decode(credentialsEncoded).split(":");
+		return credenciales[0];
+	}
+	
+	/*
+	 * Decodifica una cadena en base 64
+	 */
+	private String decode(String encoded){
+		byte[] decodedValue = Base64.getDecoder().decode(encoded);  // Basic Base64 decoding
+	    return new String(decodedValue, StandardCharsets.UTF_8);		
 	}
 	
 }

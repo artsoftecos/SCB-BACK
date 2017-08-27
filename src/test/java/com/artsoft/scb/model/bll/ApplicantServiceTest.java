@@ -308,4 +308,5 @@ public class ApplicantServiceTest {
 		}      
          assertTrue(isCreated);
      }    
+     
 }
