@@ -13,6 +13,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import com.artsoft.scb.model.bll.ApplicantDocumentService;
 import com.artsoft.scb.model.entity.ApplicantDocument;
 
 @RestController
+@PreAuthorize("hasRole('ROLE_APLICANTE')")
 @RequestMapping(path = "/applicantDocument")
 public class ApplicantDocumentController {
 	
@@ -52,6 +54,7 @@ public class ApplicantDocumentController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body("Documento eliminado");
 	}
+	
 	
 	@GetMapping()
 	public ResponseEntity<?> getDocuments(String email, HttpServletRequest request) {

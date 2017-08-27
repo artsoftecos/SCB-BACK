@@ -4,7 +4,10 @@ import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -12,6 +15,7 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotEmpty;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -42,6 +46,11 @@ public class Oferent {
 	
 	@Column(name = "RepresentanteLegal")
 	private String legalRepresentative;
+	
+	@OneToOne(fetch=FetchType.LAZY)
+	@JsonBackReference(value = "offerent-user")	
+	@JoinColumn(name="IdUsuario")
+	private User user; 
 	
 	@Transient
 	private String password;
@@ -113,6 +122,13 @@ public class Oferent {
 	public void setDateRegister(Timestamp dateRegister) {
 		this.dateRegister = dateRegister;
 	}	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
 	
 }
 

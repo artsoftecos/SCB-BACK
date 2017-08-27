@@ -38,8 +38,8 @@ public class Applicant {
     @JoinColumn(name = "IdTipoDocumento")
 	private DocumentType documentType;
 	
-	@NotNull(message = "El número de documento es requerido")
-	@NotEmpty(message = "El número de documento es requerido")
+	@NotNull(message = "El numero de documento es requerido")
+	@NotEmpty(message = "El numero de documento es requerido")
 	@Column(name = "NumeroDocumento")
 	private String documentNumber;	
 	

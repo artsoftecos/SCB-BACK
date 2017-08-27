@@ -32,6 +32,7 @@ import com.artsoft.scb.model.entity.ApplicantDocument;
 
 @RunWith(SpringRunner.class)
 public class ApplicantDocumentServiceTest {
+	
 	@TestConfiguration
 	static class ApplicantDocumentServiceTestContextConfiguration {
 
@@ -69,6 +70,7 @@ public class ApplicantDocumentServiceTest {
 	/**
 	 * Repository of applicant.
 	 */
+	
 	@MockBean
 	private ApplicantRepository applicantRepository;
 
@@ -213,4 +215,5 @@ public class ApplicantDocumentServiceTest {
 			fail();
 		}
 	}
+	
 }
