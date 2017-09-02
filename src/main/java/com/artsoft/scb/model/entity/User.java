@@ -3,10 +3,7 @@ package com.artsoft.scb.model.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -31,7 +28,7 @@ public class User {
 	private Applicant applicant;
 
 	@OneToOne(mappedBy="user")	
-	private Oferent offerent;
+	private Offerer offerent;
 	
 	@OneToOne(fetch = FetchType.EAGER, mappedBy = "user")
 	private UserType userType;
@@ -96,11 +93,11 @@ public class User {
 		this.applicant = applicant;
 	} 
 	
-	public Oferent getOfferent() {
+	public Offerer getOfferent() {
 		return offerent;
 	}
 
-	public void setOfferent(Oferent offerent) {
+	public void setOfferent(Offerer offerent) {
 		this.offerent = offerent;
 	}
 

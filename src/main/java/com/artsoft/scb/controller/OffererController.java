@@ -3,6 +3,7 @@ package com.artsoft.scb.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,32 +13,34 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.artsoft.scb.model.bll.OferentService;
-import com.artsoft.scb.model.entity.Oferent;
+import com.artsoft.scb.model.bll.OffererService;
+import com.artsoft.scb.model.entity.Offerer;
 
 @RestController
-@RequestMapping(path = "/oferent")
-public class OferentController {
+@RequestMapping(path = "/offerer")
+public class OffererController {
 	
 	@Autowired
-	private OferentService oferentService;
+	private OffererService offererService;
 	
 	@PostMapping()
-	public ResponseEntity<?> createOferent(@RequestBody Oferent oferent) {
+	public ResponseEntity<?> createOferent(@RequestBody Offerer oferent) {
+		JSONObject response = new JSONObject();
 		try {
-			oferentService.createOferent(oferent);			
+			offererService.createOferent(oferent);	
+			response.put("Response", "Oferente creado.");
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body("Oferente creado");
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 	@GetMapping()
 	public ResponseEntity<?> getAllOferents() {
-		List<Oferent> oferents = new ArrayList<Oferent>();
+		List<Offerer> oferents = new ArrayList<Offerer>();
 		try {
-			oferents = oferentService.getAllOferents();			
+			oferents = offererService.getAllOferents();			
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			

@@ -1,7 +1,6 @@
 package com.artsoft.scb.model.bll;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -10,10 +9,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.artsoft.scb.model.bll.interfaces.IApplicantService;
@@ -27,7 +24,7 @@ import com.artsoft.scb.model.entity.User;
 import com.artsoft.scb.model.entity.UserType;
 
 @Service
-public class ApplicantService implements IApplicantService {
+public class ApplicantService extends ExceptionService implements IApplicantService  {
 	
 	@Autowired
 	private MessageService messageService;
@@ -84,11 +81,11 @@ public class ApplicantService implements IApplicantService {
 	public void approveRegisterApplicant(String token) throws Exception {
 		User user = userRepository.findByToken(token);
 		if (user == null) {
-			throw new Exception("El usuario no se encontro con ese token");
+			throwException("Response", "El usuario no se encontro con ese token.");			
 		}
 		
 		if (user.isEnabled()) {
-			throw new Exception("El usuario ya estï¿½ habilitado");
+			throwException("Response", "El usuario ya está habilitado.");
 		}
 		
 		user.setEnabled(true);
@@ -146,18 +143,19 @@ public class ApplicantService implements IApplicantService {
 	 * @throws Exception : lanza excepcion si alguna propiedad del solicitante no es valida.
 	 */
 	private void validateApplicant(Applicant applicant) throws Exception {
-		
+			
+		Hashtable<String, String> parameters = new Hashtable<>();
 		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
-		Set<ConstraintViolation<Applicant>> constraintViolations = validator.validate(applicant);
-
-		if (constraintViolations.size() > 0) {
-		    Set<String> violationMessages = new HashSet<String>();
-
-		    for (ConstraintViolation<Applicant> constraintViolation : constraintViolations) {
-		        violationMessages.add(constraintViolation.getPropertyPath() + ": " + constraintViolation.getMessage());
+		Set<ConstraintViolation<Object>> constraintViolations = validator.validate(applicant);
+		
+		if (constraintViolations.size() > 0) {		    
+		    for (ConstraintViolation<Object> constraintViolation : constraintViolations) {
+		    	parameters.put(constraintViolation.getPropertyPath().toString(), constraintViolation.getMessage());		    	
 		    }
-
-		    throw new RuntimeException("Applicant is not valid:\n" + StringUtils.join(violationMessages, "\n"));
+		}		
+		
+		if(parameters.values().size()>0){
+			throwException(parameters);
 		}
 		
 		ValidatePassword(applicant);
@@ -171,20 +169,16 @@ public class ApplicantService implements IApplicantService {
 	 * @throws Exception: lanza excepcion si no es valido el tipo documento.
 	 */
 	private void ValidateDocuments(Applicant applicant) throws Exception {
-		/*if (applicant.getDocumentType() == null) {
-			throw new Exception("El tipo documento es requerido.");
-		}*/
-		
 		int idDocumentType = applicant.getDocumentType().getId();
 		DocumentType documentType = documentTypeRepository.findOne(idDocumentType);
 				
 		if(documentType == null) {
-			throw new Exception("No existe ese tipo documento.");
+			throwException("documentType", "No existe ese tipo documento.");
 		}
 				
 		Applicant applicantSearched = applicantRepository.findByDocumentTypeAndDocumentNumber(documentType, applicant.getDocumentNumber());
 		if (applicantSearched != null) {
-			throw new Exception("Ya hay un aplicante con ese numero de documento y tipo documento.");
+			throwException("documentNumber", "Ya hay un aplicante con ese numero de documento y tipo documento.");
 		}
 	}
 	
@@ -197,17 +191,17 @@ public class ApplicantService implements IApplicantService {
 		
 		Applicant applicantSearched = applicantRepository.findByEmail(applicant.getEmail());
 		if (applicantSearched != null) {
-			throw new Exception("Ya hay un aplicante con ese email.");
+			throwException("email", "Ya hay un aplicante con ese email.");
 		}
 	}
 	
 	private void ValidatePassword(Applicant applicant) throws Exception {
 		if(applicant.getPassword() == null || applicant.getPassword().isEmpty()) {
-			throw new Exception("La clave es requerida.");
+			throwException("password", "La clave es requerida.");			
 		}
 		
 		if(applicant.getPassword().length() < 3) {
-			throw new Exception("La clave debe ser mayor de 3 caracteres.");
+			throwException("password", "La clave debe ser mayor de 3 caracteres.");
 		}
 	}
 }

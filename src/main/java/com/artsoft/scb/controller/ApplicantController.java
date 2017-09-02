@@ -1,5 +1,6 @@
 package com.artsoft.scb.controller;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,23 +23,27 @@ public class ApplicantController {
 		
 	@PostMapping()
 	public ResponseEntity<?> createApplicant(@RequestBody Applicant applicant) {
+		 JSONObject response = new JSONObject();
 		try {
-			applicantService.createApplicant(applicant);			
+			applicantService.createApplicant(applicant);	
+			response.put("Response", "Bienvenido, le llegará un correo para completar su registro.");
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body("Solicitante creado, le debe llegar correo de bienvenida");
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 	
 	@GetMapping("/welcome/{token}")
 	public ResponseEntity<?> approveApplicant(@PathVariable("token")String token) {
+		JSONObject response = new JSONObject();
 		try {
-			applicantService.approveRegisterApplicant(token);			
+			applicantService.approveRegisterApplicant(token);
+			response.put("Response", "Solicitante aprobado.");
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body("Solicitante aprovado");
+		return ResponseEntity.status(HttpStatus.OK).body(response);
 	}
 }
