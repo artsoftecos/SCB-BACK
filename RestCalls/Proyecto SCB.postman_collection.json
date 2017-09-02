@@ -22,11 +22,17 @@
 						"key": "Accept",
 						"value": "application/json",
 						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic MTAxNDIwNzMzNjpwYXNzd29yZA==",
+						"description": "",
+						"disabled": true
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"documentNumber\": \"1014207335\",\n\t\"documentType\": {\n\t\t\"id\" : 1\n\t},\n\t\"email\" : \"walteralonso20@yahoo.com\",\n\t\"firstName\": \"Waalter\",\n\t\"secondName\": \"Javier\",\n\t\"firstLastName\": \"Alonso\",\n\t\"secondLastName\": \"Javier\",\n\t\"password\": \"hola\"\n}"
+					"raw": "{\n\t\"documentNumber\": \"1014207335\",\n\t\"documentType\": {\n\t\t\"id\" : 1\n\t},\n\t\"email\" : \"walteralonso20@yahoo.com\",\n\t\"firstName\": \"Walter\",\n\t\"secondName\": \"Javier\",\n\t\"firstLastName\": \"Alonso\",\n\t\"secondLastName\": \"Roa\",\n\t\"password\": \"artsoft\"\n}"
 				},
 				"description": ""
 			},
@@ -35,18 +41,23 @@
 		{
 			"name": "Oferente - Crear oferente",
 			"request": {
-				"url": "http://localhost:8081/offerer",
+				"url": "http://localhost:8080/offerer",
 				"method": "POST",
 				"header": [
 					{
 						"key": "Content-Type",
 						"value": "application/json",
 						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"email\": \"walonso@psl.com.co\",\r\n\t\"nit\" : \"1014207335\",\r\n\t\"name\": \"walter\",\r\n\t\"address\": \"direccion\",\r\n\t\"telephone\": \"4300012\",\r\n\t\"legalRepresentative\": \"Yo\",\r\n\t\"password\": \"password\"\r\n}"
+					"raw": "{\r\n\t\"email\": \"walonsoeddtfeee@psl.com.co\",\r\n\t\"nit\" : \"1014207339fd5ee\",\r\n\t\"name\": \"walter\",\r\n\t\"address\": \"direccion\",\r\n\t\"telephone\": \"4300012\",\r\n\t\"legalRepresentative\": \"Yo\",\r\n\t\"password\": \"password\"\r\n}"
 				},
 				"description": ""
 			},
@@ -57,7 +68,18 @@
 			"request": {
 				"url": "http://localhost:8080/applicantDocument",
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic d2FsdGVyYWxvbnNvMjBAeWFob28uY29tOmFydHNvZnQ=",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
 				"body": {
 					"mode": "formdata",
 					"formdata": [
@@ -65,8 +87,7 @@
 							"key": "file",
 							"description": "",
 							"type": "file",
-							"src": "Soy pdf.pdf",
-							"value": ""
+							"src": "Soy pdf.pdf"
 						},
 						{
 							"key": "email",
@@ -76,7 +97,7 @@
 						},
 						{
 							"key": "name",
-							"value": "Cedulas",
+							"value": "Cedulas3",
 							"description": "",
 							"type": "text"
 						}
@@ -124,7 +145,13 @@
 			"request": {
 				"url": "http://localhost:8080/applicantDocument/1",
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": ""
@@ -136,9 +163,15 @@
 		{
 			"name": "applicantDocument - Delete document",
 			"request": {
-				"url": "http://localhost:8080/applicantDocument/1",
+				"url": "http://localhost:8080/applicantDocument/2",
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": ""
@@ -166,7 +199,13 @@
 			"request": {
 				"url": "http://localhost:8080/applicant/welcome/[B@469dc4ba",
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": ""
@@ -178,7 +217,7 @@
 		{
 			"name": "Oferente - Get Oferents",
 			"request": {
-				"url": "http://localhost:8081/offerer",
+				"url": "http://localhost:8080/offerer",
 				"method": "GET",
 				"header": [],
 				"body": {},

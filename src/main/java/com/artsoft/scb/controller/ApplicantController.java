@@ -31,7 +31,7 @@ public class ApplicantController {
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());		
 	}
 	
 	@GetMapping("/welcome/{token}")
@@ -44,6 +44,12 @@ public class ApplicantController {
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+	}
+	
+	@GetMapping()
+	public ResponseEntity<?> getApplicant() {
+		String h = "";
+		return ResponseEntity.status(HttpStatus.OK).body(h.toString());
 	}
 }

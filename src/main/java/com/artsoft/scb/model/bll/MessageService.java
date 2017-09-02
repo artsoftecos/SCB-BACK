@@ -7,10 +7,11 @@ import org.springframework.stereotype.Service;
 
 import com.amazonaws.services.simpleemail.*;
 import com.amazonaws.services.simpleemail.model.*;
+import com.artsoft.scb.model.bll.interfaces.IMessageService;
 import com.amazonaws.regions.*;
 
 @Service
-public class MessageService implements IMessageService {
+public class MessageService extends ExceptionService implements IMessageService {
 
 	@Autowired
 	private HelperService helperService;
@@ -61,12 +62,12 @@ public class MessageService implements IMessageService {
 					// configuration set
 //					.withConfigurationSetName(CONFIGSET);
 			client.sendEmail(request);
-			System.out.println("Email sent!");
-			return true;
-		} catch (Exception ex) {
+			System.out.println("Email sent!");			
+		} catch (Exception ex) {			
 			System.out.println("The email was not sent. Error message: " + ex.getMessage());
-			throw ex;
+			throwException("Response","The email was not sent. Error message: " + ex.getMessage());
 		}
+		return true;
 	}
 
 }

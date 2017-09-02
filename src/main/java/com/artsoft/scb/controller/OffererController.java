@@ -33,7 +33,7 @@ public class OffererController {
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(response);
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
 	@GetMapping()
