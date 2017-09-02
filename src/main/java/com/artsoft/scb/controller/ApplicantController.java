@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.artsoft.scb.model.bll.ApplicantService;
 import com.artsoft.scb.model.entity.Applicant;
 
+@EnableWebMvc
 @RestController
 @RequestMapping(path = "/applicant")
 public class ApplicantController {
@@ -45,11 +47,5 @@ public class ApplicantController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
-	}
-	
-	@GetMapping()
-	public ResponseEntity<?> getApplicant() {
-		String h = "";
-		return ResponseEntity.status(HttpStatus.OK).body(h.toString());
 	}
 }
