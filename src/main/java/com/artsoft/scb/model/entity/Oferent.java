@@ -55,6 +55,10 @@ public class Oferent {
 	@Transient
 	private String password;
 	
+	@Column(name = "Estado")
+	private String state;
+	
+	
 	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")	
 	@Column(name = "FechaRegistro")
 	private Timestamp dateRegister;
@@ -129,6 +133,15 @@ public class Oferent {
 	public void setUser(User user) {
 		this.user = user;
 	}
+	
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	
 }
 
