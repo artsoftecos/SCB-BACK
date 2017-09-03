@@ -37,7 +37,7 @@ public class Offerer {
 	@NotNull(message = "El nombre es requerido")
 	@NotEmpty(message = "El nombre es requerido")
 	@Column(name = "Nombre")
-	private String Name;
+	private String name;
 		
 	@Column(name = "Direccion")
 	private String address;
@@ -81,11 +81,11 @@ public class Offerer {
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public String getAddress() {

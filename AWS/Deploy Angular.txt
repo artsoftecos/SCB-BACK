@@ -1,0 +1,47 @@
+﻿https://gist.github.com/tusharbabbar/d8fc8d3448db6085bae6
+
+1. Ingresar a la maquina ec2.
+
+2. tener instalado:
+
+* instalado node js y el gestor de paquetes npm:
+	- validar si lo tiene instalado y que version: 
+		npm -v
+
+	- Instalarlo si no lo tiene:
+	sudo apt-get install npm
+	curl -sL https://deb.nodesource.com/setup | sudo bash
+	sudo apt-get install -y nodejs
+
+* Installing yoeman, grunt and bower
+npm install -g yo
+npm install -g generator-angular
+npm install -g bower grunt (-g signifies global scope)
+
+
+
+
+* instalado angular cli:
+	npm install -g @angular/cli
+	npm install -g angular-cli
+
+
+
+
+2. ejecutar los siguientes comandos:
+sudo su
+cd /home
+cd SCB-FRONT
+git checkout development
+
+
+mvn clean install
+cp -avr /home/SCB-BACK/target/SCB-Back-1.war /opt/tomcat/webapps
+cd /opt/tomcat/webapps
+mv SCB-Back-1.war SCB-Back.war
+
+
+
+	sudo apt-get update
+	sudo apt-get install nodejs
+	sudo apt-get install npm
