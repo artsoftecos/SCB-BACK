@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "EstadoOferente")
 public class OffererState {
@@ -23,6 +25,7 @@ public class OffererState {
 	private String description;
 	
 	@OneToMany(mappedBy = "offererState")
+	@JsonBackReference(value = "offererState-offerer")
 	private Set<Offerer>  offerers = new HashSet<Offerer>();;
 
 	public Integer getId() {
