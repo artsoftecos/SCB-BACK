@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.artsoft.scb.model.bll.interfaces.IDocumentService;
 
-public class DocumentLocalService implements IDocumentService {
+public class DocumentLocalService extends ExceptionService  implements IDocumentService {
 	
 	private String domainName;
 	private boolean isFileStorageAsync;	
@@ -30,7 +30,7 @@ public class DocumentLocalService implements IDocumentService {
 	}
 	
 	public void upload(File file, String fileName, String folderName, HttpServletRequest request) 
-			throws AmazonServiceException, AmazonClientException, InterruptedException, IOException {	
+			throws AmazonServiceException, AmazonClientException, InterruptedException, IOException, JSONException {	
 		try {			
 			String path = request.getSession().getServletContext().getRealPath("/")+this.domainName;		
 			File folder = new File(path);
@@ -49,7 +49,7 @@ public class DocumentLocalService implements IDocumentService {
 			Files.write(finalPath, bytes);
 		}
 		catch(Exception e) {
-			throw new IOException("error: " + e.getMessage() + e.toString());
+			throwException("Response", e.getMessage() + e.toString());
 		}
 	}
 	
@@ -58,12 +58,11 @@ public class DocumentLocalService implements IDocumentService {
 		File file = null;
 		try {			
 			String path = request.getSession().getServletContext().getRealPath("/")+this.domainName+"/"+folderName;		
-			file = new File(path + "/" +fileName);
-			
-			return file;
-		} catch (Exception e) {			
-			throw new IOException("error: " + e.getMessage() + e.toString());
+			file = new File(path + "/" +fileName);			
+		} catch (Exception e) {	
+			throwException("Response", e.getMessage() + e.toString());
 		}
+		return file;
 	}
 	
 	public ArrayList<String> getFiles(String folderName, HttpServletRequest request) throws Exception {
@@ -81,7 +80,7 @@ public class DocumentLocalService implements IDocumentService {
 			}			
 		}
 		catch (Exception e) {
-			throw new Exception("error : " + e.getMessage(), e);
+			throwException("Response", e.getMessage() + e);
 		}
 		return Files;
 	}
@@ -97,7 +96,7 @@ public class DocumentLocalService implements IDocumentService {
 			currentfile.delete();			
 		}
 		catch (Exception e) {
-			throw new Exception("error : " + e.getMessage(), e);
+			throwException("Response", e.getMessage() + e);
 		}
 	}
 }

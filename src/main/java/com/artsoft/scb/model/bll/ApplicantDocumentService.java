@@ -21,7 +21,7 @@ import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.ApplicantDocument;
 
 @Service
-public class ApplicantDocumentService {
+public class ApplicantDocumentService extends ExceptionService {
 	@Autowired
 	private IDocumentService documentService; 
 		
@@ -64,7 +64,7 @@ public class ApplicantDocumentService {
 	public void deleteDocument(Long id, HttpServletRequest request ) throws Exception {
 		ApplicantDocument document = getApplicantDocument(id);
 		if (document == null) {
-			throw new Exception("No se encontro el archivo a eliminar.");			
+			throwException("Response", "No se encontro el archivo a eliminar.");			
 		}
 		
 		documentService.delete(document.getApplicant().getEmail(), document.getFileName(), request);	
@@ -82,7 +82,7 @@ public class ApplicantDocumentService {
 		ApplicantDocument applicantDocument = getApplicantDocument(id);
 		
 		if (applicantDocument == null) {
-			throw new Exception("No se encontro el documento.");
+			throwException("Response", "No se encontro el documento.");
 		}
 		
 		File file = documentService.get(applicantDocument.getFileName(), 
@@ -131,11 +131,11 @@ public class ApplicantDocumentService {
 	
 	private void validateDocument(MultipartFile file, String email, String fileName) throws Exception {
 		if (file == null) {
-			throw new Exception("El archivo es requerido."); 
+			throwException("Response", "El archivo es requerido.");
 		}
 		
 		if (fileName == null || fileName.isEmpty()) {
-			throw new Exception("El nombre es requerido.");
+			throwException("Response", "El nombre es requerido.");
 		}
 		
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
@@ -149,12 +149,12 @@ public class ApplicantDocumentService {
 	
 	private void validateEmail(String email) throws Exception {
 		if (email == null || email.isEmpty()) {
-			throw new Exception("El email es requerido.");
+			throwException("Response", "El email es requerido.");
 		}
 		
 		Applicant applicant = applicantRepository.findByEmail(email);
 		if (applicant == null) {
-			throw new Exception("No se encontro al aplicante con email: "+ email);
+			throwException("Response", "No se encontro al aplicante con email: "+ email);
 		}
 	}
 	
@@ -163,7 +163,7 @@ public class ApplicantDocumentService {
 		long sizeInMb = sizeBytes / (1024 * 1024);
 		
 		if (sizeInMb > allowedSizeDocument) {
-			throw new Exception("El tamaño del archivo no debe ser mayor a " + allowedSizeDocument + " MB."); 
+			throwException("Response", "El tamaño del archivo no debe ser mayor a " + allowedSizeDocument + " MB.");
 		}
 	}
 	
@@ -172,17 +172,17 @@ public class ApplicantDocumentService {
 		List<ApplicantDocument> documents = getDocuments(applicant);
 		
 		if (documents.size() >= amountAllowedFiles) {
-			throw new Exception("Solo se permiten "+ amountAllowedFiles+" por persona.");
+			throwException("Response", "Solo se permiten "+ amountAllowedFiles+" por persona.");
 		}
 		
 		boolean existDocument = documents.stream().anyMatch(document -> document.getFileName().toLowerCase().equals(completeFileName.toLowerCase()));
 		if (existDocument) {
-			throw new Exception("Ese documento ya existe.");
+			throwException("Response", "Ese documento ya existe.");
 		}
 		
 		boolean existName = documents.stream().anyMatch(document -> document.getName().toLowerCase().equals(fileName.toLowerCase()));
 		if (existName) {
-			throw new Exception("Ese nombre de documento ya existe.");
+			throwException("Response", "Ese nombre de documento ya existe.");
 		}
 	}
 	
@@ -190,7 +190,7 @@ public class ApplicantDocumentService {
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
 		boolean existExtension = Arrays.asList(allowedFormats).contains(extension);
 		if (!existExtension) {
-			throw new Exception("Solo son permitidos estos formatos: " + Arrays.toString(allowedFormats) + ".");
+			throwException("Response", "Solo son permitidos estos formatos: " + Arrays.toString(allowedFormats) + ".");
 		}
 	}
 }

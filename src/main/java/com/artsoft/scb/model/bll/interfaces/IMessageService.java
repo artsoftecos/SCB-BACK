@@ -1,4 +1,4 @@
-package com.artsoft.scb.model.bll;
+package com.artsoft.scb.model.bll.interfaces;
 
 import java.util.List;
 

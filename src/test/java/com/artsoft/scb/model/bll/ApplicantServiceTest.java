@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.artsoft.scb.model.dao.ApplicantRepository;
 import com.artsoft.scb.model.dao.DocumentTypeRepository;
 import com.artsoft.scb.model.dao.UserRepository;
+import com.artsoft.scb.model.dao.UserTypeRepository;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.DocumentType;
 import com.artsoft.scb.model.entity.User;
@@ -69,6 +70,9 @@ public class ApplicantServiceTest {
     
     @MockBean
     private MessageService messageService;
+    
+    @MockBean
+	private UserTypeRepository userTypeRepository;
     
     @Before
     public void setUp() {

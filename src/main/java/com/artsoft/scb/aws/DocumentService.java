@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FilenameUtils;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
@@ -26,24 +26,28 @@ import com.amazonaws.services.s3.transfer.Download;
 import com.amazonaws.services.s3.transfer.TransferManager;
 import com.amazonaws.services.s3.transfer.TransferManagerBuilder;
 import com.amazonaws.services.s3.transfer.Upload;
+import com.artsoft.scb.model.bll.ExceptionService;
 import com.artsoft.scb.model.bll.interfaces.IDocumentService;
 
-public class DocumentService implements IDocumentService {
+public class DocumentService extends ExceptionService implements IDocumentService {
 	
 	private String domainName;
 	private boolean isFileStorageAsync;	
 	private static TransferManager tx;
 		
-	public DocumentService( @Value("#{ @environment['Document.AsyncUpload'] ?: 0 }")boolean isAsync) {
+	public DocumentService( @Value("#{ @environment['Document.AsyncUpload'] ?: 0 }")boolean isAsync) throws JSONException {
 		this.isFileStorageAsync = isAsync;
 		
 		try {
 			AmazonS3 s3Client = AmazonS3ClientBuilder.standard().withRegion(Regions.US_EAST_1).build();
 			tx = TransferManagerBuilder.standard().withS3Client(s3Client).build();			
-		} catch (Exception e) {			
-			throw new AmazonClientException("Cannot load the credentials from the credential profiles file. "
+		} catch (Exception e) {	
+			throwException("Response","Cannot load the credentials from the credential profiles file. "
 					+ "Please make sure that your credentials file is at the correct "
-					+ "location (~/.aws/credentials), and is in valid format.", e);
+					+ "location (~/.aws/credentials), and is in valid format." + e.toString());
+			/*throw new AmazonClientException("Cannot load the credentials from the credential profiles file. "
+					+ "Please make sure that your credentials file is at the correct "
+					+ "location (~/.aws/credentials), and is in valid format.", e);*/
 		}
 	}
 	
@@ -74,18 +78,23 @@ public class DocumentService implements IDocumentService {
 			download.waitForCompletion();			
 
 			boolean success = file.exists() && file.canRead();
-			if (!success) {				
-				throw new Exception("It was not possible to find the requested file, exists: " + file.exists()
+			if (!success) {		
+				throwException("Response", "It was not possible to find the requested file, exists: " + file.exists()
 						+ ", possible to read: " + file.canRead());
-			}
-			return file;			
-		} catch (AmazonServiceException e) {			
-			throw new AmazonServiceException("error: " + e.getErrorMessage() + ", " + e.getMessage(), e);
+//				throw new Exception("It was not possible to find the requested file, exists: " + file.exists()
+//						+ ", possible to read: " + file.canRead());
+			}		
+		} catch (AmazonServiceException e) {
+			throwException("Response", e.getErrorMessage() + ", " + e.getMessage());
+//			throw new AmazonServiceException("error: " + e.getErrorMessage() + ", " + e.getMessage(), e);
 		} catch (FileNotFoundException e) {			
-			throw new FileNotFoundException("error: " + e.getMessage() + e.toString());
-		} catch (IOException e) {			
-			throw new IOException("error: " + e.getMessage() + e.toString());
+			throwException("Response", e.getMessage() + e.toString());
+			//throw new FileNotFoundException("error: " + e.getMessage() + e.toString());
+		} catch (IOException e) {
+			throwException("Response", e.getMessage() + e.toString());
+			//throw new IOException("error: " + e.getMessage() + e.toString());
 		}
+		return file;	
 	}
 	
 	public ArrayList<String> getFiles(String folderName, HttpServletRequest request) throws Exception {
@@ -97,9 +106,10 @@ public class DocumentService implements IDocumentService {
 			}
 		}
 		catch (AmazonServiceException e) {
-			throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);
+			throwException("Response", e.getErrorMessage() + ", " + e.getMessage());
+			//throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);
 		} catch (Exception e) {
-			throw new Exception("error : " + e.getMessage(), e);
+			throwException("Response", e.getMessage());			
 		}
 		return Files;
 	}
@@ -110,9 +120,11 @@ public class DocumentService implements IDocumentService {
 			tx.getAmazonS3Client().deleteObject(domainName,file);
 		}
 		catch (AmazonServiceException e) {
-			throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);
+			throwException("Response", e.getErrorMessage() + ", " + e.getMessage());			
+			//throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);
 		} catch (Exception e) {
-			throw new Exception("error : " + e.getMessage(), e);
+			throwException("Response", e.getMessage());		
+			//throw new Exception("error : " + e.getMessage(), e);
 		}
 	}
 	
@@ -133,9 +145,11 @@ public class DocumentService implements IDocumentService {
 				bucketsAndFiles.add(objectSummary.getKey() + "  " + "(size = " + objectSummary.getSize() + ")");
 			}
 		} catch (AmazonServiceException e) {
-			throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);
+			throwException("Response", e.getErrorMessage() + ", " + e.getMessage());		
+			//throw new AmazonServiceException("error :" + e.getErrorMessage() + ", " + e.getMessage(), e);
 		} catch (Exception e) {
-			throw new Exception("error : " + e.getMessage(), e);
+			throwException("Response", e.getMessage());
+			//throw new Exception("error : " + e.getMessage(), e);
 		}
 		return bucketsAndFiles;
 	}

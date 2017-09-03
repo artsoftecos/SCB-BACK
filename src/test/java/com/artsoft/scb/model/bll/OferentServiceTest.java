@@ -19,8 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.artsoft.scb.model.dao.OferentRepository;
-import com.artsoft.scb.model.entity.Oferent;
+import com.artsoft.scb.model.dao.OffererRepository;
 
 //
 ////http://www.baeldung.com/spring-boot-testing

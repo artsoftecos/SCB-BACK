@@ -7,9 +7,10 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -91,5 +92,17 @@ public class HelperService {
 	private String decode(String encoded){
 		byte[] decodedValue = Base64.getDecoder().decode(encoded);  // Basic Base64 decoding
 	    return new String(decodedValue, StandardCharsets.UTF_8);		
+	}	
+	
+	public String GetConvertedJson(Hashtable<String, String> parameters) throws JSONException {		
+		
+		JSONObject json = new JSONObject();		
+		Enumeration<String> keys = parameters.keys();
+        while(keys.hasMoreElements()){
+            String key = keys.nextElement();
+            json.put(key, parameters.get(key));            
+        }
+        
+		return json.toString();
 	}	
 }

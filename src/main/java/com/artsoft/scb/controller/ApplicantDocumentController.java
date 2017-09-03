@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -35,24 +36,28 @@ public class ApplicantDocumentController {
 	
 	@PostMapping()
 	public ResponseEntity<?> uploadDocument(MultipartFile file, String email, String name, HttpServletRequest request) {
+		JSONObject response = new JSONObject();
 		try {			
 			applicantDocumentService.uploadDocument(file, name, email, request);
+			response.put("Response", "Documento almacenado");
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body("Documento almacenado");
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteDocument(@PathVariable("id")Long id, HttpServletRequest request) {
+		JSONObject response = new JSONObject();
 		try {			
 			applicantDocumentService.deleteDocument(id, request);
+			response.put("Response", "Documento eliminado");
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body("Documento eliminado");
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
 	

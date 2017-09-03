@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "Oferente")
-public class Oferent {
+public class Offerer {
 	
 	@Id	
 	@NotNull(message = "El email es requerido")

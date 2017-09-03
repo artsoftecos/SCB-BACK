@@ -1,5 +1,6 @@
 package com.artsoft.scb.controller.configuration;
 
+import org.json.JSONException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +20,7 @@ public class DocumentServiceConfig {
  
     @Bean
     @ConditionalOnProperty(name = "Document.uploadType", havingValue = "Amazon")
-    public IDocumentService cloudDocumentService() {
+    public IDocumentService cloudDocumentService() throws JSONException {
         return new DocumentService(true);
     }
    
