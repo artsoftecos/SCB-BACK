@@ -4,6 +4,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.mockito.Matchers.anyList;
+import static org.mockito.Matchers.anyString;
 
 import java.util.Properties;
 
@@ -64,6 +66,9 @@ public class ApplicantServiceTest {
     
     @MockBean
     private HelperService helperService;
+    
+    @MockBean
+    private MessageService messageService;
     
     @Before
     public void setUp() {
@@ -271,7 +276,7 @@ public class ApplicantServiceTest {
      }
     
     @Test
-    public void whenValidApplicant_thenApplicantIsSaved() {
+    public void whenValidApplicant_thenApplicantIsSaved() throws Exception {
     	
     	boolean isCreated = false;
     	DocumentType documentType = new DocumentType();
@@ -289,7 +294,7 @@ public class ApplicantServiceTest {
         user.setEnabled(false);
         user.setToken("tok");
         user.setPassword("hola");
-        
+                
         Mockito.when(documentTypeRepository.findOne(1))
           .thenReturn(documentType);        
         Mockito.when(applicantRepository.save(alex))
@@ -300,6 +305,8 @@ public class ApplicantServiceTest {
         .thenReturn("tok");
         Mockito.when(helperService.getBaseUrl())
         .thenReturn("http://localhost");
+        Mockito.when(messageService.sendMessage(anyString(), anyList(), anyString()))
+        .thenReturn(true);
         
 		try {
 			isCreated = applicantService.createApplicant(alex);

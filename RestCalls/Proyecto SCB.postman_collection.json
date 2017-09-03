@@ -1,8 +1,8 @@
 {
 	"variables": [],
 	"info": {
-		"name": "Proyecto SCB",
-		"_postman_id": "d570e2bc-a228-fb6a-b6da-fcbeded7cd52",
+		"name": "Proyecto SCB copy",
+		"_postman_id": "a9bccca0-a638-a90b-466f-9d3b01621ec1",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -33,9 +33,9 @@
 			"response": []
 		},
 		{
-			"name": "Oferente",
+			"name": "Oferente - Crear oferente",
 			"request": {
-				"url": "http://localhost:8080/oferent",
+				"url": "http://localhost:8081/oferent",
 				"method": "POST",
 				"header": [
 					{
@@ -46,7 +46,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\t\"email\": \"wlonso\",\r\n\t\"nit\" : \"1014207335\",\r\n\t\"name\": \"walter\",\r\n\t\"address\": \"direccion\",\r\n\t\"telephone\": \"4300012\",\r\n\t\"legalRepresentative\": \"Yo\",\r\n\t\"password\": \"password\"\r\n}"
+					"raw": "{\r\n\t\"email\": \"walonso@psl.com.co\",\r\n\t\"nit\" : \"1014207335\",\r\n\t\"name\": \"walter\",\r\n\t\"address\": \"direccion\",\r\n\t\"telephone\": \"4300012\",\r\n\t\"legalRepresentative\": \"Yo\",\r\n\t\"password\": \"password\"\r\n}"
 				},
 				"description": ""
 			},
@@ -65,7 +65,8 @@
 							"key": "file",
 							"description": "",
 							"type": "file",
-							"src": "Soy pdf.pdf"
+							"src": "Soy pdf.pdf",
+							"value": ""
 						},
 						{
 							"key": "email",
@@ -110,7 +111,10 @@
 				},
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": "trae los documentos de un aplicante"
 			},
 			"response": []
@@ -121,7 +125,10 @@
 				"url": "http://localhost:8080/applicantDocument/1",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": "obtiene un documento segun el id"
 			},
 			"response": []
@@ -132,7 +139,10 @@
 				"url": "http://localhost:8080/applicantDocument/1",
 				"method": "DELETE",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": "Borra documento segun id de la bd y lo borra en  s3 tambn"
 			},
 			"response": []
@@ -143,7 +153,10 @@
 				"url": "http://localhost:8080/documentType/",
 				"method": "GET",
 				"header": [],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": "Obtiene todos lo tipos de documento"
 			},
 			"response": []
@@ -151,11 +164,25 @@
 		{
 			"name": "- applicant - aprobar registro token",
 			"request": {
-				"url": "http://localhost:8080/applicant/welcome/[B@77a79666",
-				"method": "POST",
+				"url": "http://localhost:8080/applicant/welcome/[B@469dc4ba",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "recibe el token por parametro y lo aprueba"
+			},
+			"response": []
+		},
+		{
+			"name": "Oferente - Get Oferents",
+			"request": {
+				"url": "http://localhost:8081/oferent",
+				"method": "GET",
 				"header": [],
 				"body": {},
-				"description": "recibe el token por parametro y lo aprueba"
+				"description": "obtiene los oferentes"
 			},
 			"response": []
 		}

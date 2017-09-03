@@ -1,6 +1,5 @@
 package com.artsoft.scb.model.bll;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -29,6 +28,9 @@ import com.artsoft.scb.model.entity.UserType;
 
 @Service
 public class ApplicantService implements IApplicantService {
+	
+	@Autowired
+	private MessageService messageService;
 	
 	/**
 	 * Repository of document type.
@@ -96,16 +98,11 @@ public class ApplicantService implements IApplicantService {
 	}
 	
 	private void setUser(Applicant applicant, String token) {
-		
-		
-		
 		User user = new User();
 		user.setEnabled(false);
 		user.setPassword(helperService.encryptPassword(applicant.getPassword()));
 		user.setToken(token);
 		user.setEmail(applicant.getEmail());
-		//user.setUserType(userType);
-		
 		user = userRepository.save(user);		
 			
 		UserType userType = new UserType();
@@ -116,7 +113,7 @@ public class ApplicantService implements IApplicantService {
 		applicant.setUser(user);
 	}
 	
-	private void sendWelcomeEmail(Applicant applicant, String token) throws IOException {
+	private void sendWelcomeEmail(Applicant applicant, String token) throws Exception {
 		String link = helperService.getBaseUrl();
 		
 		Hashtable<String, String>  parameters = new Hashtable<String, String>();
@@ -130,8 +127,7 @@ public class ApplicantService implements IApplicantService {
 		List<String> destinies = new ArrayList<String>();
 		destinies.add(applicant.getEmail());		
 		
-
-		//sendEmail(bodyEmailToSend, destinies)		
+		messageService.sendMessage(bodyEmailToSend, destinies, subjectWelcomeEmail);
 	}
 	
 	

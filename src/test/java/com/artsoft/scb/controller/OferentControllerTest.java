@@ -1,7 +1,11 @@
 package com.artsoft.scb.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.artsoft.scb.model.bll.OferentService;
 import com.artsoft.scb.model.entity.Oferent;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 //@RunWith(SpringRunner.class)
 //@WebMvcTest(OferentController.class)
@@ -50,5 +55,23 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //        .andExpect(status().isOk());
 //    }
 //    
+//    @Test
+//    public void GetAllOferents_whenGetAllOferents_thenReturnOk()
+//      throws Exception {
+//         
+//    	List<Oferent> oferents = new ArrayList<Oferent>();
+//    	Oferent oferentOne = new Oferent();
+//		oferentOne.setName("Oferent one");
+//		oferentOne.setNit("123456");
+//		oferents.add(oferentOne);
+//		
+//		Mockito.when(oferentService.getAllOferents()).thenReturn(oferents);
+//		
+//        mvc.perform(get("/oferent")
+//        		.accept(MediaType.APPLICATION_JSON)
+//        		.contentType(MediaType.APPLICATION_JSON))
+//        .andExpect(status().isOk());
+//    }
 //}
-//
+
+

@@ -1,10 +1,16 @@
 package com.artsoft.scb.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.PathVariable;
+=======
+>>>>>>> development
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +38,7 @@ public class OferentController {
 		return ResponseEntity.status(HttpStatus.OK).body("Oferente creado");
 	}
 	
+
 	@PostMapping("/approve/{nit}")
 	public ResponseEntity<?> approveOferent(@PathVariable("nit") String nit){
 		oferentService.acceptOferent(nit);
@@ -42,6 +49,18 @@ public class OferentController {
 	public ResponseEntity<?> denyOferent(@PathVariable("nit") String nit){
 		oferentService.rejectOferent(nit);
 		return ResponseEntity.status(HttpStatus.OK).body("Oferente rechazado");
+
+	@GetMapping()
+	public ResponseEntity<?> getAllOferents() {
+		List<Oferent> oferents = new ArrayList<Oferent>();
+		try {
+			oferents = oferentService.getAllOferents();			
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(oferents);
+
 	}
 }
 

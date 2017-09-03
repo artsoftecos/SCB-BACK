@@ -1,9 +1,11 @@
 package com.artsoft.scb.model.bll;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Hashtable;
+
 import java.util.List;
 import java.util.Set;
 
@@ -125,6 +127,14 @@ public class OferentService implements IOferentService {
 	}
 		
 	/**
+	 * obtiene todos los oferentes
+	 * @return los oferentes.
+	 */
+	public List<Oferent> getAllOferents() {
+		return (ArrayList<Oferent>)oferentRepository.findAll();
+	}
+	
+	/**
 	 * Valida el oferente
 	 * @param applicant: El oferente
 	 * @throws Exception : lanza excepcion si alguna propiedad del oferente no es valida.
@@ -183,7 +193,7 @@ public class OferentService implements IOferentService {
 		if(oferent.getPassword().length() < 3) {
 			throw new Exception("La clave debe ser mayor de 3 caracteres.");
 		}
-	}
+	}	
 }
 
 	

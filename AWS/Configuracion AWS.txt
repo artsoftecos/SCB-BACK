@@ -265,6 +265,295 @@ la configuracion de la bd.
 https://www.mkyong.com/spring-boot/spring-boot-spring-data-jpa-oracle-example/
 
 
+10. Configurar https en instancia Amazon:
+
+
+11. duplicar instancias:
+se crea una image(AMI) de la instancia actual con la cual se crean otras instancias.
+- ir a EC2 
+- seleccionar la instancia -> Actions -> image -> create.
+- ir a AMIs y ya ve la imagen creada.
+
+para crear la instancia usando console:
+- ir a EC2
+- click sobre "Launch instance"
+- escoger en la parte derecha en el acordeon: "My AMIs" y escoger su imagen.
+- Configurelo: 
+** escoja el tipo de instancia q desee.
+** en security: 
+	* Network: la VPC que siemprehemos manejado. (la por default)
+	* Subnet: puede escoger alguna availability zone, o dejarla por defecto (dejarla por defecto)
+	* Auto assign IP: deafult.
+	* Role: escoja el rol ya existente o dejelo por defecto (escoga Get_AudioFiles).
+** Next hasta "Configure security group":
+Seleccione existente o que le cree uno. (escoja existente: instance-linux).
+** Review and lunch.
+** y escoja el key pair (escojer el ya existente).
+** para entrar por putty a la maquina use el usuario ubuntu.
+
+(listo con esto ya tiene otra maquina igual a la de la imagen!)
+
+para crear la instancia usando launch configuration para autoescalado:
+Siga el tutorial de abajo, solo que para el auto scalling escoja el AMI que creo.
+y ya continue con su proceso normal.
+
+
+11. Para el autoescalado:
+http://docs.aws.amazon.com/autoscaling/latest/userguide/GettingStartedTutorial.html
+
+The Auto Scaling resources that you create are tied to the region you specify and are not replicated across regions. 
+(los recursos de autoescalado se atan a una unica region y no se replican entre regiones).
+Los data centers estan en diferentes ubicaciones fisicas. Las regiones estan ampliamente dipersadas por ubicaciones
+geograficas. Cada region contiene multiples ubicaciones distintas, llamadas "availability zones"(zonas de disponibilidad), 
+las cuales son gestionadas para estar aisladas de fallas en otras zonas de disponibilidad y provean  bvarato y baja latencia en conectividad a otras zonas de disponibilidad en la misma region.
+
+http://docs.aws.amazon.com/general/latest/gr/rande.html#as_region
+Cada servicio, como lo es crear una instancia o crear una cola, puede estar replicada en regiones distintas por diferentes endpoints.
+Si en South America = https://ff en US East = https://aa
+
+Hay 2 formas:
+a. crear el launch configuration como template, indicando que el mismo cree las instancias (puede crear instancia desde 0 o a partir de imagen) y en el auto escalling group se indica las maquinas.
+b. crear el launch cnfiguration segun un tipo de instancia y en autoescalling group se le asocian las instancias 
+que se quieren asociar de las que ya se tienen creadas. (a las instancias se le da action -> add auto scalling group).
+
+Se crean 2 archivos:
+- launch configuration -> template que usa para crear la maquina.
+- auto escalling group -> las instancias que va a crear y con que criterio lo crea. (las crea nuevas o se asocian)
+
+11.1 Crear la configuracion del autoescalado
+ir al dashboard de EC2.
+11.1.1 ir a la opcion auto scalling => create auto scaling group => launch configuration.
+11.1.2 escoja Amazon machine image (AMIs) 64 bit o la que desee (ejemplo: ubuntu)
+11.1.4 esacoja el tipode instancia (t2.micro) -> next configure details.
+11.1.5 si se tiene una vpc asignela, si no el crea una, esto es para:
+Es una subred publica en cada "zona disponibilidad" en la región.
+Name = scb-autoscalling-conf
+IAM role= escoger si ya tiene uno configurado. (en este caso Get_AudioFiles).
+Advanced details=
+en IP Address Type= escoger "Assign a public IP address to every instance" .
+
+click sobre "Skip to review"
+11.1.6 En el "review" de click a "Security groups" y escoger uno existente o crear uno.
+(en este caso se escoge "instance-linux").
+
+click sobre "Create launch configuration"
+
+11.1.7 En "Key pair", la ventana emergente,
+escoja "existing key pair".
+
+
+11.2 Crear el grupo de autoescalado
+Son el grupo de las instancias EC2, aca se asocia la configuracion que se quiere para las 
+instancias y el numero de instancias a crear y debe contener siempre, ademas de la "zona de disponibilidad"
+donde sera lanzada.
+
+11.2.1
+Group name= dar un nombre (ejemplo: autoescalado-instancias)
+Group size= dar el numero de instancias a crear, eje: 2.
+Network= se selecciona VPC, porque es de Amazon (seleccione por defecto)
+asi mismo se deben seleccionar subnets. (se escoje a y d (ultima letra)).
+
+Cick sobre: "next -> configure scaling policies".
+
+http://docs.aws.amazon.com/es_es/autoscaling/latest/userguide/as-dg.pdf#as-scaling-simple-step
+(escalado dinamico)
+11.2.2 escoja la opcion:
+" Use scaling policies to adjust the capacity of this group"
+escoja:
+scale between "1" and "2" instances. sera el minimo y maximo de instancias.
+
+Name= el nombre (ejemplo: Escalado Amzon 1 a 2 instancias)
+Metric type: hay 4, se escoje cpu. (las otras son, por request al ELB, entrada de red y salida de red).
+target value: escriba 80. (indicva que cuando supere el 80% se activara esta regla de auto escalado, creando la otra instancia).
+instances need: 120 (este es el tiempo en segundos que se da para el inicio de la instancia, asi mismo para la terminacion de la instancia).
+
+click sobre "configure notification"
+
+11.2.3 crear notificacion
+
+seleccionese o creese en "create topic".
+y coloque el email donde quiere ser notificado.
+
+click sobre "close".
+
+11.3 verificar el autoescalado.
+ir a en EC2 dashboard en la parte izquierda a "Auto Scaling group"
+
+aca se observa el grupo de auto escalado.
+ 
+11.4 borrar:
+Ir al dashboard de EC2 y escojer auto scalling.
+
+Se puede eliminar:
+- el auto scaling group. (este contiene el numerode instancias para crecer.)
+- o la configuracion del templatede autoescalado. (este contiene el template que se usa para escalar en cada instancia).
+
+Borrar el scaling group:
+bajo auto scalling group -> action -> delete.
+
+Borrar launch configuration:
+bajo launch configuration -> action -> delete.
+
+
+11.5 Para probar el auto escalado:
+instale stress:
+sudo yum install stress (CENTOS, RHEL, AND FEDORA LINUX) o apt-get install stress (ubuntu)
+
+para usarlo:
+use el comando:
+stress --cpu 8 --io 4 --vm 2 --vm-bytes 128M --timeout 300s
+
+para mirar cuanta cpu se esta usando:
+top
+
+12. Crear ELB (Elastic load balancer)
+Existen 2 tipos: 
+- Application Load Balancers: http://docs.aws.amazon.com/elasticloadbalancing/latest/application/introduction.html
+- Classic Load Balancers: http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/introduction.html
+El balanceador de carga clásico es ideal para balancear el tráfico de forma sencilla en varias instancias de EC2, mientras que el balanceador de carga de aplicaciones es ideal para microservicios o arquitecturas basadas en contenedores en las que debe enrutarse el tráfico a varios servicios o balancear la carga en numerosos puertos de la misma instancia de EC2.
+
+12.1 Crear un certificado auto firmado:
+descargar open ssl: https://www.openssl.org/
+para windows: https://sourceforge.net/projects/openssl/
+
+https://github.com/Crystalnix/omaha-server/wiki/SSL-Certificate-for-Elastic-Load-Balancing
+http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https-ssl.html
+
+CORRA OPEN SSL Y GENERE EL CERTIFDICADO COMO ADMINISTRADOR (ROOT)
+
+A. saber version:
+openssl version
+
+B. Crear private key
+You need to create an RSA private key to create your certificate signing request (CSR). To create your private key, use the openssl genrsa command:
+openssl genrsa 2048 > SCB_SSL_Artsoft.pem
+(lo anterior crea el archivo SCB_SSL_Artsoft.pem)
+
+C. Crear CSR (el que se envia a CA para que lo firmen)
+(se puede presentar este problema: "Unable to load config info from /usr/local/ssl/openssl.cnf" o que no lo encuentra)
+Busque la ruta donde esta el openssl.exe y buscar el archivo openssl.cnf
+set OPENSSL_CONF=E:\OpenSSL\bin\openssl.cnf
+
+A CSR is a file you send to a certificate authority (CA) to apply for a digital server certificate. To create a CSR, use the openssl req command:
+openssl req -new -key SCB_SSL_Artsoft.pem -out csr.pem
+
+Pide los siguientes datos:
+ cuntry: CO
+ Province: Bogota
+ Locacity: Bogota
+ Organization: Artsoft
+ Unit Name: Artsoft
+ common name: Artsoft
+ email: artsoftecos@gmail.com
+ clave: artsoft
+ optional company name: artsoft
+
+You can submit the signing request to a third party for signing, or sign it yourself for development and testing. 
+Self-signed certificates can also be used for backend HTTPS between a load balancer and EC2 instances.
+(nosotros mismos vamos a certificarlo)
+
+To sign the certificate, use the openssl x509 command. The following example uses the private key from the previous step (SCB_SSL_Artsoft.pem) and the signing request (csr.pem) to create a public certificate named scb_sslpublic_artsoft.crt that is valid for 365 days :
+
+openssl x509 -req -days 365 -in csr.pem -signkey SCB_SSL_Artsoft.pem -out scb_sslpublic_artsoft.crt
+
+(si sale error como: "unable to write 'random state'", debe correrlo como administrador la consola).
+
+To use the certificate with the Windows Server platform, you must convert it to a PFX format. Use the following command to create a PFX certificate from the private key and public certificate files:
+
+openssl pkcs12 -export -out artsoft.com.pfx -inkey SCB_SSL_Artsoft.pem -in scb_sslpublic_artsoft.crt
+
+12.2 Cargar el certificado en el ELB.
+http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/configuring-https-ssl-upload.html
+
+teniendo instalado was cli y configurado con las llaves del servidor, escribir en consola:
+(ojo: cambiar:
+- name: ssl-elb
+- la llave privada: terminada en pem
+- la llave publica: terminada en crt
+- el arn, lo mapeo de nuestro beanstalk)
+
+comando:
+aws iam upload-server-certificate --server-certificate-name ssl-elb --certificate-body file://E:/llaves/scb_sslpublic_artsoft.crt --private-key file://E:/llaves/SCB_SSL_Artsoft.pem
+
+Esto es lo que responde aws en consola:
+{
+    "ServerCertificateMetadata": {
+        "ServerCertificateId": "ASCAJKMEJNUDISQ7WIQNY",
+        "ServerCertificateName": "ssl-elb",
+        "Expiration": "2018-08-27T03:47:57Z",
+        "Path": "/",
+        "Arn": "arn:aws:iam::370472337765:server-certificate/ssl-elb",
+        "UploadDate": "2017-08-27T04:16:02.194Z"
+    }
+}
+
+12.3 Para nuestro caso se creara un balanceador clásico:
+
+- ir a EC2 y en la parte izquierda seleccionar "Load balancers" y dar click sobre "Create load balancer"
+- escoger classic load balancer. (next)
+** name = scb-back-balanceador
+** Create ELB inside: escoja el vpc por defecto.
+** En la tabla agregue la configuracion a que apuntarle:
+(es una tabla donde las 2 primeras columnas son el protocolo con el cual recibe el ELB la peticion, las otras 2 
+son para indicar el protocolo con el que recibe la instancia. (en nuestro caso la instancia recibe en 8080)).
+	* Http 80 Para la instancia: si se configuro tls ahi, apuntar a https 443, sino http 8080.
+	* Https 443 Para la instancia: si se configuro tls ahi, apuntar a https 443, sino http 8080.
+- En el security group, permita que cree una nueva configuracion (para que esa quede solo aociada a los elb).
+Name= scb-elb-security
+Description: todos los ELB de SCB 
+click (next)
+- estando en "Configure security settings" escoger la opcion:
+"Choose an existing certificate from AWS Identity and Access Management (IAM)"
+(en certficate: (se debe mostrar en un combobox los certificados cargados, en nuestro caso el certificado subido en el paso anterior: ssl-elb))
+- en la parte de abajo en "Select a cipher", deje por defecto la suite que recomienda AWS.
+click en (next)
+-estando en "Configure Health check":
+	* ping protocol: HTTP (las instancias seran http, el unico https sera el ELB)
+	* ping port: 8080
+	* Ping Path: /SCB-Back/
+(el resto de configuracion por defecto).
+click (nxt)
+- estando en add EC2 insances:
+Agregue las instancias que considere.
+- review y create.
+
+
+En EC2 vaya a load balancing y en description tome el DNS, para nuestro caso es:
+https://scb-back-balanceador-820761814.us-east-1.elb.amazonaws.com/SCB-Back/
+
+
+12. Agregar un ELB al grupo de autoescalado.
+http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html
+
+- Ir a auto escalling en EC2.
+- en description del auto scalling -> click al boton "Edit "
+- En la opcion Load Balancers: seleccione el balanceador de carga creado.
+- save.
+(debe esperar un rato para que el autoscalling y el elb se asocien)
+
+12.2 las instancias solo sean accedidas por el elb
+http://docs.aws.amazon.com/elasticloadbalancing/latest/classic/elb-security-groups.html#elb-classic-security-groups
+
+en el security group de las instancias, indique:
+Custom tcp
+8080
+Custom
+sg-2c4d215c (el security group del elb), llendo a Load balancing en description buscar "Security group".
+
+lo que se tenia era:
+Custom tcp
+8080
+Custom
+0.0.0.0/0
+
+Custom tcp rule
+TCP
+8080
+Custom
+sg-6456eb15
+
+
+
 8. links:
 
 Los temas que les mostré con los links soporte de información son estos:

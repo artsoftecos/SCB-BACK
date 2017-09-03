@@ -23,10 +23,11 @@ import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.DocumentType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 //@RunWith(SpringRunner.class)
 //@WebMvcTest(ApplicantController.class)
 //public class ApplicantControllerTest {
-//	
+//
 //	@Autowired
 //    private MockMvc mvc;
 // 
@@ -62,10 +63,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //      throws Exception {
 //         
 //    	Mockito.doNothing().when(applicantService).approveRegisterApplicant("12");        
-//        mvc.perform(post("/applicant/welcome/12")
+//        mvc.perform(get("/applicant/welcome/12")
 //        		.accept(MediaType.APPLICATION_JSON)
 //        		.contentType(MediaType.APPLICATION_JSON))
 //        .andExpect(status().isOk());
 //    }
-//    
 //}
+
