@@ -16,9 +16,13 @@ import org.springframework.stereotype.Service;
 
 import com.artsoft.scb.model.bll.interfaces.IOffererService;
 import com.artsoft.scb.model.dao.OffererRepository;
+import com.artsoft.scb.model.dao.OffererStateRepository;
 import com.artsoft.scb.model.dao.UserRepository;
 import com.artsoft.scb.model.dao.UserTypeRepository;
+import com.artsoft.scb.model.entity.Applicant;
+import com.artsoft.scb.model.entity.DocumentType;
 import com.artsoft.scb.model.entity.Offerer;
+import com.artsoft.scb.model.entity.OffererState;
 import com.artsoft.scb.model.entity.User;
 import com.artsoft.scb.model.entity.UserType;
 
@@ -40,6 +44,12 @@ public class OffererService extends ExceptionService implements IOffererService 
 	@Autowired
 	private UserTypeRepository userTypeRepository;
 	
+	@Autowired
+	private OffererStateRepository offererStateRepository;
+	
+	@Autowired
+	private MessageService messageService;
+	
 	@Value("${Email.SubjectDecision}")
 	private String subjectDecisionEmail;
 	
@@ -48,6 +58,13 @@ public class OffererService extends ExceptionService implements IOffererService 
 	
 	private final String ROLE_OFERENT = "ROLE_OFERENTE";
 	
+	private final int ID_PENDING = 1;
+	
+	private final int ID_APPROVED = 2;
+	
+	private final int ID_REJECTED = 3;
+	
+	
 	/**
 	 * Crea el oferente
 	 * @param offerer el oferente.
@@ -55,7 +72,7 @@ public class OffererService extends ExceptionService implements IOffererService 
 	 */
 	public boolean createOferent(Offerer offerer) throws Exception {
 		validateOferent(offerer);
-		offerer.setState("PENDIENTE");
+		setOffererState(offerer, ID_PENDING);
 		offerer.setDateRegister(new java.sql.Timestamp(System.currentTimeMillis()));
 		setUser(offerer);
 		Offerer oferentSaved = oferentRepository.save(offerer);
@@ -88,26 +105,37 @@ public class OffererService extends ExceptionService implements IOffererService 
 		offerer.setUser(user);
 	}
 	
-	public void acceptOferent(String nit){
+	public void acceptOferent(String nit) throws Exception{
 		Offerer offerer = oferentRepository.findByNit(nit);
-		offerer.setState("APROBADO");
+		setOffererState(offerer, ID_APPROVED);
 		oferentRepository.save(offerer);
 		
 		User user = userRepository.findByEmail(offerer.getEmail());
 		user.setEnabled(true);
-		user = userRepository.save(user);		
+		user = userRepository.save(user);
+		
+		sendDecisionMessage(offerer,"Aceptada");
 	}
 	
-	public void rejectOferent(String nit){
+	public void rejectOferent(String nit) throws Exception{
 		Offerer offerer = oferentRepository.findByNit(nit);
-		offerer.setState("RECHAZADO");
+		setOffererState(offerer, ID_REJECTED);
 		oferentRepository.save(offerer);
+		
+		User user = userRepository.findByEmail(offerer.getEmail());
+		user.setEnabled(false);
+		user = userRepository.save(user);
+		
+		sendDecisionMessage(offerer,"Rechazada");
 	}	
 		
-	
-	private void sendWelcomeEmail(Offerer offerer, String decision) throws IOException {
-		String link = helperService.getBaseUrl();
+	private void setOffererState(Offerer offerer, int id) {	
+		OffererState offererState = offererStateRepository.findOne(id);
+		offerer.setOffererState(offererState);
 		
+	}
+	
+	private void sendDecisionMessage(Offerer offerer, String decision) throws Exception {
 		Hashtable<String, String>  parameters = new Hashtable<String, String>();
 		String name = offerer.getName();
 		parameters.put("[NAME]", name);
@@ -115,9 +143,8 @@ public class OffererService extends ExceptionService implements IOffererService 
 		String bodyEmailToSend = helperService.getEmail(pathHtmlDecisionEmail, parameters);
 		List<String> destinies = new ArrayList<String>();
 		destinies.add(offerer.getEmail());		
-		
-
-		//sendEmail(bodyEmailToSend, destinies)		
+		messageService.sendMessage(bodyEmailToSend, destinies, subjectDecisionEmail);
+			
 	}
 		
 	/**

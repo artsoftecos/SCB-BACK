@@ -27,3 +27,20 @@ SELECT * FROM (SELECT 'walteralonso20@yahoo.com' as correo, null as direccion, n
 WHERE NOT EXISTS (
     SELECT correo FROM scb.solicitante WHERE correo = 'walteralonso20@yahoo.com'
 ) LIMIT 1;
+------------------INSERTING OFFERENT STATES-------------------
+INSERT INTO scb.estado_oferente (descripcion)
+SELECT * FROM (SELECT 'PENDIENTE') AS tmp
+WHERE NOT EXISTS (
+    SELECT descripcion FROM scb.estado_oferente WHERE descripcion = 'PENDIENTE'
+) LIMIT 1;
+INSERT INTO scb.estado_oferente (descripcion)
+SELECT * FROM (SELECT 'APROBADO') AS tmp
+WHERE NOT EXISTS (
+    SELECT descripcion FROM scb.estado_oferente WHERE descripcion = 'APROBADO'
+) LIMIT 1;
+INSERT INTO scb.estado_oferente (descripcion)
+SELECT * FROM (SELECT 'RECHAZADO') AS tmp
+WHERE NOT EXISTS (
+    SELECT descripcion FROM scb.estado_oferente WHERE descripcion = 'RECHAZADO'
+) LIMIT 1;
+

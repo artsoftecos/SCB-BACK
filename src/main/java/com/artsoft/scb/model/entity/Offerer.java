@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -55,13 +56,13 @@ public class Offerer {
 	@Transient
 	private String password;
 	
-	@Column(name = "Estado")
-	private String state;
-	
-	
 	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")	
 	@Column(name = "FechaRegistro")
 	private Timestamp dateRegister;
+	
+	@ManyToOne
+	@JoinColumn(name = "idState")
+	private OffererState offererState;
 
 	public String getEmail() {
 		return email;
@@ -134,12 +135,12 @@ public class Offerer {
 		this.user = user;
 	}
 	
-	public String getState() {
-		return state;
+	public OffererState getOffererState() {
+		return offererState;
 	}
 
-	public void setState(String state) {
-		this.state = state;
+	public void setOffererState(OffererState offererState) {
+		this.offererState = offererState;
 	}
 
 	
