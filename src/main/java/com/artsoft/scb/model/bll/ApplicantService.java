@@ -55,7 +55,7 @@ public class ApplicantService extends ExceptionService implements IApplicantServ
 	@Value("${Email.NameHtmlWelcome}")
 	private String pathHtmlWelcomeEmail;
 	
-	private final String ROLE_APLICANT = "ROLE_APLICANTE";
+	private final String ROLE_APLICANT = "ROLE_APPLICANT";
 	/**
 	 * Crea el solicitante
 	 * @param applicant el solicitante.
