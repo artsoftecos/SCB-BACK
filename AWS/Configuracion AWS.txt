@@ -244,8 +244,15 @@ cp -avr /home/SCB-BACK/target/SCB-Back-1.war /opt/tomcat/webapps
 cd /opt/tomcat/webapps
 mv SCB-Back-1.war SCB-Back.war
 
+Reset the target:
+rm -R target
+git fetch --all
+git reset --hard origin/<branch_name> = git reset --hard origin/master
+
+
 Para remover:
 rm -R SCB-Back-1
+rm -R SCB-Back.war
 
 7.7 Desplegar aplicacion
 Ir a la direccion ip publica de la maquina y abrir en el navegador:
@@ -601,3 +608,18 @@ https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#  (buscar cloudW
 La configuración de los accesos por puertos, protocolos que les mostre de la base de datos (aplica para EC2 tambn):
 https://console.aws.amazon.com/vpc/home?region=us-east-1#securityGroups:
  
+
+
+-----------------------
+en linux testeo:
+Display amount of free and used memory
+
+free -m
+
+Display swap usage summary
+
+swapon -s
+
+Display user-process resource limits
+
+ulimit -a
