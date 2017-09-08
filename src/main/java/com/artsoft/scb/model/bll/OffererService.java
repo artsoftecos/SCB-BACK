@@ -1,6 +1,5 @@
 package com.artsoft.scb.model.bll;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -19,8 +18,6 @@ import com.artsoft.scb.model.dao.OffererRepository;
 import com.artsoft.scb.model.dao.OffererStateRepository;
 import com.artsoft.scb.model.dao.UserRepository;
 import com.artsoft.scb.model.dao.UserTypeRepository;
-import com.artsoft.scb.model.entity.Applicant;
-import com.artsoft.scb.model.entity.DocumentType;
 import com.artsoft.scb.model.entity.Offerer;
 import com.artsoft.scb.model.entity.OffererState;
 import com.artsoft.scb.model.entity.User;
@@ -56,7 +53,7 @@ public class OffererService extends ExceptionService implements IOffererService 
 	@Value("${Email.NameHtmlDecision}")
 	private String pathHtmlDecisionEmail;
 	
-	private final String ROLE_OFERENT = "ROLE_OFERENTE";
+	private final String ROLE_OFFERER = "ROLE_OFFERER";
 	
 	private final int ID_PENDING = 1;
 	
@@ -98,7 +95,7 @@ public class OffererService extends ExceptionService implements IOffererService 
 		user = userRepository.save(user);
 
 		UserType userType = new UserType();
-		userType.setRol(ROLE_OFERENT);
+		userType.setRol(ROLE_OFFERER);
 		userType.setUser(user);
 		userType = userTypeRepository.save(userType);
 
@@ -153,6 +150,33 @@ public class OffererService extends ExceptionService implements IOffererService 
 	 */
 	public List<Offerer> getAllOferents() {
 		return (ArrayList<Offerer>)oferentRepository.findAll();
+	}
+	
+	/**
+	 * obtiene todos los oferentes pendientes
+	 * @return los oferentes.
+	 */
+	public List<Offerer> getPendingOferents() {
+		OffererState offererState = offererStateRepository.findOne(ID_PENDING);
+		return (ArrayList<Offerer>)oferentRepository.findByOffererState(offererState);
+	}
+	
+	/**
+	 * obtiene todos los oferentes aprobados
+	 * @return los oferentes.
+	 */
+	public List<Offerer> getApprovedOferents() {
+		OffererState offererState = offererStateRepository.findOne(ID_APPROVED);
+		return (ArrayList<Offerer>)oferentRepository.findByOffererState(offererState);
+	}
+	
+	/**
+	 * obtiene todos los oferentes rechazados
+	 * @return los oferentes.
+	 */
+	public List<Offerer> getRejectedOferents() {
+		OffererState offererState = offererStateRepository.findOne(ID_REJECTED);
+		return (ArrayList<Offerer>)oferentRepository.findByOffererState(offererState);
 	}
 	
 	/**
