@@ -61,7 +61,7 @@ public class Offerer {
 	private Timestamp dateRegister;
 	
 	@ManyToOne
-	@JoinColumn(name = "idState")
+	@JoinColumn(name = "IdEstado")
 	private OffererState offererState;
 
 	public String getEmail() {

@@ -28,7 +28,7 @@ public class ApplicantDocumentControllerTest extends BaseControllerTest {
 	private ApplicantDocumentService applicantDocumentService;
 
 	@Test
-	@WithMockUser(roles="APLICANTE")
+	@WithMockUser(roles="APLICANT")
 	public void uploadDocument_whenuploadDocument_thenReturnOk() throws Exception {
 
 		MockMultipartFile file = new MockMultipartFile("file", "orig", null, "bar".getBytes());

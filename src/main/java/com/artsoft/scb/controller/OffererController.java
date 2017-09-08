@@ -82,5 +82,44 @@ public class OffererController {
 		return ResponseEntity.status(HttpStatus.OK).body(oferents);
 
 	}
+	
+	@GetMapping("/rejected")
+	public ResponseEntity<?> getRejectedOferents() {
+		List<Offerer> oferents = new ArrayList<Offerer>();
+		try {
+			oferents = offererService.getRejectedOferents();			
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(oferents);
+
+	}
+	
+	@GetMapping("/approved")
+	public ResponseEntity<?> getApprovedOferents() {
+		List<Offerer> oferents = new ArrayList<Offerer>();
+		try {
+			oferents = offererService.getApprovedOferents();			
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(oferents);
+
+	}
+	
+	@GetMapping("/pending")
+	public ResponseEntity<?> getPendingOferents() {
+		List<Offerer> oferents = new ArrayList<Offerer>();
+		try {
+			oferents = offererService.getPendingOferents();			
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(oferents);
+
+	}
 }
 

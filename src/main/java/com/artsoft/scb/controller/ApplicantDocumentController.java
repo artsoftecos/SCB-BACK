@@ -27,7 +27,7 @@ import com.artsoft.scb.model.bll.ApplicantDocumentService;
 import com.artsoft.scb.model.entity.ApplicantDocument;
 
 @RestController
-@PreAuthorize("hasRole('ROLE_APLICANTE')")
+@PreAuthorize("hasRole('ROLE_APLICANT')")
 @RequestMapping(path = "/applicantDocument")
 public class ApplicantDocumentController {
 	
