@@ -40,16 +40,30 @@ npm install -g bower grunt (-g signifies global scope)
 
 
 2. ejecutar los siguientes comandos:
+npm install
+ng build --prod
+en la carpeta dist cambiar en <base href="/">  a <base href="/scb/"> 
+
 sudo su
 cd /home
+git clone https://github.com/artsoftecos/SCB-FRONT.git
 cd SCB-FRONT
-git checkout development
+git pull
+git checkout master
+cp -avr /home/SCB-FRONT/dist /opt/tomcat/webapps
+cd  /opt/tomcat/webapps
+mv dist scb
 
+Reset folder scb
+rm -r scb
+
+
+cp -avr /home/SCB-BACK/target/SCB-Back-1.war /opt/tomcat/webapps
 
 mvn clean install
 cp -avr /home/SCB-BACK/target/SCB-Back-1.war /opt/tomcat/webapps
 cd /opt/tomcat/webapps
-mv SCB-Back-1.war SCB-Back.war
+
 
 
 
