@@ -238,13 +238,14 @@ cd /home
 git clone https://github.com/artsoftecos/SCB-BACK.git
 cd SCB-BACK
 git checkout development
+git pull
 mvn clean install
 cp -avr /home/SCB-BACK/target/SCB-Back-1.war /opt/tomcat/webapps
 cd /opt/tomcat/webapps
 mv SCB-Back-1.war SCB-Back.war
 
 Para remover:
-rm -R SCB
+rm -R SCB-Back-1
 
 7.7 Desplegar aplicacion
 Ir a la direccion ip publica de la maquina y abrir en el navegador:
