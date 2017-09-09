@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,7 +28,7 @@ import com.artsoft.scb.model.bll.ApplicantDocumentService;
 import com.artsoft.scb.model.entity.ApplicantDocument;
 
 @RestController
-@PreAuthorize("hasRole('ROLE_APLICANT')")
+//@PreAuthorize("hasRole('ROLE_APLICANT')")
 @RequestMapping(path = "/applicantDocument")
 public class ApplicantDocumentController {
 	
@@ -35,7 +36,8 @@ public class ApplicantDocumentController {
 	private ApplicantDocumentService applicantDocumentService;
 	
 	@PostMapping()
-	public ResponseEntity<?> uploadDocument(MultipartFile file, String email, String name, HttpServletRequest request) {
+	public ResponseEntity<?> uploadDocument(@RequestPart("file")MultipartFile file, 
+			@RequestPart("email")String email, @RequestPart("name")String name, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {			
 			applicantDocumentService.uploadDocument(file, name, email, request);
