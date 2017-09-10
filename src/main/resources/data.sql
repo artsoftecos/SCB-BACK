@@ -129,3 +129,11 @@ SELECT * FROM (SELECT 'offererPending@artsoft.com' as correo, null as direccion,
 WHERE NOT EXISTS (
     SELECT correo FROM scb.oferente WHERE correo = 'offererPending@artsoft.com'
 ) LIMIT 1;
+------------------INSERTING KEY DATA-------------------
+insert into credencial (id,llave,valor)
+ values (1, 'aws_secret_access_key', '');
+insert into credencial (id,llave,valor)
+ values (2, 'aws_secret_access_key', '');
+
+
+
