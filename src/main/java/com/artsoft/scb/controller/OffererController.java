@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,7 @@ public class OffererController {
 	
 
 	@PostMapping("/approve/{nit}")
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
 	public ResponseEntity<?> approveOferent(@PathVariable("nit") String nit){
 		JSONObject response = new JSONObject();
 		
@@ -56,6 +58,7 @@ public class OffererController {
 	}
 	
 	@PostMapping("/reject/{nit}")
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
 	public ResponseEntity<?> denyOferent(@PathVariable("nit") String nit){
 		JSONObject response = new JSONObject();	
 		
@@ -71,6 +74,7 @@ public class OffererController {
 	}
 
 	@GetMapping()
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
 	public ResponseEntity<?> getAllOferents() {
 		List<Offerer> oferents = new ArrayList<Offerer>();
 		try {
@@ -84,6 +88,7 @@ public class OffererController {
 	}
 	
 	@GetMapping("/rejected")
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
 	public ResponseEntity<?> getRejectedOferents() {
 		List<Offerer> oferents = new ArrayList<Offerer>();
 		try {
@@ -97,6 +102,7 @@ public class OffererController {
 	}
 	
 	@GetMapping("/approved")
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
 	public ResponseEntity<?> getApprovedOferents() {
 		List<Offerer> oferents = new ArrayList<Offerer>();
 		try {
@@ -110,6 +116,7 @@ public class OffererController {
 	}
 	
 	@GetMapping("/pending")
+	@PreAuthorize("hasRole('ROLE_ADMINISTRATOR')")
 	public ResponseEntity<?> getPendingOferents() {
 		List<Offerer> oferents = new ArrayList<Offerer>();
 		try {
