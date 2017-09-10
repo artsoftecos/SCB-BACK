@@ -25,7 +25,7 @@ public class AWSEmailCredentialProvider implements AWSCredentialsProvider {
 
     @Override
     public AWSCredentials getCredentials() {
-    	if(accessKey == null || secretKey == null) {
+    	if(accessKey == null || accessKey.isEmpty() || secretKey == null || secretKey.isEmpty()) {
 	    	List<AWScredential> credentialList = awsCredentialService.getCredentials();    	
 			if (credentialList != null && credentialList.size() > 0) {
 				 accessKey = credentialList.get(0).getValue();
