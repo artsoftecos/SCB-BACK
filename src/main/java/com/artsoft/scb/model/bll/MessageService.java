@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.simpleemail.*;
 import com.amazonaws.services.simpleemail.model.*;
+import com.artsoft.scb.controller.configuration.AWSEmailCredentialProvider;
 import com.artsoft.scb.model.bll.interfaces.IMessageService;
 import com.artsoft.scb.model.entity.AWScredential;
 import com.amazonaws.auth.AWSCredentials;
@@ -24,8 +25,8 @@ public class MessageService extends ExceptionService implements IMessageService 
 	private HelperService helperService;
 
 	@Autowired
-	private AWScredentialService awsCredentialService;
-
+	private AWSEmailCredentialProvider awsEmailCredentialProvider ;
+	
 	// Replace sender@example.com with your "From" address.
 	// This address must be verified with Amazon SES.
 	static final String FROM = "user@goidea.com.co";
@@ -55,21 +56,10 @@ public class MessageService extends ExceptionService implements IMessageService 
 
 	@Override
 	public boolean sendMessage(String htmlBody, List<String> destinies, String subject) throws Exception {
-
 		try {
-
-			List<AWScredential> credentialList = awsCredentialService.getCredentials();
-			
-			AWSCredentials cred=null;
-			if (credentialList != null && credentialList.size() > 0) {
-				String accessKey = credentialList.get(0).getValue();
-				String secretAccessKey = credentialList.get(1).getValue();
-				cred = new BasicAWSCredentials(accessKey, secretAccessKey);
-			}
-
 			String textBody = helperService.RemoveHtmlTags(htmlBody);
-			AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard().withCredentials((AWSCredentialsProvider) cred)
-
+			AmazonSimpleEmailService client = AmazonSimpleEmailServiceClientBuilder.standard()
+					.withCredentials(awsEmailCredentialProvider)
 					// Replace US_WEST_2 with the AWS Region you're using for
 					// Amazon SES.
 					.withRegion(Regions.US_EAST_1).build();
