@@ -59,11 +59,12 @@ public class MessageService extends ExceptionService implements IMessageService 
 		try {
 
 			List<AWScredential> credentialList = awsCredentialService.getCredentials();
+			
 			AWSCredentials cred=null;
 			if (credentialList != null && credentialList.size() > 0) {
-				cred = new BasicAWSCredentials(credentialList.get(0).getKey(), credentialList.get(0).getValue());
-				AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
-						.withCredentials(new AWSStaticCredentialsProvider(cred)).build();
+				String accessKey = credentialList.get(0).getValue();
+				String secretAccessKey = credentialList.get(1).getValue();
+				cred = new BasicAWSCredentials(accessKey, secretAccessKey);
 			}
 
 			String textBody = helperService.RemoveHtmlTags(htmlBody);

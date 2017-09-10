@@ -13,10 +13,10 @@ public class AWScredential {
 	@Column(name = "Id")
 	private int id;
 	
-	@Column(name = "Key")
+	@Column(name = "Llave")
 	private String key;
 	
-	@Column(name = "Value")
+	@Column(name = "Valor")
 	private String value;
 
 	public String getKey() {
