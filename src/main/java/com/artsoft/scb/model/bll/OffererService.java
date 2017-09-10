@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.bll;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -50,9 +51,19 @@ public class OffererService extends ExceptionService implements IOffererService 
 	@Value("${Email.SubjectDecision}")
 	private String subjectDecisionEmail;
 	
-	@Value("${Email.NameHtmlDecision}")
-	private String pathHtmlDecisionEmail;
+	@Value("${Email.NameHtmlApproved}")
+	private String pathHtmlApprovedEmail;
 	
+	@Value("${Email.NameHtmlRejected}")
+	private String pathHtmlRejectedEmail;
+	
+	@Value("${Email.NameHtmlOffererRegistration}")
+	private String pathHtmlOffererRegistration;
+	
+	@Value("${Email.SubjectWelcome}")
+	private String subjectWelcomeEmail;
+	
+		
 	private final String ROLE_OFFERER = "ROLE_OFFERER";
 	
 	private final int ID_PENDING = 1;
@@ -76,7 +87,7 @@ public class OffererService extends ExceptionService implements IOffererService 
 		if (oferentSaved == null) {
 			return false;
 		}
-		
+		sendRegistrationEmail(offerer);
 		return true;
 	}
 	
@@ -111,7 +122,7 @@ public class OffererService extends ExceptionService implements IOffererService 
 		user.setEnabled(true);
 		user = userRepository.save(user);
 		
-		sendDecisionMessage(offerer,"Aceptada");
+		sendApprovedMessage(offerer);
 	}
 	
 	public void rejectOferent(String nit) throws Exception{
@@ -123,7 +134,7 @@ public class OffererService extends ExceptionService implements IOffererService 
 		user.setEnabled(false);
 		user = userRepository.save(user);
 		
-		sendDecisionMessage(offerer,"Rechazada");
+		sendRejectedMessage(offerer);
 	}	
 		
 	private void setOffererState(Offerer offerer, int id) {	
@@ -132,16 +143,37 @@ public class OffererService extends ExceptionService implements IOffererService 
 		
 	}
 	
-	private void sendDecisionMessage(Offerer offerer, String decision) throws Exception {
+	private void sendApprovedMessage(Offerer offerer) throws Exception {
 		Hashtable<String, String>  parameters = new Hashtable<String, String>();
 		String name = offerer.getName();
 		parameters.put("[NAME]", name);
-		parameters.put("[DECISION]", decision);
-		String bodyEmailToSend = helperService.getEmail(pathHtmlDecisionEmail, parameters);
+		String bodyEmailToSend = helperService.getEmail(pathHtmlApprovedEmail, parameters);
 		List<String> destinies = new ArrayList<String>();
 		destinies.add(offerer.getEmail());		
 		messageService.sendMessage(bodyEmailToSend, destinies, subjectDecisionEmail);
 			
+	}
+	
+	private void sendRejectedMessage(Offerer offerer) throws Exception {
+		Hashtable<String, String>  parameters = new Hashtable<String, String>();
+		String name = offerer.getName();
+		parameters.put("[NAME]", name);
+		String bodyEmailToSend = helperService.getEmail(pathHtmlRejectedEmail, parameters);
+		List<String> destinies = new ArrayList<String>();
+		destinies.add(offerer.getEmail());
+		messageService.sendMessage(bodyEmailToSend, destinies, subjectDecisionEmail);
+			
+	}
+	
+	private void sendRegistrationEmail(Offerer offerer) throws Exception{
+		Hashtable<String, String>  parameters = new Hashtable<String, String>();
+		String name = offerer.getName();
+		parameters.put("[NAME]", name);
+		String bodyEmailToSend = helperService.getEmail(pathHtmlOffererRegistration, parameters);
+		List<String> destinies = new ArrayList<String>();
+		destinies.add(offerer.getEmail());	
+		subjectWelcomeEmail = subjectWelcomeEmail.replace("[NAME]", name);
+		messageService.sendMessage(bodyEmailToSend, destinies, subjectWelcomeEmail);
 	}
 		
 	/**
@@ -225,9 +257,9 @@ public class OffererService extends ExceptionService implements IOffererService 
 	 */
 	private void ValidateEmail(Offerer offerer) throws Exception {
 		
-		Offerer oferentSearched = oferentRepository.findByEmail(offerer.getEmail());
-		if (oferentSearched != null) {
-			throwException("email", "Ya hay un oferente con ese email.");
+		User userSearched = userRepository.findByEmail(offerer.getEmail());
+		if (userSearched != null) {
+			throwException("email", "Ya hay existe una cuenta asociada a ese correo");
 		}
 	}
 	
