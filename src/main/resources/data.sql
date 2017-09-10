@@ -131,9 +131,9 @@ WHERE NOT EXISTS (
 ) LIMIT 1;
 ------------------INSERTING KEY DATA-------------------
 insert into credencial (id,llave,valor)
- values (1, 'aws_secret_access_key', '');
+ values (1, 'aws_access_key_id', 'AKIAJ2FH26GEDTUO4UFQ');
 insert into credencial (id,llave,valor)
- values (2, 'aws_secret_access_key', '');
+ values (2, 'aws_secret_access_key', 'JmdfcNeOf3/NtH4Ov30iO6eLGn9mRXg1C+5CtWhL');
 
 
 
