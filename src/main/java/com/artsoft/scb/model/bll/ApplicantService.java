@@ -85,7 +85,7 @@ public class ApplicantService extends ExceptionService implements IApplicantServ
 		}
 		
 		if (user.isEnabled()) {
-			throwException("Response", "El usuario ya está habilitado.");
+			throwException("Response", "El usuario ya estï¿½ habilitado.");
 		}
 		
 		user.setEnabled(true);
@@ -188,10 +188,9 @@ public class ApplicantService extends ExceptionService implements IApplicantServ
 	 * @throws Exception : Lanza excepcion si el email no es valido
 	 */
 	private void ValidateEmail(Applicant applicant) throws Exception {
-		
-		Applicant applicantSearched = applicantRepository.findByEmail(applicant.getEmail());
-		if (applicantSearched != null) {
-			throwException("email", "Ya hay un aplicante con ese email.");
+		User userSearched = userRepository.findByEmail(applicant.getEmail());
+		if (userSearched != null) {
+			throwException("email", "Ya hay existe una cuenta asociada a ese correo");
 		}
 	}
 	

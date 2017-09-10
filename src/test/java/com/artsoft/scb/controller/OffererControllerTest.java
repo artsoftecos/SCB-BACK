@@ -57,6 +57,7 @@ public class OffererControllerTest extends BaseControllerTest {
     }
     
     @Test
+    @WithMockUser(roles="ADMINISTRATOR")
     public void GetAllOferents_whenGetAllOferents_thenReturnOk()
       throws Exception {
          
@@ -75,7 +76,7 @@ public class OffererControllerTest extends BaseControllerTest {
     }
     
     @Test
-    @WithMockUser(roles="OFFERER")
+    @WithMockUser(roles="ADMINISTRATOR")
     public void GetAllPendingOfferers_whenGetAllPendingOfferers_thenReturnOk()
       throws Exception {
          
@@ -99,7 +100,7 @@ public class OffererControllerTest extends BaseControllerTest {
     }
     
     @Test
-    @WithMockUser(roles="OFFERER")
+    @WithMockUser(roles="ADMINISTRATOR")
     public void GetAllApprovedOfferers_whenGetAllApprovedOfferers_thenReturnOk()
       throws Exception {
          
@@ -123,7 +124,7 @@ public class OffererControllerTest extends BaseControllerTest {
     }
     
     @Test
-    @WithMockUser(roles="OFFERER")
+    @WithMockUser(roles="ADMINISTRATOR")
     public void GetAllRejectedOfferers_whenGetAllRejectedOfferers_thenReturnOk()
       throws Exception {
          

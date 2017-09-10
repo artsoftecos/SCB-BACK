@@ -36,6 +36,7 @@ public class ApplicantDocumentController {
 	private ApplicantDocumentService applicantDocumentService;
 	
 	@PostMapping()
+	@PreAuthorize("hasRole('ROLE_APPLICANT')")
 	public ResponseEntity<?> uploadDocument(@RequestPart("file")MultipartFile file, 
 			@RequestPart("email")String email, @RequestPart("name")String name, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
@@ -50,6 +51,7 @@ public class ApplicantDocumentController {
 	}
 	
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_APPLICANT')")
 	public ResponseEntity<?> deleteDocument(@PathVariable("id")Long id, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {			
@@ -64,6 +66,7 @@ public class ApplicantDocumentController {
 	
 	
 	@GetMapping()
+	@PreAuthorize("hasRole('ROLE_APPLICANT')")
 	public ResponseEntity<?> getDocuments(String email, HttpServletRequest request) {
 		List<ApplicantDocument> documents = new ArrayList<ApplicantDocument>();
 		try {			
@@ -76,6 +79,7 @@ public class ApplicantDocumentController {
 	}
 	
 	@GetMapping("/{id}")
+	@PreAuthorize("hasRole('ROLE_APPLICANT')")
 	public ResponseEntity<?> getDocument(@PathVariable("id")Long id, HttpServletRequest request) throws FileNotFoundException {
 		File document = null;
 		try {			
