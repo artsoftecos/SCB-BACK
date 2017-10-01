@@ -134,6 +134,39 @@ insert into credencial (id,llave,valor)
  values (1, 'aws_access_key_id', '');
 insert into credencial (id,llave,valor)
  values (2, 'aws_secret_access_key', '');
+------------------INSERTING CONVOCATORY TYPE-------------------------------------
+INSERT INTO scb.tipo_convocatoria (nombre)
+SELECT * FROM (SELECT 'Beca Completa' as nombre) AS tmp
+WHERE NOT EXISTS (
+    SELECT correo FROM scb.oferente WHERE correo = 'Beca Completa'
+) LIMIT 1;
 
+INSERT INTO scb.tipo_convocatoria (nombre)
+SELECT * FROM (SELECT 'Beca Parcial' as nombre) AS tmp
+WHERE NOT EXISTS (
+    SELECT correo FROM scb.oferente WHERE correo = 'Beca Parcial'
+) LIMIT 1;
 
+INSERT INTO scb.tipo_convocatoria (nombre)
+SELECT * FROM (SELECT 'Subsidio investigación' as nombre) AS tmp
+WHERE NOT EXISTS (
+    SELECT correo FROM scb.oferente WHERE correo = 'Subsidio investigación'
+) LIMIT 1;
 
+INSERT INTO scb.tipo_convocatoria (nombre)
+SELECT * FROM (SELECT 'Intercambio' as nombre) AS tmp
+WHERE NOT EXISTS (
+    SELECT correo FROM scb.oferente WHERE correo = 'Intercambio'
+) LIMIT 1;
+
+INSERT INTO scb.tipo_convocatoria (nombre)
+SELECT * FROM (SELECT 'Pasantía' as nombre) AS tmp
+WHERE NOT EXISTS (
+    SELECT correo FROM scb.oferente WHERE correo = 'Pasantía'
+) LIMIT 1;
+
+INSERT INTO scb.tipo_convocatoria (nombre)
+SELECT * FROM (SELECT 'Crédito' as nombre) AS tmp
+WHERE NOT EXISTS (
+    SELECT correo FROM scb.oferente WHERE correo = 'Crédito'
+) LIMIT 1;

@@ -1,8 +1,8 @@
 {
 	"variables": [],
 	"info": {
-		"name": "Proyecto SCB copy",
-		"_postman_id": "cb81d7c5-25ab-4ea9-5dda-a276ac04974a",
+		"name": "Proyecto SCB copy copy",
+		"_postman_id": "17c56cd3-a404-32d0-6cb6-4158acdcd41b",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -241,7 +241,10 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -258,7 +261,10 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
 			},
 			"response": []
@@ -275,8 +281,28 @@
 						"description": ""
 					}
 				],
-				"body": {},
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ConvocatoryType - Get all convocatoryTypes",
+			"request": {
+				"url": "http://localhost:8080/convocatoryType",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic T2ZmZXJlckFwcHJvdmVkQGFydHNvZnQuY29tOmFydHNvZnQ=",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "trae los tipos de convocatoria"
 			},
 			"response": []
 		}

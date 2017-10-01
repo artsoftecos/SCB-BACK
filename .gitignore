@@ -28,9 +28,10 @@ release.properties
 application-dev.properties
 /application-dev.properties
 src/main/resources/application.properties
-.aws/credentials
 src/main/resources/application-dev.properties
+/src/main/resources/application-dev.properties
 
+.aws/credentials
 .aws
 .aws/credentials
 .aws/
