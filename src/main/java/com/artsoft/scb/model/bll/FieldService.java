@@ -3,11 +3,13 @@ package com.artsoft.scb.model.bll;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.artsoft.scb.model.bll.interfaces.IFieldService;
 import com.artsoft.scb.model.dao.FieldRespository;
 import com.artsoft.scb.model.entity.Field;
 
+@Service
 public class FieldService implements IFieldService {
 
 	@Autowired

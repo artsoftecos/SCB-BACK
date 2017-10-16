@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.entity;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "Convocatoria")
@@ -31,6 +34,10 @@ public class Convocatory {
 	
 	@Column(name = "NumeroBeneficiarios", nullable = false)
 	private int numberBeneficiaries;
+	
+	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")	
+	@Column(name = "FechaResultado", nullable = false)
+	private Timestamp resultDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "MailOferente")
