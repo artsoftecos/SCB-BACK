@@ -1,10 +1,14 @@
 package com.artsoft.scb.model.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -18,6 +22,17 @@ public class ConvocatoryType {
 	
 	@Column(name = "Nombre", nullable = false, length = 60)	
 	private String name;
+	
+	@OneToMany(mappedBy = "convocatoryType")
+	private Set<Convocatory> convocatories = new HashSet<Convocatory>();
+
+	public Set<Convocatory> getConvocatories() {
+		return convocatories;
+	}
+
+	public void setConvocatories(Set<Convocatory> convocatories) {
+		this.convocatories = convocatories;
+	}
 
 	public int getId() {
 		return id;

@@ -170,3 +170,19 @@ SELECT * FROM (SELECT 'Crédito' as nombre) AS tmp
 WHERE NOT EXISTS (
     SELECT correo FROM scb.oferente WHERE correo = 'Crédito'
 ) LIMIT 1;
+
+----------INSERTING CONVOCATORY STATE----------------
+
+INSERT INTO scb.estado_convocatoria (nombre) values ('Creada');
+INSERT INTO scb.estado_convocatoria (nombre) values ('Cerrada');
+INSERT INTO scb.estado_convocatoria (nombre) values ('Abierta');
+INSERT INTO scb.estado_convocatoria (nombre) values ('Publicada');
+
+
+--------INSERTING PLACE STATE------------------------------
+insert into scb.estado_plaza (nombre) values ('Pendiente');
+insert into scb.estado_plaza (nombre) values ('Aceptada');
+insert into scb.estado_plaza (nombre) values ('Rechazada');
+
+
+

@@ -84,6 +84,29 @@ public class Applicant {
 	@OneToMany(mappedBy = "applicant", cascade = CascadeType.ALL)
 	private Set<ApplicantDocument> applicantDocuments = new HashSet<ApplicantDocument>();
 	
+	
+	@OneToOne(mappedBy = "applicant")
+	private ApplicantPerPhase applicantPerPhase;
+	
+	@OneToOne(mappedBy = "applicant")
+	private Place place;
+	
+	public Place getPlace() {
+		return place;
+	}
+
+	public void setPlace(Place place) {
+		this.place = place;
+	}
+
+	public ApplicantPerPhase getApplicantPerPhase() {
+		return applicantPerPhase;
+	}
+
+	public void setApplicantPerPhase(ApplicantPerPhase applicantPerPhase) {
+		this.applicantPerPhase = applicantPerPhase;
+	}
+
 	public String getEmail() {
 		return email;
 	}

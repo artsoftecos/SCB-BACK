@@ -24,7 +24,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 //@WebAppConfiguration (no va)
 //@Import(SecurityConfiguration.class)
 @WebMvcTest(controllers = ApplicantController.class, secure = true)
-public class ApplicantControllerTest extends BaseControllerTest {
+public class ApplicantControllerTest{
+//extends BaseControllerTest {
 
 //	@TestConfiguration
 //    static class ApplicantControllerTestContextConfiguration {
