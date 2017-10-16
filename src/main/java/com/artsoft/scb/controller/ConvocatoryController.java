@@ -1,6 +1,7 @@
 package com.artsoft.scb.controller;
 
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -8,6 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.artsoft.scb.model.bll.ConvocatoryService;
+import com.artsoft.scb.model.entity.Convocatory;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_OFFERER')")
@@ -17,12 +21,16 @@ public class ConvocatoryController {
 	/**
 	 * crea la convocatoria
 	 */
+	
+	@Autowired
+	private ConvocatoryService convocatoryService;
+	
 	@PostMapping()
-	public ResponseEntity<?> post(@RequestBody String convocatory) {	
+	public ResponseEntity<?> post(@RequestBody Convocatory convocatory) {	
 		//Este es el obj q envio: "name":"xfaaewd","place":"fds","description":"dsgdsf","type":{"id":"1"}
 		JSONObject response = new JSONObject();
 		try {			
-			//creara la convocatoria
+			convocatoryService.createConvocatory(convocatory);
 			response.put("Response", "Convocatoria Creada");
 		}
 		catch(Exception ex){

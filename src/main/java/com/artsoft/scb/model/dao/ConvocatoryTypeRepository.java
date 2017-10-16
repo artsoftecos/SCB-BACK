@@ -6,5 +6,6 @@ import com.artsoft.scb.model.entity.ConvocatoryType;
 
 public interface ConvocatoryTypeRepository extends CrudRepository<ConvocatoryType, Integer> {
 
+	ConvocatoryType findById(int id);
 }
 
