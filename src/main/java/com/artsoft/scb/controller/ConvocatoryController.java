@@ -26,8 +26,7 @@ public class ConvocatoryController {
 	private ConvocatoryService convocatoryService;
 	
 	@PostMapping()
-	public ResponseEntity<?> post(@RequestBody Convocatory convocatory) {	
-		//Este es el obj q envio: "name":"xfaaewd","place":"fds","description":"dsgdsf","type":{"id":"1"}
+	public ResponseEntity<?> post(@RequestBody Convocatory convocatory) {
 		JSONObject response = new JSONObject();
 		try {			
 			convocatoryService.createConvocatory(convocatory);

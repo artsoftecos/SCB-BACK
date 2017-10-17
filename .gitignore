@@ -1,6 +1,6 @@
 target/*
 !.mvn/wrapper/maven-wrapper.jar
-!target/SCB-Back-1.war
+target/SCB-Back-1.war
 
 ### STS ###
 .apt_generated
@@ -36,3 +36,5 @@ src/main/resources/application-dev.properties
 .aws/credentials
 .aws/
 
+.DS_Store
+src/.DS_Store
