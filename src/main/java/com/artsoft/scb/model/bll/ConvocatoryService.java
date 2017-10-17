@@ -91,13 +91,13 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		ConvocatoryType convocatoryTypeFound = convocatoryTypeRepository.findById(id);
 		
 		if(convocatoryTypeFound == null){
-			throwException("tipoConvocatoria", "El tipo de convocatoria ingresado no existe");
+			throwException("convocatoryType", "El tipo de convocatoria ingresado no existe");
 		}
 	}
 	
 	private void validateNumberOfBeneficiaries(Convocatory convocatory) throws Exception{
 		if(convocatory.getNumberBeneficiaries() <= 0){
-			throwException("numeroBeneficiarios", "El número de beneficiarios es inválido, debe ser mayor a cero");
+			throwException("numberBeneficiaries", "El número de beneficiarios es inválido, debe ser mayor a cero");
 		}
 	}
 	

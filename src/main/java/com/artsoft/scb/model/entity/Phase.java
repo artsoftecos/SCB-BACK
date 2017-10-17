@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.entity;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -31,13 +32,14 @@ public class Phase {
 	@Column(name= "Descripcion", nullable = false, length = 1000)
 	private String description;
 	
-	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")	
 	@Column(name = "FechaInicio", nullable = false)
-	private Timestamp startDate;
+	private Date startDate;
 	
-	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")	
 	@Column(name = "FechaFinalizacion", nullable = false)
-	private Timestamp endDate;
+	private Date endDate;
+	
+	@Column(name = "FechaInicioAprobacion", nullable = false)
+	private Date startApprovalDate;
 	
 	@ManyToOne
 	@JoinColumn(name = "IdConvocatoria")
@@ -45,6 +47,17 @@ public class Phase {
 	
 	@OneToOne(mappedBy = "phase")
 	private ApplicantPerPhase applicantPerPhase;
+
+	
+
+
+	public Date getStartApprovalDate() {
+		return startApprovalDate;
+	}
+
+	public void setStartApprovalDate(Date startApprovalDate) {
+		this.startApprovalDate = startApprovalDate;
+	}
 
 	public ApplicantPerPhase getApplicantPerPhase() {
 		return applicantPerPhase;
@@ -78,19 +91,19 @@ public class Phase {
 		this.description = description;
 	}
 
-	public Timestamp getStartDate() {
+	public Date getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(Timestamp startDate) {
+	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 	}
 
-	public Timestamp getEndDate() {
+	public Date getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(Timestamp endDate) {
+	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
 

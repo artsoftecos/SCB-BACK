@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import com.artsoft.scb.model.entity.Convocatory;
 
 public interface ConvocatoryRepository extends CrudRepository<Convocatory, Integer>{
-
+	Convocatory findById(int id);
 }

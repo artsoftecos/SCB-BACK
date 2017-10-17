@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.entity;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,6 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "Convocatoria")
@@ -44,6 +47,10 @@ public class Convocatory {
 	@JoinColumn(name = "IdEstado")
 	private ConvocatoryState convocatoryState;
 	
+	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")	
+	@Column(name = "FechaPublicacionResultados", nullable = false)
+	private Timestamp resultDate;
+	
 	@OneToMany(mappedBy = "convocatory")
 	private Set<Phase> phases = new HashSet<Phase>();
 	
@@ -53,6 +60,16 @@ public class Convocatory {
 	@OneToOne(mappedBy = "convocatory")
 	private Postulation postulation;
 	
+	
+	
+	public Timestamp getResultDate() {
+		return resultDate;
+	}
+
+	public void setResultDate(Timestamp resultDate) {
+		this.resultDate = resultDate;
+	}
+
 	public Postulation getPostulation() {
 		return postulation;
 	}
