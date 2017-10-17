@@ -34,11 +34,7 @@ public class Convocatory {
 	
 	@Column(name = "NumeroBeneficiarios", nullable = false)
 	private int numberBeneficiaries;
-	
-	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")	
-	@Column(name = "FechaResultado", nullable = false)
-	private Timestamp resultDate;
-	
+		
 	@ManyToOne
 	@JoinColumn(name = "MailOferente")
 	private Offerer offerer;
