@@ -1,14 +1,13 @@
 package com.artsoft.scb.model.bll;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
-import javax.swing.plaf.basic.BasicTreeUI.TreeHomeAction;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +17,7 @@ import com.artsoft.scb.model.dao.ConvocatoryStateRepository;
 import com.artsoft.scb.model.dao.ConvocatoryTypeRepository;
 import com.artsoft.scb.model.dao.OffererRepository;
 import com.artsoft.scb.model.entity.Convocatory;
+import com.artsoft.scb.model.entity.ConvocatoryState;
 import com.artsoft.scb.model.entity.ConvocatoryType;
 import com.artsoft.scb.model.entity.Offerer;
 
@@ -111,6 +111,29 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		if(convocatory.getDescription().isEmpty() || convocatory.getDescription() == null){
 			throwException("description", "La descripción es obligatoria");
 		}
+	}
+
+	@Override
+	public Convocatory getByOffer(String mailOffer) throws Exception {
+		Offerer of = new Offerer();
+		of.setEmail(mailOffer);
+		return convocatoryRepository.findByOfferer(of);
+	}
+
+	@Override
+	public Convocatory getById(int id) throws Exception {
+		return convocatoryRepository.findById(id);
+	}
+
+	@Override
+	public List<Convocatory> getByState(ConvocatoryState convState) throws Exception {
+		return convocatoryRepository.findByConvocatoryState(convState);
+	}
+
+	@Override
+	public List<Convocatory> getByPendingPhases() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
