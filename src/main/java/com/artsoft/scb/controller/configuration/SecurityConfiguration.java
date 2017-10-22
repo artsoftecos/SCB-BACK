@@ -30,7 +30,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 		.antMatchers("/","/login","/applicant", "/offerer", "/documentType/", "/applicant/welcome/*", "/offerer/approve/*", "/offerer/reject/*", "/applicantDocument", "/offerer/approved", "/offerer/pending", 
-				"/offerer/rejected","/convocatoryType","/convocatory", "/phase").permitAll()
+				"/offerer/rejected","/convocatoryType","/convocatory/*", "/phase/*", "/convocatory/getByOffererState/**", "/convocatory/getByPendingPhases/**",
+				"/convocatory/create", "/convocatory/update", "/convocatory/getByOfferer/**", "/convocatory/getById/**").permitAll()
 		.anyRequest()
 			.fullyAuthenticated()
 		.and()
