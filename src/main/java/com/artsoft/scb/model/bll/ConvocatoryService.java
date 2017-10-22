@@ -45,7 +45,7 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	
 	@Override
 	public boolean createConvocatory(Convocatory convocatory) throws Exception {
-		validateConvocatory(convocatory);
+		validateConvocatory(convocatory,1);
 		convocatory.setConvocatoryState(convocatoryStateRepository.findById(ID_CREADA));
 		Offerer offerer = offererRepository.findByEmail(convocatory.getOfferer().getEmail());
 		convocatory.setOfferer(offerer);
@@ -57,7 +57,7 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		return true;
 	}
 	
-	private void validateConvocatory(Convocatory convocatory) throws Exception{
+	private void validateConvocatory(Convocatory convocatory, int validationType) throws Exception{
 		Hashtable<String, String> parameters = new Hashtable<>();
 		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 		Set<ConstraintViolation<Object>> constraintViolations = validator.validate(convocatory);
@@ -72,7 +72,10 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 			throwException(parameters);
 		}
 		
-		validateMail(convocatory.getOfferer().getEmail());
+		if(validationType == 1){
+			validateMail(convocatory.getOfferer().getEmail());
+		}
+		
 		validateConvocatoryType(convocatory.getConvocatoryType().getId());
 		validateNumberOfBeneficiaries(convocatory);
 		validateEmptyName(convocatory);
@@ -134,6 +137,22 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	public List<Convocatory> getByPendingPhases() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean editConvocatory(Convocatory convocatory) throws Exception {
+		Convocatory convocatoryToEdit = convocatoryRepository.findById(convocatory.getId());
+		validateConvocatory(convocatoryToEdit, 2);
+		convocatoryToEdit.setName(convocatory.getName());
+		convocatoryToEdit.setDescription(convocatory.getDescription());
+		convocatoryToEdit.setNumberBeneficiaries(convocatory.getNumberBeneficiaries());
+		convocatoryToEdit.setConvocatoryType(convocatory.getConvocatoryType());
+		convocatoryToEdit.setResultDate(convocatory.getResultDate());
+		Convocatory convocatorySaved = convocatoryRepository.save(convocatoryToEdit);
+		if(convocatorySaved == null){
+			return false;
+		}
+		return true;
 	}
 
 }

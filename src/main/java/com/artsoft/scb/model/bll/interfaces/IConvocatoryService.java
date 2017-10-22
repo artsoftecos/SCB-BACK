@@ -17,5 +17,7 @@ public interface IConvocatoryService {
 
 	List<Convocatory> getByPendingPhases() throws Exception;
 	
+	boolean editConvocatory(Convocatory convocatory) throws Exception;
+	
 	
 }
