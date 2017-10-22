@@ -1,5 +1,8 @@
 package com.artsoft.scb.controller;
 
+import java.util.List;
+
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,14 +49,14 @@ public class FieldController {
 	
 	@GetMapping(path = "/getByPhase/{idPhase}")
 	public ResponseEntity<?> getAllField(@PathVariable("idPhase") int idPhase) {
-		
+		List<Field> fields;
 		try {
-			fieldService.findByPhase(idPhase);
+			fields = fieldService.findByPhase(idPhase);
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
 		
-		return ResponseEntity.status(HttpStatus.OK).body("Field Deleted!");
+		return ResponseEntity.status(HttpStatus.OK).body(fields);
 	}
 
 }
