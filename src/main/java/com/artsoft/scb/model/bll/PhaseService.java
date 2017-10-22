@@ -2,6 +2,7 @@ package com.artsoft.scb.model.bll;
 
 import java.sql.Timestamp;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -27,15 +28,19 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 	@Override
 	public boolean createPhase(Phase phase) throws Exception {
 		System.out.println("Antes de validar: " + phase.getStartDate());
-		validatePhase(phase);
+		validatePhase(phase,1);
 		Phase phaseSaved = phaseRepository.save(phase);
 		if (phaseSaved == null) {
 			return false;			
 		}
 		return true;
 	}
+	
+	public void deletePhase(int idPhase) throws Exception{
+		phaseRepository.delete(idPhase);		
+	}
 
-	private void validatePhase(Phase phase) throws Exception{
+	private void validatePhase(Phase phase, int tipoValidacion) throws Exception{
 		Hashtable<String, String> parameters = new Hashtable<>();
 		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 		Set<ConstraintViolation<Object>> constraintViolations = validator.validate(phase);
@@ -54,8 +59,9 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		validateStartDate(phase);
 		validateEndDate(phase);
 		validateStartApprovalDate(phase);
-		validateConvocatory(phase);
-		
+		if(tipoValidacion == 1){
+			validateConvocatory(phase);
+		}		
 	}
 	
 	private void validateEmptyName(Phase phase) throws Exception{
@@ -110,6 +116,29 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		if (convocatoryFound == null) {
 			throwException("id","La convocatoria ingresada no existe");
 		}
+	}
+
+
+
+	@Override
+	public boolean editPhase(Phase phase) throws Exception {
+		Phase phaseToEdit = phaseRepository.findById(phase.getId());
+		validatePhase(phaseToEdit, 2);
+		phaseToEdit.setName(phase.getName());
+		phaseToEdit.setDescription(phase.getDescription());
+		phaseToEdit.setStartDate(phase.getStartDate());
+		phaseToEdit.setEndDate(phase.getEndDate());
+		phaseToEdit.setStartApprovalDate(phase.getStartApprovalDate());
+		Phase phaseSaved = phaseRepository.save(phaseToEdit);
+		if (phaseSaved == null) {
+			return false;			
+		}
+		return true;
+	}
+	
+	public List<Phase> getPhaseByConvocatoryId(int idConvocatory){
+		Convocatory convocatory = convocatoryRepository.findById(idConvocatory);
+		return phaseRepository.findByConvocatory(convocatory);
 	}
 	
 	
