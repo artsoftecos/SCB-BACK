@@ -45,7 +45,7 @@ public class FieldController {
 	}
 	
 	@GetMapping(path = "/getByPhase")
-	public ResponseEntity<?> deleteField(@PathVariable("idPhase") int idPhase) {
+	public ResponseEntity<?> getAllField(@PathVariable("idPhase") int idPhase) {
 		
 		try {
 			fieldService.findByPhase(idPhase);
