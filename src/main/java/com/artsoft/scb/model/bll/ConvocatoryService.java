@@ -114,7 +114,7 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	}
 
 	@Override
-	public Convocatory getByOffer(String mailOffer) throws Exception {
+	public List<Convocatory> getByOffer(String mailOffer) throws Exception {
 		Offerer of = new Offerer();
 		of.setEmail(mailOffer);
 		return convocatoryRepository.findByOfferer(of);
