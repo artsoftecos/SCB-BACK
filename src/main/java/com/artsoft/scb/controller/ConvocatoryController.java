@@ -1,5 +1,7 @@
 package com.artsoft.scb.controller;
 
+import java.util.List;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -104,14 +106,14 @@ public class ConvocatoryController {
 	
 	@GetMapping(path = "/getByOffererState/{mailOfferer}/{state}")
 	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer, @PathVariable("state") int state) {
-		JSONObject response = new JSONObject();
+		List<Convocatory> convocatories;
 		try {
-			response.put("Response", convocatoryService.getByOffererState(mailOfferer, state));
+			convocatories = convocatoryService.getByOffererState(mailOfferer, state);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
 	}
 	
 	@PostMapping(path = "/edit")
