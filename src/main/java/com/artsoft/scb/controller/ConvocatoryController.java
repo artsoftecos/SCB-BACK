@@ -40,7 +40,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@PostMapping(path = "/getByOfferer")
+	@GetMapping(path = "/getByOfferer")
 	public ResponseEntity<?> post(@RequestBody String mailOfferer) {
 		JSONObject response = new JSONObject();
 		try {
@@ -64,7 +64,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@PostMapping(path = "/getByState")
+	@GetMapping(path = "/getByState")
 	public ResponseEntity<?> post(@RequestBody ConvocatoryState convState) {
 		JSONObject response = new JSONObject();
 		try {
