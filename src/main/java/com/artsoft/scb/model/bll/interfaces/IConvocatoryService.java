@@ -17,5 +17,5 @@ public interface IConvocatoryService {
 
 	List<Convocatory> getByPendingPhases() throws Exception;
 	
-	
+	List<Convocatory> getByOffererState(String mailOfferer, int state) throws Exception;
 }

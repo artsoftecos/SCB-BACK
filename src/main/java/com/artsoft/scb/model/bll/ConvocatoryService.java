@@ -132,8 +132,23 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 
 	@Override
 	public List<Convocatory> getByPendingPhases() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		ConvocatoryState convState = new ConvocatoryState();
+		convState.setId(1);
+		convState.setName("pendiente");
+		convocatoryRepository.findByConvocatoryState(convState);
+		return convocatoryRepository.findByConvocatoryState(convState);
+	}
+
+	@Override
+	public List<Convocatory> getByOffererState(String mailOfferer, int state) throws Exception {
+		Offerer of = new Offerer();
+		of.setEmail(mailOfferer);
+		List<Convocatory> convocatories = convocatoryRepository.findByOfferer(of);
+		for (Convocatory convocatory : convocatories) {
+			if(convocatory.getConvocatoryState().getId() != state)
+				convocatories.remove(convocatory);
+		}
+		return convocatories;
 	}
 
 }
