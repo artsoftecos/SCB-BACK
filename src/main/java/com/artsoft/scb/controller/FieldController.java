@@ -44,7 +44,7 @@ public class FieldController {
 		return ResponseEntity.status(HttpStatus.OK).body("Field Deleted!");
 	}
 	
-	@GetMapping(path = "/getByPhase")
+	@GetMapping(path = "/getByPhase/{idPhase}")
 	public ResponseEntity<?> getAllField(@PathVariable("idPhase") int idPhase) {
 		
 		try {
