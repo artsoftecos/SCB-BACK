@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,8 +43,20 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping(path = "/getByOfferer")
-	public ResponseEntity<?> post(@RequestBody String mailOfferer) {
+	@PutMapping(path = "/update")
+	public ResponseEntity<?> put(@RequestBody Convocatory convocatory) {
+		JSONObject response = new JSONObject();
+		try {			
+			//TODO: Implemet method....
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+	}
+	
+	@GetMapping(path = "/getByOfferer/{mailOfferer}")
+	public ResponseEntity<?> getByOfferer(@PathVariable("mailOfferer") String mailOfferer) {
 		JSONObject response = new JSONObject();
 		try {
 			response.put("Response", convocatoryService.getByOffer(mailOfferer));
@@ -53,8 +67,8 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@PostMapping(path = "/getById")
-	public ResponseEntity<?> post(@RequestBody int id) {
+	@GetMapping(path = "/getById/{id}")
+	public ResponseEntity<?> post(@PathVariable("id") int id) {
 		JSONObject response = new JSONObject();
 		try {
 			response.put("Response", convocatoryService.getById(id));
@@ -77,11 +91,11 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping(path = "/getByPendingPhases")
-	public ResponseEntity<?> getByPendingPhases() {
+	@GetMapping(path = "/getByPendingPhases/{mailOfferer}")
+	public ResponseEntity<?> getByPendingPhases(@PathVariable("mailOfferer") String mailOfferer) {
 		JSONObject response = new JSONObject();
 		try {
-			response.put("Response", convocatoryService.getByPendingPhases());
+			response.put("Response", convocatoryService.getByPendingPhases(mailOfferer));
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
@@ -89,8 +103,8 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping(path = "/getByOffererState")
-	public ResponseEntity<?> getByOffererState(@RequestParam String mailOfferer, @RequestParam int state) {
+	@GetMapping(path = "/getByOffererState/{mailOfferer}/{state}")
+	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer, @PathVariable("state") int state) {
 		JSONObject response = new JSONObject();
 		try {
 			response.put("Response", convocatoryService.getByOffererState(mailOfferer, state));

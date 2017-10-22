@@ -131,7 +131,7 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	}
 
 	@Override
-	public List<Convocatory> getByPendingPhases() throws Exception {
+	public List<Convocatory> getByPendingPhases(String mailOfferer) throws Exception {
 		ConvocatoryState convState = new ConvocatoryState();
 		convState.setId(1);
 		convState.setName("pendiente");
