@@ -81,7 +81,6 @@ public class PhaseController {
 	@GetMapping(path = "/getPhases/{idConvocatory}")
 	public ResponseEntity<?> getPhasesByConvocatoryId(@PathVariable("idConvocatory") int idConvocatory){
 		List<Phase> phases = new ArrayList<Phase>();
-		JSONObject response = new JSONObject();
 		try {
 			phases = phaseService.getPhaseByConvocatoryId(idConvocatory);
 		} catch (Exception ex) {
@@ -89,5 +88,17 @@ public class PhaseController {
 		}
 		
 		return ResponseEntity.status(HttpStatus.OK).body(phases);
+	}
+	
+	@GetMapping(path = "/getPhases/{idPhase}")
+	public ResponseEntity<?> getPhasesByPhaseId(@PathVariable("idPhase") int idPhase){
+		Phase phase;
+		try {
+			phase = phaseService.getPhaseById(idPhase);
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).body(phase);
 	}
 }

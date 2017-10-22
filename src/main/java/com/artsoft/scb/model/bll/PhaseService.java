@@ -140,6 +140,11 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		Convocatory convocatory = convocatoryRepository.findById(idConvocatory);
 		return phaseRepository.findByConvocatory(convocatory);
 	}
+
+	@Override
+	public Phase getPhaseById(int idPhase) throws Exception {
+		return phaseRepository.findById(idPhase);
+	}
 	
 	
 }
