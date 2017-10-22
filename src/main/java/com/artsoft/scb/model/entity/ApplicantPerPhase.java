@@ -6,8 +6,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "SolicitantePorFase")
@@ -18,22 +21,25 @@ public class ApplicantPerPhase {
 	private int id;
 	
 	@OneToOne
+	@JsonBackReference(value = "applicantPerPhase-applicant")
 	@JoinColumn(name = "mail_solicitante", nullable = false)
 	private Applicant applicant;
 	
 	@OneToOne
+	@JsonBackReference(value = "applicantPerPhase-phase")
 	@JoinColumn(name = "id_fase", nullable = false)
 	private Phase phase;
 	
-	@Column(name = "Aprobado")
-	private boolean approved;
+	@ManyToOne
+	@JoinColumn(name = "idEstado")
+	private ApplicantPerPhaseState applicantPerPhaseState;
 	
-	public boolean isApproved() {
-		return approved;
+	public ApplicantPerPhaseState getApplicantPerPhaseState() {
+		return applicantPerPhaseState;
 	}
 
-	public void setApproved(boolean approved) {
-		this.approved = approved;
+	public void setApplicantPerPhaseState(ApplicantPerPhaseState applicantPerPhaseState) {
+		this.applicantPerPhaseState = applicantPerPhaseState;
 	}
 
 	public int getId() {

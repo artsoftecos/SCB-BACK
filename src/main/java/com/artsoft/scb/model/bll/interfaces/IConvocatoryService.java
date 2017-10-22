@@ -16,6 +16,10 @@ public interface IConvocatoryService {
 	List<Convocatory> getByState(ConvocatoryState convState) throws Exception;
 
 	List<Convocatory> getByPendingPhases(String mailOfferer) throws Exception;
+
 	
+	boolean editConvocatory(Convocatory convocatory) throws Exception;
+	
+
 	List<Convocatory> getByOffererState(String mailOfferer, int state) throws Exception;
 }

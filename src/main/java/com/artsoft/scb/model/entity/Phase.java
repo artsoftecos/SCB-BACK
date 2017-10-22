@@ -15,6 +15,7 @@ import javax.persistence.Table;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
@@ -41,7 +42,11 @@ public class Phase {
 	@Column(name = "FechaInicioAprobacion", nullable = false)
 	private Date startApprovalDate;
 	
+	@Column(name = "FechaCierreAprobacion", nullable = false)
+	private Date endApprovalDate;
+	
 	@ManyToOne
+	@JsonBackReference(value = "phase-convocatory")
 	@JoinColumn(name = "IdConvocatoria")
 	private Convocatory convocatory;
 	
@@ -49,7 +54,13 @@ public class Phase {
 	private ApplicantPerPhase applicantPerPhase;
 
 	
+	public Date getEndApprovalDate() {
+		return endApprovalDate;
+	}
 
+	public void setEndApprovalDate(Date endApprovalDate) {
+		this.endApprovalDate = endApprovalDate;
+	}
 
 	public Date getStartApprovalDate() {
 		return startApprovalDate;

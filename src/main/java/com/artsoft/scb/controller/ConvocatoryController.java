@@ -114,5 +114,19 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
+	@PostMapping(path = "/edit")
+	public ResponseEntity<?> editConvocatory(@RequestBody Convocatory convocatory){
+		JSONObject response = new JSONObject();
+		try {
+			convocatoryService.editConvocatory(convocatory);
+			response.put("Response", "Convocatoria editada con éxito");
+			
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+	}
+	
+	
 }
 
