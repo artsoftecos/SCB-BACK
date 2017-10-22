@@ -97,8 +97,8 @@ public class ConvocatoryController {
 	
 	@GetMapping(path = "/getByOffererState/{mailOfferer}/{state}")
 	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer, @PathVariable("state") int state) {
-		JSONObject response = new JSONObject();
-		List<Convocatory> convocatories = new ArrayList<Convocatory>();
+
+		List<Convocatory> convocatories;
 		try {
 			convocatories = convocatoryService.getByOffererState(mailOfferer, state);
 		}
