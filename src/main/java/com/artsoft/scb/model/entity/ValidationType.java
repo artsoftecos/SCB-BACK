@@ -3,6 +3,7 @@ package com.artsoft.scb.model.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -20,6 +21,19 @@ public class ValidationType {
 	@NotEmpty(message = "El nombre es requerido")
 	@Column(name = "Nombre")
 	private String name;
+	
+	@OneToOne(mappedBy = "validationType")
+	private FieldTypeValidation fieldTypeValidation;
+	
+	
+
+	public FieldTypeValidation getFieldTypeValidation() {
+		return fieldTypeValidation;
+	}
+
+	public void setFieldTypeValidation(FieldTypeValidation fieldTypeValidation) {
+		this.fieldTypeValidation = fieldTypeValidation;
+	}
 
 	public int getId() {
 		return id;

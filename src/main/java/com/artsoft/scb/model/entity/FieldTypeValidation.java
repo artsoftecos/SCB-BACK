@@ -3,6 +3,8 @@ package com.artsoft.scb.model.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -25,10 +27,26 @@ public class FieldTypeValidation {
 	@NotNull(message = "El validationTypeId es requerido")
 	@Column(name = "ValidationTypeId")
 	private int validationTypeId;
-	
+	/*
 	@JsonBackReference(value = "fieldTypeValidation-validationType")
 	@OneToOne(mappedBy = "validationType")
 	private ValidationType validationType;
+	 */
+	@OneToOne
+	@JoinColumn(name = "idValidationType")
+	private ValidationType validationType;
+	
+	@ManyToOne
+	@JoinColumn(name = "idField")
+	private Field field;
+	
+	public Field getField() {
+		return field;
+	}
+
+	public void setField(Field field) {
+		this.field = field;
+	}
 
 	public int getId() {
 		return id;
