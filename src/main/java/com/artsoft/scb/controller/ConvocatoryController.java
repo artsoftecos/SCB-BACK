@@ -98,7 +98,6 @@ public class ConvocatoryController {
 	
 	@GetMapping(path = "/getByOffererState/{mailOfferer}/{state}")
 	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer, @PathVariable("state") int state) {
-
 		List<Convocatory> convocatories;
 		try {
 			convocatories = convocatoryService.getByOffererState(mailOfferer, state);
@@ -106,6 +105,8 @@ public class ConvocatoryController {
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
+		if(convocatories != null && convocatories.size() == 0)
+			return ResponseEntity.status(HttpStatus.OK).body("No hay convocatorias asosiadas con el oferente");
 		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
 	}
 	

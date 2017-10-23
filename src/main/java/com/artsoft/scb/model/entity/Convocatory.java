@@ -1,7 +1,6 @@
 package com.artsoft.scb.model.entity;
 
 import java.sql.Date;
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -16,7 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "Convocatoria")
@@ -36,14 +35,17 @@ public class Convocatory {
 	@Column(name = "NumeroBeneficiarios", nullable = false)
 	private int numberBeneficiaries;
 		
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "MailOferente")
 	private Offerer offerer;
 	
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "IdTipo")
 	private ConvocatoryType convocatoryType;
 
+	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "IdEstado")
 	private ConvocatoryState convocatoryState;
@@ -51,12 +53,15 @@ public class Convocatory {
 	@Column(name = "FechaPublicacionResultados", nullable = false)
 	private Date resultDate;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "convocatory")
 	private Set<Phase> phases = new HashSet<Phase>();
 	
+	@JsonIgnore
 	@OneToOne(mappedBy = "convocatory")
 	private Place place;
 	
+	@JsonIgnore
 	@OneToOne(mappedBy = "convocatory")
 	private Postulation postulation;
 	
@@ -149,10 +154,12 @@ public class Convocatory {
 	public void setOfferer(Offerer offerer) {
 		this.offerer = offerer;
 	}
-	
-	
-	
-	
-	
 
+	@Override
+	public String toString() {
+		return "Convocatory [id=" + id + ", name=" + name + ", description=" + description + ", numberBeneficiaries="
+				+ numberBeneficiaries + ", offerer=" + offerer + ", convocatoryType=" + convocatoryType
+				+ ", convocatoryState=" + convocatoryState + ", resultDate=" + resultDate + ", phases=" + phases
+				+ ", place=" + place + ", postulation=" + postulation + "]";
+	}
 }

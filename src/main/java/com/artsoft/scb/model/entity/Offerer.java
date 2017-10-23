@@ -67,6 +67,7 @@ public class Offerer {
 	@JoinColumn(name = "IdEstado")
 	private OffererState offererState;
 
+	@JsonBackReference(value="convocatory-offerer")
 	@OneToMany(mappedBy = "offerer")
 	private Set<Convocatory> convocatories = new HashSet<Convocatory>();
 	
