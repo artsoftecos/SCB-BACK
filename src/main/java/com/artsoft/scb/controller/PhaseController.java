@@ -30,16 +30,6 @@ public class PhaseController {
 	 */
 	@PostMapping()
 	public ResponseEntity<?> post(@RequestBody Phase phase) {	
-		//TODO: Este es el obj q envio: 
-		/*
-		  name: string;
-    description: string;
-    state: StatePhase;
-    startDate: string;
-    finishDate: string;
-    startApprovalPostulation: string;
-    resultDate: string;
-		 */
 		JSONObject response = new JSONObject();
 		try {
 			System.out.println("En el controlador: " + phase.getStartDate());

@@ -46,7 +46,6 @@ public class Phase {
 	private Date endApprovalDate;
 	
 	@ManyToOne
-	@JsonBackReference(value = "phase-convocatory")
 	@JoinColumn(name = "IdConvocatoria")
 	private Convocatory convocatory;
 	

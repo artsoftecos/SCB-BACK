@@ -51,6 +51,8 @@ public class Convocatory {
 	@Column(name = "FechaPublicacionResultados", nullable = false)
 	private Date resultDate;
 		
+
+	@JsonBackReference(value = "convocatory-phase")
 	@OneToMany(mappedBy = "convocatory")
 	private Set<Phase> phases = new HashSet<Phase>();
 	
