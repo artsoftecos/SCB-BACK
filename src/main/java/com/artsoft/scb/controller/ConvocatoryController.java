@@ -121,6 +121,17 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	
+	@GetMapping(path = "/getPending")
+	public ResponseEntity<?> getByOffererState() {
+
+		List<Convocatory> convocatories;
+		try {
+			convocatories = convocatoryService.getConvocatoriesWithPhasesToApprove();
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
+	}
 }
 

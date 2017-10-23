@@ -185,4 +185,9 @@ insert into scb.estado_plaza (nombre) values ('Aceptada');
 insert into scb.estado_plaza (nombre) values ('Rechazada');
 
 
+------INSERTING ----------------------------
+insert into scb.estado_solicitante_por_fase (nombre) values ('Aprobado');
+insert into scb.estado_solicitante_por_fase (nombre) values ('Pendiente');
+insert into scb.estado_solicitante_por_fase (nombre) values ('Rechazado');
+
 

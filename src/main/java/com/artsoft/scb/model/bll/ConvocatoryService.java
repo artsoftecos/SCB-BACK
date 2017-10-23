@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.bll;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,7 @@ import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.ConvocatoryState;
 import com.artsoft.scb.model.entity.ConvocatoryType;
 import com.artsoft.scb.model.entity.Offerer;
+import com.artsoft.scb.model.entity.Phase;
 
 
 @Service
@@ -36,6 +38,9 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	
 	@Autowired
 	private OffererRepository offererRepository;
+	
+	@Autowired
+	private PhaseService phaseService;
 	
 	
 	private final int ID_CREADA = 1;
@@ -169,5 +174,26 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		}
 		return true;
 	}
-
+	
+	
+	public List<Convocatory> getAllConvocatories(){
+		List<Convocatory> convocatories = (List<Convocatory>) convocatoryRepository.findAll();
+		return convocatories;
+	}
+	
+	public List<Convocatory> getConvocatoriesWithPhasesToApprove(){
+		List<Convocatory> convocatories = (List<Convocatory>) convocatoryRepository.findAll();
+		List<Convocatory> convocatoriesToReturn = new ArrayList<Convocatory>();
+		for (int i = 0; i < convocatories.size(); i++) {
+			Set<Phase> setPhasesTemp = convocatories.get(i).getPhases();
+			List<Phase> phasesTemp = new ArrayList<Phase>(setPhasesTemp);
+			List<Phase> validPhases = phaseService.getPhasesWithApplicantsToApprove(phasesTemp);
+			if(validPhases.size() > 0){
+				convocatoriesToReturn.add(convocatories.get(i));
+			}			
+		}
+		return convocatoriesToReturn;
+	}
+	
+	
 }

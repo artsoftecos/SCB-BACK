@@ -32,6 +32,7 @@ public class ApplicantPerPhase {
 	
 	@ManyToOne
 	@JoinColumn(name = "idEstado")
+	@JsonBackReference(value = "applicantPerPhase-applicantPerPhaseState")
 	private ApplicantPerPhaseState applicantPerPhaseState;
 	
 	public ApplicantPerPhaseState getApplicantPerPhaseState() {
