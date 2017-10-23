@@ -152,11 +152,12 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		Offerer of = new Offerer();
 		of.setEmail(mailOfferer);
 		List<Convocatory> convocatories = convocatoryRepository.findByOfferer(of);
+		List<Convocatory> finalConvocatories = new ArrayList<Convocatory>();
 		for (Convocatory convocatory : convocatories) {
-			if(convocatory.getConvocatoryState().getId() != state)
-				convocatories.remove(convocatory);
+			if(convocatory.getConvocatoryState().getId() == state)
+				finalConvocatories.add(convocatory);		
 		}
-		return convocatories;
+		return finalConvocatories;
 	}
 
 	@Override
