@@ -6,5 +6,6 @@ public interface IPhaseService {
 	
 	boolean createPhase(Phase phase) throws Exception;
 	boolean editPhase(Phase phase) throws Exception;
+	Phase getPhaseById(int idPhase) throws Exception;
 
 }
