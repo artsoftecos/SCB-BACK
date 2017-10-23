@@ -60,14 +60,15 @@ public class ConvocatoryController {
 	
 	@GetMapping(path = "/getById/{id}")
 	public ResponseEntity<?> post(@PathVariable("id") int id) {
-		JSONObject response = new JSONObject();
+		
+		Convocatory convocatory = null;
 		try {
-			response.put("Response", convocatoryService.getById(id));
+			convocatory = convocatoryService.getById(id);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+		return ResponseEntity.status(HttpStatus.OK).body(convocatory);
 	}
 	
 	@GetMapping(path = "/getByState")
