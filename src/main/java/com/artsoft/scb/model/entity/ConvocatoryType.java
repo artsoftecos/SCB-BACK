@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "TipoConvocatoria")
 public class ConvocatoryType {
@@ -23,6 +25,7 @@ public class ConvocatoryType {
 	@Column(name = "Nombre", nullable = false, length = 60)	
 	private String name;
 	
+	@JsonBackReference(value = "convocatory-convocatoryType")
 	@OneToMany(mappedBy = "convocatoryType")
 	private Set<Convocatory> convocatories = new HashSet<Convocatory>();
 

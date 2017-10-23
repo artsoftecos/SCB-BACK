@@ -60,14 +60,15 @@ public class ConvocatoryController {
 	
 	@GetMapping(path = "/getById/{id}")
 	public ResponseEntity<?> post(@PathVariable("id") int id) {
-		JSONObject response = new JSONObject();
+		
+		Convocatory convocatory = null;
 		try {
-			response.put("Response", convocatoryService.getById(id));
+			convocatory = convocatoryService.getById(id);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+		return ResponseEntity.status(HttpStatus.OK).body(convocatory);
 	}
 	
 	@GetMapping(path = "/getByState")
@@ -97,7 +98,6 @@ public class ConvocatoryController {
 	
 	@GetMapping(path = "/getByOffererState/{mailOfferer}/{state}")
 	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer, @PathVariable("state") int state) {
-
 		List<Convocatory> convocatories;
 		try {
 			convocatories = convocatoryService.getByOffererState(mailOfferer, state);
@@ -105,6 +105,8 @@ public class ConvocatoryController {
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
+		if(convocatories != null && convocatories.size() == 0)
+			return ResponseEntity.status(HttpStatus.OK).body("No hay convocatorias asosiadas con el oferente");
 		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
 	}
 	
