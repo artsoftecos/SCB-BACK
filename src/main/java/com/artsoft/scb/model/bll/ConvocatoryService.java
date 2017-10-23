@@ -181,8 +181,10 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		return convocatories;
 	}
 	
-	public List<Convocatory> getConvocatoriesWithPhasesToApprove(){
-		List<Convocatory> convocatories = (List<Convocatory>) convocatoryRepository.findAll();
+	public List<Convocatory> getConvocatoriesWithPhasesToApprove(String mailOfferer){
+		Offerer of = new Offerer();
+		of.setEmail(mailOfferer);
+		List<Convocatory> convocatories = (List<Convocatory>) convocatoryRepository.findByOfferer(of);
 		List<Convocatory> convocatoriesToReturn = new ArrayList<Convocatory>();
 		for (int i = 0; i < convocatories.size(); i++) {
 			Set<Phase> setPhasesTemp = convocatories.get(i).getPhases();

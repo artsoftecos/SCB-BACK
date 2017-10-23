@@ -31,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests()
 		.antMatchers("/","/login","/applicant", "/offerer", "/documentType/", "/applicant/welcome/*", "/offerer/approve/*", "/offerer/reject/*", "/applicantDocument", "/offerer/approved", "/offerer/pending", 
 				"/offerer/rejected","/convocatoryType","/convocatory/*", "/phase/*", "/convocatory/getByOffererState/**", "/convocatory/getByPendingPhases/**",
-				"/convocatory/create", "/convocatory/edit", "/convocatory/getByOfferer/**", "/convocatory/getById/**").permitAll()
+				"/convocatory/create", "/convocatory/edit", "/convocatory/getByOfferer/**", "/convocatory/getById/**", "/convocatory/getPending/**").permitAll()
 		.anyRequest()
 			.fullyAuthenticated()
 		.and()
