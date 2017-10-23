@@ -46,6 +46,24 @@ SELECT * FROM (SELECT 'solicitanteRejected@artsoft.com' as correo, null as direc
 WHERE NOT EXISTS (
     SELECT correo FROM scb.solicitante WHERE correo = 'solicitanteRejected@artsoft.com'
 ) LIMIT 1;
+
+insert into scb.usuario (email, enabled, password) values ('SolicitanteApproved2@artsoft.com', 1, '$2a$10$2tkTPQBzX5eyud2uAwDPtOws3KV.IGR/Adka/MkN4Mbo/u6GP5fwa');
+insert into scb.usuario (email, enabled, password) values ('SolicitanteApproved3@artsoft.com', 1, '$2a$10$2tkTPQBzX5eyud2uAwDPtOws3KV.IGR/Adka/MkN4Mbo/u6GP5fwa');
+insert into scb.usuario (email, enabled, password) values ('SolicitanteApproved4@artsoft.com', 1, '$2a$10$2tkTPQBzX5eyud2uAwDPtOws3KV.IGR/Adka/MkN4Mbo/u6GP5fwa');
+insert into scb.usuario (email, enabled, password) values ('SolicitanteApproved5@artsoft.com', 1, '$2a$10$2tkTPQBzX5eyud2uAwDPtOws3KV.IGR/Adka/MkN4Mbo/u6GP5fwa');
+
+
+insert into scb.solicitante (correo, fecha_registro, numero_documento, primer_apellido, primer_nombre, segundo_apellido, segunda_nombre, id_tipo_documento, id_usuario)
+values ('solicitanteApproved2@artsoft.com', '2017-09-02 12:31:51', '1014207335', 'Quintero', 'Pineros', 'Miguel', 'Angel', 1, 'solicitanteApproved2@artsoft.com');
+
+insert into scb.solicitante (correo, fecha_registro, numero_documento, primer_apellido, primer_nombre, segundo_apellido, segunda_nombre, id_tipo_documento, id_usuario)
+values ('solicitanteApproved3@artsoft.com', '2017-09-02 12:31:51', '1014207335', 'Quintero', 'Pineros', 'Luisa', 'Fernanda', 1, 'solicitanteApproved3@artsoft.com');
+
+insert into scb.solicitante (correo, fecha_registro, numero_documento, primer_apellido, primer_nombre, segundo_apellido, segunda_nombre, id_tipo_documento, id_usuario)
+values ('solicitanteApproved4@artsoft.com', '2017-09-02 12:31:51', '1014207335', 'Quintero', 'Diaz', 'Rafael', '', 1, 'solicitanteApproved4@artsoft.com');
+
+insert into scb.solicitante (correo, fecha_registro, numero_documento, primer_apellido, primer_nombre, segundo_apellido, segunda_nombre, id_tipo_documento, id_usuario)
+values ('solicitanteApproved5@artsoft.com', '2017-09-02 12:31:51', '1014207335', 'Gomez', 'Jimenez', 'Carlos', 'Alberto', 1, 'solicitanteApproved5@artsoft.com');
 ----------------INSERTING ADMIN (no necesita otra tabla como lo es oferente y solicitante?)--------------------------------------
 INSERT INTO scb.usuario (email, enabled, password, token)
 SELECT * FROM (SELECT 'admin@artsoft.com', 1, '$2a$10$2tkTPQBzX5eyud2uAwDPtOws3KV.IGR/Adka/MkN4Mbo/u6GP5fwa', null) AS tmp
@@ -189,5 +207,86 @@ insert into scb.estado_plaza (nombre) values ('Rechazada');
 insert into scb.estado_solicitante_por_fase (nombre) values ('Aprobado');
 insert into scb.estado_solicitante_por_fase (nombre) values ('Pendiente');
 insert into scb.estado_solicitante_por_fase (nombre) values ('Rechazado');
+
+---- INSERTING CONVOCATORY----
+
+
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en españa 1', 'Estudios en España 1', 1, '2017-09-01', 1, 1, 'OffererApproved@artsoft.com');
+
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en españa 2', 'Estudios en España 2', 2, '2017-09-01', 1, 2, 'OffererApproved@artsoft.com');
+
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en españa 3', 'Estudios en España 3', 3, '2017-09-01', 1, 3, 'OffererApproved@artsoft.com');
+
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en españa 4', 'Estudios en España 3', 4, '2017-09-01', 1, 4, 'OffererApproved@artsoft.com');
+
+-----INSERTING PHASE-----------------
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 1 Conv 1','2017-10-01', '2017-10-03', '2017-10-15', '2017-10-25', 'Fase 1 Conv 1', 1);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 2 Conv 1','2017-10-26', '2017-10-30', '2017-11-01', '2017-11-05', 'Fase 2 Conv 1', 1);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 3 Conv 1','2017-11-06', '2017-11-09', '2017-11-10', '2017-11-20', 'Fase 3 Conv 1', 1);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 4 Conv 1','2017-11-21', '2017-11-23', '2017-11-24', '2017-11-30', 'Fase 4 Conv 1', 1);
+
+----
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 1 Conv 2','2017-09-01', '2017-09-03', '2017-09-15', '2017-09-25', 'Fase 1 Conv 2', 2);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 2 Conv 2','2017-10-01', '2017-10-03', '2017-10-15', '2017-10-25', 'Fase 2 Conv 2', 2);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 3 Conv 2','2017-11-06', '2017-11-09', '2017-11-10', '2017-11-20', 'Fase 3 Conv 2', 2);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 4 Conv 2','2017-11-21', '2017-11-23', '2017-11-24', '2017-11-30', 'Fase 4 Conv 2', 2);
+
+
+-----
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 1 Conv 3','2017-09-01', '2017-09-03', '2017-09-10', '2017-09-11', 'Fase 1 Conv 3', 3);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 2 Conv 3','2017-09-11', '2017-09-13', '2017-09-15', '2017-09-30', 'Fase 2 Conv 3', 3);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 3 Conv 3','2017-10-01', '2017-10-03', '2017-10-15', '2017-10-25', 'Fase 3 Conv 3', 3);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 4 Conv 3','2017-11-21', '2017-11-23', '2017-11-24', '2017-11-30', 'Fase 4 Conv 3', 3);
+
+----------
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 1 Conv 4','2017-09-01', '2017-09-03', '2017-09-10', '2017-09-11', 'Fase 1 Conv 4', 4);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 2 Conv 4','2017-09-11', '2017-09-13', '2017-09-15', '2017-09-20', 'Fase 2 Conv 4', 4);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 3 Conv 4','2017-09-21', '2017-09-23', '2017-09-26', '2017-09-30', 'Fase 3 Conv 4', 4);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase 4 Conv 4','2017-10-01', '2017-10-03', '2017-10-15', '2017-10-25', 'Fase 4 Conv 4', 4);
+
+
+----------INSERTING APPLICANTS PER PHASE------
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteApproved@artsoft.com', 1,  2);
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteRejected@artsoft.com', 2,  6);
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteApproved4@artsoft.com', 2,  1);
 
 

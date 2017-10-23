@@ -78,7 +78,7 @@ public class PhaseController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping(path = "/getPhases/{idConvocatory}")
+	@GetMapping(path = "/getPhasesOfConvocatory/{idConvocatory}")
 	public ResponseEntity<?> getPhasesByConvocatoryId(@PathVariable("idConvocatory") int idConvocatory){
 		List<Phase> phases = new ArrayList<Phase>();
 		try {
