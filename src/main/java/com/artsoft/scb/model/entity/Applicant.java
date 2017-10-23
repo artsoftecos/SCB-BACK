@@ -88,6 +88,7 @@ public class Applicant {
 	@OneToOne(mappedBy = "applicant")
 	private ApplicantPerPhase applicantPerPhase;
 	
+	@JsonBackReference(value = "applicant-place")
 	@OneToOne(mappedBy = "applicant")
 	private Place place;
 	

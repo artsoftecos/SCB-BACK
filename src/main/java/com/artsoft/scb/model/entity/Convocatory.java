@@ -15,6 +15,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -35,38 +36,31 @@ public class Convocatory {
 	@Column(name = "NumeroBeneficiarios", nullable = false)
 	private int numberBeneficiaries;
 		
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "MailOferente")
 	private Offerer offerer;
 	
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "IdTipo")
 	private ConvocatoryType convocatoryType;
 
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name = "IdEstado")
 	private ConvocatoryState convocatoryState;
 	
 	@Column(name = "FechaPublicacionResultados", nullable = false)
 	private Date resultDate;
-	
-	@JsonIgnore
+		
 	@OneToMany(mappedBy = "convocatory")
 	private Set<Phase> phases = new HashSet<Phase>();
 	
-	@JsonIgnore
+	@JsonBackReference(value = "convocatory-place")
 	@OneToOne(mappedBy = "convocatory")
 	private Place place;
-	
-	@JsonIgnore
+		
 	@OneToOne(mappedBy = "convocatory")
 	private Postulation postulation;
-	
-	
-	
+		
 	public Date getResultDate() {
 		return resultDate;
 	}
