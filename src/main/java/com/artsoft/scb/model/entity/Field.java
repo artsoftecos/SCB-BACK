@@ -1,11 +1,17 @@
 package com.artsoft.scb.model.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "Campo")
@@ -33,6 +39,10 @@ public class Field {
 	
 	@Column(name = "SeleccionMultiple", nullable = false, length = 60)
 	private boolean multipleSelection;
+	
+	@JsonBackReference(value = "field-fieldTypeValidation")
+	@OneToMany(mappedBy = "fieldTypeValidation")
+	private Set<FieldTypeValidation> fieldTypeValidation = new HashSet<FieldTypeValidation>();
 
 	public int getId() {
 		return id;
@@ -88,5 +98,13 @@ public class Field {
 
 	public void setMultipleSelection(boolean multipleSelection) {
 		this.multipleSelection = multipleSelection;
+	}
+
+	public Set<FieldTypeValidation> getFieldTypeValidation() {
+		return fieldTypeValidation;
+	}
+
+	public void setFieldTypeValidation(Set<FieldTypeValidation> fieldTypeValidation) {
+		this.fieldTypeValidation = fieldTypeValidation;
 	}
 }
