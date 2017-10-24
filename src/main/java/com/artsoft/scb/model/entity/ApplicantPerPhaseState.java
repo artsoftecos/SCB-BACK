@@ -11,31 +11,19 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 @Entity
-@Table(name = "TipoConvocatoria")
-public class ConvocatoryType {
-	
-	@Id	
+@Table(name = "estado_solicitante_por_fase")
+public class ApplicantPerPhaseState {
+	@Id
 	@Column(name = "Id")
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
-	@Column(name = "Nombre", nullable = false, length = 60)	
+	@Column(name = "Nombre", nullable = false, length = 20)
 	private String name;
 	
-	@JsonBackReference(value = "convocatory-convocatoryType")
-	@OneToMany(mappedBy = "convocatoryType")
-	private Set<Convocatory> convocatories = new HashSet<Convocatory>();
-
-	public Set<Convocatory> getConvocatories() {
-		return convocatories;
-	}
-
-	public void setConvocatories(Set<Convocatory> convocatories) {
-		this.convocatories = convocatories;
-	}
+	@OneToMany(mappedBy = "applicantPerPhaseState")
+	private Set<ApplicantPerPhase> applicantsPerPhase = new HashSet<ApplicantPerPhase>();
 
 	public int getId() {
 		return id;
@@ -52,4 +40,13 @@ public class ConvocatoryType {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Set<ApplicantPerPhase> getApplicantsPerPhase() {
+		return applicantsPerPhase;
+	}
+
+	public void setApplicantsPerPhase(Set<ApplicantPerPhase> applicantsPerPhase) {
+		this.applicantsPerPhase = applicantsPerPhase;
+	}
+
 }

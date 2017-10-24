@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.bll;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -20,6 +21,7 @@ import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.ConvocatoryState;
 import com.artsoft.scb.model.entity.ConvocatoryType;
 import com.artsoft.scb.model.entity.Offerer;
+import com.artsoft.scb.model.entity.Phase;
 
 
 @Service
@@ -37,6 +39,9 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	@Autowired
 	private OffererRepository offererRepository;
 	
+	@Autowired
+	private PhaseService phaseService;
+	
 	
 	private final int ID_CREADA = 1;
 	private final int ID_CERRADA = 2;
@@ -45,7 +50,7 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	
 	@Override
 	public boolean createConvocatory(Convocatory convocatory) throws Exception {
-		validateConvocatory(convocatory);
+		validateConvocatory(convocatory,1);
 		convocatory.setConvocatoryState(convocatoryStateRepository.findById(ID_CREADA));
 		Offerer offerer = offererRepository.findByEmail(convocatory.getOfferer().getEmail());
 		convocatory.setOfferer(offerer);
@@ -57,7 +62,7 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		return true;
 	}
 	
-	private void validateConvocatory(Convocatory convocatory) throws Exception{
+	private void validateConvocatory(Convocatory convocatory, int validationType) throws Exception{
 		Hashtable<String, String> parameters = new Hashtable<>();
 		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 		Set<ConstraintViolation<Object>> constraintViolations = validator.validate(convocatory);
@@ -72,7 +77,10 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 			throwException(parameters);
 		}
 		
-		validateMail(convocatory.getOfferer().getEmail());
+		if(validationType == 1){
+			validateMail(convocatory.getOfferer().getEmail());
+		}
+		
 		validateConvocatoryType(convocatory.getConvocatoryType().getId());
 		validateNumberOfBeneficiaries(convocatory);
 		validateEmptyName(convocatory);
@@ -114,7 +122,7 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	}
 
 	@Override
-	public Convocatory getByOffer(String mailOffer) throws Exception {
+	public List<Convocatory> getByOffer(String mailOffer) throws Exception {
 		Offerer of = new Offerer();
 		of.setEmail(mailOffer);
 		return convocatoryRepository.findByOfferer(of);
@@ -131,9 +139,64 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	}
 
 	@Override
-	public List<Convocatory> getByPendingPhases() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Convocatory> getByPendingPhases(String mailOfferer) throws Exception {
+		ConvocatoryState convState = new ConvocatoryState();
+		convState.setId(1);
+		convState.setName("pendiente");
+		convocatoryRepository.findByConvocatoryState(convState);
+		return convocatoryRepository.findByConvocatoryState(convState);
 	}
 
+	@Override
+	public List<Convocatory> getByOffererState(String mailOfferer, int state) throws Exception {
+		Offerer of = new Offerer();
+		of.setEmail(mailOfferer);
+		List<Convocatory> convocatories = convocatoryRepository.findByOfferer(of);
+		List<Convocatory> finalConvocatories = new ArrayList<Convocatory>();
+		for (Convocatory convocatory : convocatories) {
+			if(convocatory.getConvocatoryState().getId() == state)
+				finalConvocatories.add(convocatory);		
+		}
+		return finalConvocatories;
+	}
+
+	@Override
+	public boolean editConvocatory(Convocatory convocatory) throws Exception {
+		Convocatory convocatoryToEdit = convocatoryRepository.findById(convocatory.getId());
+		validateConvocatory(convocatoryToEdit, 2);
+		convocatoryToEdit.setName(convocatory.getName());
+		convocatoryToEdit.setDescription(convocatory.getDescription());
+		convocatoryToEdit.setNumberBeneficiaries(convocatory.getNumberBeneficiaries());
+		convocatoryToEdit.setConvocatoryType(convocatory.getConvocatoryType());
+		convocatoryToEdit.setResultDate(convocatory.getResultDate());
+		Convocatory convocatorySaved = convocatoryRepository.save(convocatoryToEdit);
+		if(convocatorySaved == null){
+			return false;
+		}
+		return true;
+	}
+	
+	
+	public List<Convocatory> getAllConvocatories(){
+		List<Convocatory> convocatories = (List<Convocatory>) convocatoryRepository.findAll();
+		return convocatories;
+	}
+	
+	public List<Convocatory> getConvocatoriesWithPhasesToApprove(String mailOfferer){
+		Offerer of = new Offerer();
+		of.setEmail(mailOfferer);
+		List<Convocatory> convocatories = (List<Convocatory>) convocatoryRepository.findByOfferer(of);
+		List<Convocatory> convocatoriesToReturn = new ArrayList<Convocatory>();
+		for (int i = 0; i < convocatories.size(); i++) {
+			Set<Phase> setPhasesTemp = convocatories.get(i).getPhases();
+			List<Phase> phasesTemp = new ArrayList<Phase>(setPhasesTemp);
+			List<Phase> validPhases = phaseService.getPhasesWithApplicantsToApprove(phasesTemp);
+			if(validPhases.size() > 0){
+				convocatoriesToReturn.add(convocatories.get(i));
+			}			
+		}
+		return convocatoriesToReturn;
+	}
+	
+	
 }

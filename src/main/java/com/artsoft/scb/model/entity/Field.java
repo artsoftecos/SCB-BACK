@@ -5,7 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
 
 @Entity
 @Table(name = "Campo")
@@ -33,7 +37,14 @@ public class Field {
 	
 	@Column(name = "SeleccionMultiple", nullable = false, length = 60)
 	private boolean multipleSelection;
-
+	
+	@ManyToOne()
+	@JoinColumn(name = "idTipoCampo")
+	private FieldType fieldType = new FieldType();
+	
+	@OneToOne(mappedBy = "field")
+	private Validation validation;
+	
 	public int getId() {
 		return id;
 	}
@@ -88,5 +99,21 @@ public class Field {
 
 	public void setMultipleSelection(boolean multipleSelection) {
 		this.multipleSelection = multipleSelection;
+	}
+
+	public FieldType getFieldType() {
+		return fieldType;
+	}
+
+	public void setFieldType(FieldType fieldType) {
+		this.fieldType = fieldType;
+	}
+
+	public Validation getValidation() {
+		return validation;
+	}
+
+	public void setValidation(Validation validation) {
+		this.validation = validation;
 	}
 }

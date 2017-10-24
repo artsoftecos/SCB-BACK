@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "Postulacion")
 public class Postulation {
@@ -23,6 +25,7 @@ public class Postulation {
 	@JoinColumn(name = "mail_solicitante", nullable = false)
 	private Applicant applicant;
 	
+	@JsonBackReference(value = "convocatory-postulation")
 	@OneToOne
 	@JoinColumn(name = "id_convocatoria", nullable = false)
 	private Convocatory convocatory;

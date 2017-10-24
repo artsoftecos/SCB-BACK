@@ -10,6 +10,6 @@ import com.artsoft.scb.model.entity.Offerer;
 
 public interface ConvocatoryRepository extends CrudRepository<Convocatory, Integer>{
 	Convocatory findById(int id);
-	Convocatory findByOfferer(Offerer offerer);
+	List<Convocatory> findByOfferer(Offerer offerer);
 	List<Convocatory> findByConvocatoryState(ConvocatoryState convocatoryState);
 }

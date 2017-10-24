@@ -1,11 +1,15 @@
 package com.artsoft.scb.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,9 +43,9 @@ public class ConvocatoryController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
-	
-	@PostMapping(path = "/getByOfferer")
-	public ResponseEntity<?> post(@RequestBody String mailOfferer) {
+		
+	@GetMapping(path = "/getByOfferer/{mailOfferer}")
+	public ResponseEntity<?> getByOfferer(@PathVariable("mailOfferer") String mailOfferer) {
 		JSONObject response = new JSONObject();
 		try {
 			response.put("Response", convocatoryService.getByOffer(mailOfferer));
@@ -52,19 +56,20 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@PostMapping(path = "/getById")
-	public ResponseEntity<?> post(@RequestBody int id) {
-		JSONObject response = new JSONObject();
+	@GetMapping(path = "/getById/{id}")
+	public ResponseEntity<?> post(@PathVariable("id") int id) {
+		
+		Convocatory convocatory = null;
 		try {
-			response.put("Response", convocatoryService.getById(id));
+			convocatory = convocatoryService.getById(id);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+		return ResponseEntity.status(HttpStatus.OK).body(convocatory);
 	}
 	
-	@PostMapping(path = "/getByState")
+	@GetMapping(path = "/getByState")
 	public ResponseEntity<?> post(@RequestBody ConvocatoryState convState) {
 		JSONObject response = new JSONObject();
 		try {
@@ -76,17 +81,54 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping(path = "/getByPendingPhases")
-	public ResponseEntity<?> get() {
-		JSONObject response = new JSONObject();
+	@GetMapping(path = "/getByPendingPhases/{mailOfferer}")
+	public ResponseEntity<?> getByPendingPhases(@PathVariable("mailOfferer") String mailOfferer) {
+		List<Convocatory> convocatories = new ArrayList<Convocatory>();
 		try {
-			response.put("Response", convocatoryService.getByPendingPhases());
+			convocatories = convocatoryService.getByPendingPhases(mailOfferer);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
+		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
+	}
+	
+	@GetMapping(path = "/getByOffererState/{mailOfferer}/{state}")
+	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer, @PathVariable("state") int state) {
+		List<Convocatory> convocatories;		
+		try {
+			convocatories = convocatoryService.getByOffererState(mailOfferer, state);
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
+	}
+	
+	@PostMapping(path = "/edit")
+	public ResponseEntity<?> editConvocatory(@RequestBody Convocatory convocatory){
+		JSONObject response = new JSONObject();
+		try {
+			convocatoryService.editConvocatory(convocatory);
+			response.put("Response", "Convocatoria editada con éxito");
+			
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
+	@GetMapping(path = "/getPending/{mailOfferer}")
+	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer) {
+
+		List<Convocatory> convocatories;
+		try {
+			convocatories = convocatoryService.getConvocatoriesWithPhasesToApprove(mailOfferer);
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
+	}
 }
 

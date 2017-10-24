@@ -1,7 +1,10 @@
 package com.artsoft.scb.model.bll;
 
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -14,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.artsoft.scb.model.bll.interfaces.IPhaseService;
 import com.artsoft.scb.model.dao.ConvocatoryRepository;
 import com.artsoft.scb.model.dao.PhaseRepository;
+import com.artsoft.scb.model.entity.ApplicantPerPhase;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Phase;
 @Service
@@ -24,18 +28,26 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 	
 	@Autowired
 	private ConvocatoryRepository convocatoryRepository;
+	
+	@Autowired
+	private ApplicantPerPhaseService applicantPerPhaseService;
+	
 	@Override
 	public boolean createPhase(Phase phase) throws Exception {
 		System.out.println("Antes de validar: " + phase.getStartDate());
-		validatePhase(phase);
+		validatePhase(phase,1);
 		Phase phaseSaved = phaseRepository.save(phase);
 		if (phaseSaved == null) {
 			return false;			
 		}
 		return true;
 	}
+	
+	public void deletePhase(int idPhase) throws Exception{
+		phaseRepository.delete(idPhase);		
+	}
 
-	private void validatePhase(Phase phase) throws Exception{
+	private void validatePhase(Phase phase, int tipoValidacion) throws Exception{
 		Hashtable<String, String> parameters = new Hashtable<>();
 		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 		Set<ConstraintViolation<Object>> constraintViolations = validator.validate(phase);
@@ -54,8 +66,9 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		validateStartDate(phase);
 		validateEndDate(phase);
 		validateStartApprovalDate(phase);
-		validateConvocatory(phase);
-		
+		if(tipoValidacion == 1){
+			validateConvocatory(phase);
+		}		
 	}
 	
 	private void validateEmptyName(Phase phase) throws Exception{
@@ -111,6 +124,68 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 			throwException("id","La convocatoria ingresada no existe");
 		}
 	}
+
+
+
+	@Override
+	public boolean editPhase(Phase phase) throws Exception {
+		Phase phaseToEdit = phaseRepository.findById(phase.getId());
+		validatePhase(phase, 2);
+		phaseToEdit.setName(phase.getName());
+		phaseToEdit.setDescription(phase.getDescription());
+		phaseToEdit.setStartDate(phase.getStartDate());
+		phaseToEdit.setEndDate(phase.getEndDate());
+		phaseToEdit.setStartApprovalDate(phase.getStartApprovalDate());
+		Phase phaseSaved = phaseRepository.save(phaseToEdit);
+		if (phaseSaved == null) {
+			return false;			
+		}
+		return true;
+	}
 	
+	public List<Phase> getPhaseByConvocatoryId(int idConvocatory){
+		Convocatory convocatory = convocatoryRepository.findById(idConvocatory);
+		return phaseRepository.findByConvocatory(convocatory);
+	}
+
+	@Override
+	public Phase getPhaseById(int idPhase) throws Exception {
+		return phaseRepository.findById(idPhase);
+	}
+	
+	private List<Phase> getPhasesBetweenDates(List<Phase> phases){
+		List<Phase> phasesSelected = new ArrayList<Phase>();
+		Date today = new Date(System.currentTimeMillis());
+		for (int i = 0; i < phases.size(); i++) {
+			if(today.after(phases.get(i).getStartApprovalDate()) && today.before(phases.get(i).getEndApprovalDate())){
+				phasesSelected.add(phases.get(i));
+			}
+		}
+		return phasesSelected;
+	}
+
+	private List<Phase> getPhasesFiltered(List<Phase> phasesNonFiltered){
+		List<ApplicantPerPhase> applicantsPending = applicantPerPhaseService.getApplicantPerPhaseByState(2);
+		List<Phase> phasesToReturn = new ArrayList<Phase>();
+		for (int i = 0; i < applicantsPending.size(); i++) {
+			for (int j = 0; j < phasesNonFiltered.size(); j++) {
+				if(phasesNonFiltered.get(j).getId() == applicantsPending.get(i).getPhase().getId()){
+					phasesToReturn.add(phasesNonFiltered.get(j));
+				}
+			}
+		}
+		return phasesToReturn;
+		
+	}
+	public List<Phase> getPhasesWithApplicantsToApprove(List<Phase> phasesPerConvocatory){
+		/*
+		List<ApplicantPerPhase> applicantsPending = applicantPerPhaseService.getApplicantPerPhaseByState(2);
+		List<Phase> phasesWithApplicantsApproved = new ArrayList<Phase>();
+		for (int i = 0; i < applicantsPending.size(); i++) {
+			phasesWithApplicantsApproved.add(applicantsPending.get(i).getPhase());
+		}*/
+		List<Phase> phasesToReturn = getPhasesBetweenDates(getPhasesFiltered(phasesPerConvocatory));
+		return phasesToReturn;
+	}
 	
 }
