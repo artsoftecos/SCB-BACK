@@ -136,6 +136,7 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		phaseToEdit.setStartDate(phase.getStartDate());
 		phaseToEdit.setEndDate(phase.getEndDate());
 		phaseToEdit.setStartApprovalDate(phase.getStartApprovalDate());
+		phaseToEdit.setEndApprovalDate(phase.getEndApprovalDate());
 		Phase phaseSaved = phaseRepository.save(phaseToEdit);
 		if (phaseSaved == null) {
 			return false;			
