@@ -20,7 +20,7 @@ public class ScbBackApplication{
 	public static void main(String[] args) {
 		 // can be set runtime before Spring instantiates any beans
         // TimeZone.setDefault(TimeZone.getTimeZone("GMT+00:00"));
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT-5:00"));
+        //TimeZone.setDefault(TimeZone.getTimeZone("GMT-5:00"));
 		SpringApplication.run(ScbBackApplication.class, args);
 	}
 }
