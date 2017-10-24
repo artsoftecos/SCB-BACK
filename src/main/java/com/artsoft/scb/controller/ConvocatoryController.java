@@ -11,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.artsoft.scb.model.bll.ConvocatoryService;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.ConvocatoryState;
-import com.artsoft.scb.model.entity.Offerer;
 
 @RestController
 @PreAuthorize("hasRole('ROLE_OFFERER')")
@@ -85,7 +83,6 @@ public class ConvocatoryController {
 	
 	@GetMapping(path = "/getByPendingPhases/{mailOfferer}")
 	public ResponseEntity<?> getByPendingPhases(@PathVariable("mailOfferer") String mailOfferer) {
-		JSONObject response = new JSONObject();
 		List<Convocatory> convocatories = new ArrayList<Convocatory>();
 		try {
 			convocatories = convocatoryService.getByPendingPhases(mailOfferer);

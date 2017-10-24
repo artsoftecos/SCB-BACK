@@ -1,11 +1,14 @@
 package com.artsoft.scb.model.entity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -20,34 +23,18 @@ public class FieldTypeValidation {
 	@Column(name = "Id")
 	private int id;
 
-	@NotNull(message = "El FieldTypeId es requerido")
-	@Column(name = "FieldTypeId")
-	private int fieldTypeId;
-	
-	@NotNull(message = "El validationTypeId es requerido")
-	@Column(name = "ValidationTypeId")
-	private int validationTypeId;
-	/*
-	@JsonBackReference(value = "fieldTypeValidation-validationType")
-	@OneToOne(mappedBy = "validationType")
-	private ValidationType validationType;
-	 */
-	@OneToOne
-	@JoinColumn(name = "idValidationType")
-	private ValidationType validationType;
-	
 	@ManyToOne
-	@JoinColumn(name = "idField")
-	private Field field;
+	@JoinColumn(name = "idTipoValidacion")
+	private ValidationType validationType;
 	
-	public Field getField() {
-		return field;
-	}
-
-	public void setField(Field field) {
-		this.field = field;
-	}
-
+	@JsonBackReference(value = "fieldTypeValidation-validation")
+	@OneToMany(mappedBy = "fieldTypeValidation")
+	private Set<Validation> validation = new HashSet<Validation>();
+	
+	@ManyToOne()
+	@JoinColumn(name = "idTipoCampo")
+	private FieldType fieldType = new FieldType();
+	
 	public int getId() {
 		return id;
 	}
@@ -56,27 +43,27 @@ public class FieldTypeValidation {
 		this.id = id;
 	}
 
-	public int getFieldTypeId() {
-		return fieldTypeId;
-	}
-
-	public void setFieldTypeId(int fieldTypeId) {
-		this.fieldTypeId = fieldTypeId;
-	}
-
-	public int getValidationTypeId() {
-		return validationTypeId;
-	}
-
-	public void setValidationTypeId(int validationTypeId) {
-		this.validationTypeId = validationTypeId;
-	}
-
 	public ValidationType getValidationType() {
 		return validationType;
 	}
 
 	public void setValidationType(ValidationType validationType) {
 		this.validationType = validationType;
+	}
+
+	public Set<Validation> getValidation() {
+		return validation;
+	}
+
+	public void setValidation(Set<Validation> validation) {
+		this.validation = validation;
+	}
+
+	public FieldType getFieldType() {
+		return fieldType;
+	}
+
+	public void setFieldType(FieldType fieldType) {
+		this.fieldType = fieldType;
 	}
 }

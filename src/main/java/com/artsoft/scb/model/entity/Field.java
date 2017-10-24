@@ -1,18 +1,15 @@
 package com.artsoft.scb.model.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name = "Campo")
@@ -41,11 +38,12 @@ public class Field {
 	@Column(name = "SeleccionMultiple", nullable = false, length = 60)
 	private boolean multipleSelection;
 	
-	@JsonBackReference(value = "field-fieldTypeValidation")
-	@OneToMany(mappedBy = "field")
-	private Set<FieldTypeValidation> fieldTypeValidation = new HashSet<FieldTypeValidation>();
+	@ManyToOne()
+	@JoinColumn(name = "idTipoCampo")
+	private FieldType fieldType = new FieldType();
 	
-	
+	@OneToOne(mappedBy = "field")
+	private Validation validation;
 	
 	public int getId() {
 		return id;
@@ -103,11 +101,19 @@ public class Field {
 		this.multipleSelection = multipleSelection;
 	}
 
-	public Set<FieldTypeValidation> getFieldTypeValidation() {
-		return fieldTypeValidation;
+	public FieldType getFieldType() {
+		return fieldType;
 	}
 
-	public void setFieldTypeValidation(Set<FieldTypeValidation> fieldTypeValidation) {
-		this.fieldTypeValidation = fieldTypeValidation;
+	public void setFieldType(FieldType fieldType) {
+		this.fieldType = fieldType;
+	}
+
+	public Validation getValidation() {
+		return validation;
+	}
+
+	public void setValidation(Validation validation) {
+		this.validation = validation;
 	}
 }
