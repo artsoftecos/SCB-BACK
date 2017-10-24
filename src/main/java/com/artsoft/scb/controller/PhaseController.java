@@ -45,9 +45,10 @@ public class PhaseController {
 	@PostMapping(path = "/edit")
 	public ResponseEntity<?> editPhase(@RequestBody Phase phase){
 		JSONObject response = new JSONObject();
+		System.out.println("entra: " + phase.getStartDate());
 		try {
 			phaseService.editPhase(phase);
-			response.put("Response", "Fase editada con Ã©xito");
+			response.put("Response", "Fase editada con éxito");
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}

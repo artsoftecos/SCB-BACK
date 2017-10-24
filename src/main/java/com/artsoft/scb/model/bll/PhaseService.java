@@ -130,7 +130,7 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 	@Override
 	public boolean editPhase(Phase phase) throws Exception {
 		Phase phaseToEdit = phaseRepository.findById(phase.getId());
-		validatePhase(phaseToEdit, 2);
+		validatePhase(phase, 2);
 		phaseToEdit.setName(phase.getName());
 		phaseToEdit.setDescription(phase.getDescription());
 		phaseToEdit.setStartDate(phase.getStartDate());
