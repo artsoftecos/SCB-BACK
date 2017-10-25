@@ -1,7 +1,8 @@
 package com.artsoft.scb.model.entity;
 
-import java.sql.Date;
+
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -33,15 +36,23 @@ public class Phase {
 	@Column(name= "Descripcion", nullable = false, length = 1000)
 	private String description;
 	
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, locale = "es-ES", timezone = "America/Bogota")
 	@Column(name = "FechaInicio", nullable = false)
 	private Date startDate;
 	
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, locale = "es-ES", timezone = "America/Bogota")
 	@Column(name = "FechaFinalizacion", nullable = false)
 	private Date endDate;
 	
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, locale = "es-ES", timezone = "America/Bogota")
 	@Column(name = "FechaInicioAprobacion", nullable = false)
 	private Date startApprovalDate;
 	
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, locale = "es-ES", timezone = "America/Bogota")
 	@Column(name = "FechaCierreAprobacion", nullable = false)
 	private Date endApprovalDate;
 	
