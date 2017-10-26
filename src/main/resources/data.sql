@@ -288,5 +288,58 @@ insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
 values ('solicitanteRejected@artsoft.com', 2,  6);
 insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
 values ('solicitanteApproved4@artsoft.com', 2,  1);
+-------------Field types-----------------------
+insert into scb.tipo_campo (nombre, orden) --1
+values ('Texto corto', 1);
+insert into scb.tipo_campo (nombre, orden) --2
+values ('Texto Largo', 2);
+insert into scb.tipo_campo (nombre, orden) --3
+values ('Archivo', 3);
+insert into scb.tipo_campo (nombre, orden) --4
+values ('Fecha / Calendario', 4);
+insert into scb.tipo_campo (nombre, orden) --5
+values ('Numérico', 5);
+insert into scb.tipo_campo (nombre, orden)  --6
+values ('Correo', 6);
+insert into scb.tipo_campo (nombre, orden) --7
+values ('Url', 7);
 
+------------- type validations ----------------
+insert into scb.tipo_validacion (expresion, nombre) --1
+values ('>', 'Mayor');
+insert into scb.tipo_validacion (expresion, nombre) --2
+values ('<', 'Menor');
+insert into scb.tipo_validacion (expresion, nombre) --3
+values ('<', 'Entre');
+insert into scb.tipo_validacion (expresion, nombre) --4
+values ('pdf,jpg', 'TipoArchivo');
+insert into scb.tipo_validacion (expresion, nombre) --5
+values ('', 'Celular');
+insert into scb.tipo_validacion (expresion, nombre) --6
+values ('', 'Expresion regular');
 
+------ Field type validations -----------
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (1,3);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (1,5);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (2,3);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (3,4);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (4, 1);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (4,2);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (4,3);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (5, 1);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (5, 2);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (5, 3);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (6, 6);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (7, 6);

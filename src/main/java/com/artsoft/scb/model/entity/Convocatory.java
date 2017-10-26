@@ -1,6 +1,6 @@
 package com.artsoft.scb.model.entity;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,8 +14,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
@@ -48,6 +51,8 @@ public class Convocatory {
 	@JoinColumn(name = "IdEstado")
 	private ConvocatoryState convocatoryState;
 	
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, locale = "es-ES", timezone = "America/Bogota")
 	@Column(name = "FechaPublicacionResultados", nullable = false)
 	private Date resultDate;
 		
