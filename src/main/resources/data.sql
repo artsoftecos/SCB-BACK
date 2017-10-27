@@ -289,20 +289,20 @@ values ('solicitanteRejected@artsoft.com', 2,  6);
 insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
 values ('solicitanteApproved4@artsoft.com', 2,  1);
 -------------Field types-----------------------
-insert into scb.tipo_campo (nombre, orden) --1
-values ('Texto corto', 1);
-insert into scb.tipo_campo (nombre, orden) --2
-values ('Texto Largo', 2);
-insert into scb.tipo_campo (nombre, orden) --3
-values ('Archivo', 3);
-insert into scb.tipo_campo (nombre, orden) --4
-values ('Fecha / Calendario', 4);
-insert into scb.tipo_campo (nombre, orden) --5
-values ('Numérico', 5);
-insert into scb.tipo_campo (nombre, orden)  --6
-values ('Correo', 6);
-insert into scb.tipo_campo (nombre, orden) --7
-values ('Url', 7);
+insert into scb.tipo_campo (nombre) --1
+values ('Texto corto');
+insert into scb.tipo_campo (nombre) --2
+values ('Texto Largo');
+insert into scb.tipo_campo (nombre) --3
+values ('Archivo');
+insert into scb.tipo_campo (nombre) --4
+values ('Fecha / Calendario');
+insert into scb.tipo_campo (nombre) --5
+values ('Numérico');
+insert into scb.tipo_campo (nombre)  --6
+values ('Correo');
+insert into scb.tipo_campo (nombre) --7
+values ('Url');
 
 ------------- type validations ----------------
 insert into scb.tipo_validacion (expresion, nombre) --1

@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @Entity
@@ -26,11 +29,11 @@ public class Field {
 	@Column(name = "Nombre", nullable = false, length = 60)
 	private String name;
 	
+	@Column(name = "Orden", nullable = false, length = 60)
+	private int order;
+	
 	@Column(name = "Obligatorio", nullable = false, length = 60)
 	private boolean obligatory;
-	
-	@Column(name = "Tipo", nullable = false, length = 60)
-	private String type;
 	
 	@Column(name = "Valor", nullable = false, length = 60)
 	private String value;
@@ -38,11 +41,13 @@ public class Field {
 	@Column(name = "SeleccionMultiple", nullable = false, length = 60)
 	private boolean multipleSelection;
 	
-	@ManyToOne()
-	@JoinColumn(name = "idTipoCampo")
-	private FieldType fieldType = new FieldType();
+//	@ManyToOne()
+//	@Autowired(required = false)
+	@Column(name = "idTipoCampo", nullable = true)
+	private Long fieldType;
 	
-	@OneToOne(mappedBy = "field")
+	@Autowired(required = false)
+	@OneToOne(mappedBy = "field", cascade = CascadeType.ALL)
 	private Validation validation;
 	
 	public int getId() {
@@ -77,14 +82,6 @@ public class Field {
 		this.obligatory = obligatory;
 	}
 
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
-
 	public String getValue() {
 		return value;
 	}
@@ -101,16 +98,24 @@ public class Field {
 		this.multipleSelection = multipleSelection;
 	}
 
-	public FieldType getFieldType() {
+	public Long getFieldType() {
 		return fieldType;
 	}
 
-	public void setFieldType(FieldType fieldType) {
+	public void setFieldType(Long fieldType) {
 		this.fieldType = fieldType;
 	}
 
 	public Validation getValidation() {
 		return validation;
+	}
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
 	}
 
 	public void setValidation(Validation validation) {

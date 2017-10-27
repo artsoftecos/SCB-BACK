@@ -10,6 +10,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
@@ -22,11 +24,13 @@ public class Validation {
 	private int id;
 	
 	@OneToOne
+	@Autowired(required = false)
 	@JsonBackReference(value = "validation-field")
 	@JoinColumn(name = "idField")
 	private Field field;
 	
 	@JsonBackReference(value = "validation-fieldTypeValidation")
+	@Autowired(required = false)
 	@ManyToOne()
 	@JoinColumn(name ="idTipoValidacionCampo")
 	private FieldTypeValidation fieldTypeValidation;

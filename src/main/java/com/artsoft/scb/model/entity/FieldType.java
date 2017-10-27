@@ -32,9 +32,6 @@ public class FieldType {
 	@OneToMany(mappedBy = "fieldType")
 	@JsonBackReference(value = "field-fieldType")
 	private Set<FieldTypeValidation> fieldTypeValidation = new HashSet<FieldTypeValidation>();
-	
-	@Column(name = "Orden")
-	private int order;
 
 	public int getId() {
 		return id;
@@ -58,14 +55,6 @@ public class FieldType {
 
 	public void setField(Set<Field> field) {
 		this.field = field;
-	}
-
-	public int getOrder() {
-		return order;
-	}
-
-	public void setOrder(int order) {
-		this.order = order;
 	}
 
 	public Set<FieldTypeValidation> getFieldTypeValidation() {
