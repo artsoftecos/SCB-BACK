@@ -34,6 +34,18 @@ public class FieldController {
 		return ResponseEntity.status(HttpStatus.OK).body("Field Created!");
 	}
 	
+	@PostMapping(path = "/update")
+	public ResponseEntity<?> updateField(@RequestBody Field field) {
+		
+		try {
+			fieldService.createField(field);
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).body("Field Updated!");
+	}
+	
 	@PostMapping(path = "/delete/{idField}")
 	public ResponseEntity<?> deleteField(@PathVariable("idField") int idField) {
 		
