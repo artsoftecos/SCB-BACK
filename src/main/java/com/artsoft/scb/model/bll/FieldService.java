@@ -26,8 +26,10 @@ public class FieldService implements IFieldService {
 	}
 	
 	@Override
-	public void deleteField(String idField) throws Exception {
-		fiedlRepo.delete(idField);
+	public void deleteField(int idField) throws Exception {
+		Field field = new Field();
+		field.setId(idField);
+		fiedlRepo.delete(field);
 	}
 
 	@Override
@@ -43,6 +45,11 @@ public class FieldService implements IFieldService {
 	@Override
 	public Field findOne(String id) throws Exception {
 		return fiedlRepo.findOne(id);
+	}
+
+	@Override
+	public Boolean exists(String id) throws Exception {
+		return fiedlRepo.exists(id);
 	}
 
 	

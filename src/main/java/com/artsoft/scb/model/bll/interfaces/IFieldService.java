@@ -8,12 +8,14 @@ public interface IFieldService {
 	
 	public boolean createField(Field field) throws Exception;
 	
-	public void deleteField(String idField) throws Exception;
+	public void deleteField(int idField) throws Exception;
 	
 	public List<Field> findByPhase(int idPhase) throws Exception;
 	
 	public List<Field> findAll() throws Exception;
 	
 	public Field findOne(String id) throws Exception;
+	
+	public Boolean exists(String id) throws Exception;
 
 }

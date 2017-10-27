@@ -41,10 +41,13 @@ public class Field {
 	@Column(name = "SeleccionMultiple", nullable = false, length = 60)
 	private boolean multipleSelection;
 	
-//	@ManyToOne()
-//	@Autowired(required = false)
-	@Column(name = "idTipoCampo", nullable = true)
-	private Long fieldType;
+	@Column(name = "idTipoCampo", length = 60)
+	private Long type;
+	
+	@ManyToOne()
+	@Autowired(required = false)
+	@JoinColumn(name = "idCampoTipoCampo", insertable=false, nullable = true)
+	private FieldType fieldType = new FieldType();
 	
 	@Autowired(required = false)
 	@OneToOne(mappedBy = "field", cascade = CascadeType.ALL)
@@ -98,11 +101,11 @@ public class Field {
 		this.multipleSelection = multipleSelection;
 	}
 
-	public Long getFieldType() {
+	public FieldType getFieldType() {
 		return fieldType;
 	}
 
-	public void setFieldType(Long fieldType) {
+	public void setFieldType(FieldType fieldType) {
 		this.fieldType = fieldType;
 	}
 
@@ -120,5 +123,13 @@ public class Field {
 
 	public void setValidation(Validation validation) {
 		this.validation = validation;
+	}
+
+	public Long getType() {
+		return type;
+	}
+
+	public void setType(Long type) {
+		this.type = type;
 	}
 }

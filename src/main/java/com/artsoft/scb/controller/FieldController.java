@@ -34,12 +34,17 @@ public class FieldController {
 		return ResponseEntity.status(HttpStatus.OK).body("Field Created!");
 	}
 	
-	@PostMapping(path = "/delete")
-	public ResponseEntity<?> deleteField(@RequestBody Field field) {
+	@PostMapping(path = "/delete/{idField}")
+	public ResponseEntity<?> deleteField(@PathVariable("idField") int idField) {
 		
 		try {
-			fieldService.deleteField(String.valueOf(field.getId()));
-		} catch (Exception ex) {
+//			if(!fieldService.exists(String.valueOf(idField)))
+//				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El campo no existe!");
+			fieldService.deleteField(idField);
+		} catch (IllegalArgumentException ie)	{
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Field does not exist!");
+		}
+		 catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
 		
