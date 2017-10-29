@@ -89,15 +89,28 @@ public class Applicant {
 	private ApplicantPerPhase applicantPerPhase;
 	
 	@JsonBackReference(value = "applicant-place")
-	@OneToOne(mappedBy = "applicant")
-	private Place place;
+	@OneToMany(mappedBy = "applicant")
+	private Set<Place> places = new HashSet<Place>();
 	
-	public Place getPlace() {
-		return place;
+	@JsonBackReference(value = "applicant-postulation")
+	@OneToMany(mappedBy = "applicant")
+	private Set<Postulation> postulations = new HashSet<Postulation>();
+	
+
+	public Set<Postulation> getPostulations() {
+		return postulations;
 	}
 
-	public void setPlace(Place place) {
-		this.place = place;
+	public void setPostulations(Set<Postulation> postulations) {
+		this.postulations = postulations;
+	}
+
+	public Set<Place> getPlaces() {
+		return places;
+	}
+
+	public void setPlaces(Set<Place> places) {
+		this.places = places;
 	}
 
 	public ApplicantPerPhase getApplicantPerPhase() {

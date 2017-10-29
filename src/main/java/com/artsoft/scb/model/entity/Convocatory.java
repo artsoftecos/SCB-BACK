@@ -62,34 +62,35 @@ public class Convocatory {
 	private Set<Phase> phases = new HashSet<Phase>();
 	
 	@JsonBackReference(value = "convocatory-place")
-	@OneToOne(mappedBy = "convocatory")
-	private Place place;
+	@OneToMany(mappedBy = "convocatory")
+	private Set<Place> places = new HashSet<Place>();
 		
-	@OneToOne(mappedBy = "convocatory")
-	private Postulation postulation;
+	@OneToMany(mappedBy = "convocatory")
+	private Set<Postulation> postulations = new HashSet<Postulation>();
 		
+	
+	public Set<Place> getPlaces() {
+		return places;
+	}
+
+	public void setPlaces(Set<Place> places) {
+		this.places = places;
+	}
+
+	public Set<Postulation> getPostulations() {
+		return postulations;
+	}
+
+	public void setPostulations(Set<Postulation> postulations) {
+		this.postulations = postulations;
+	}
+
 	public Date getResultDate() {
 		return resultDate;
 	}
 
 	public void setResultDate(Date resultDate) {
 		this.resultDate = resultDate;
-	}
-
-	public Postulation getPostulation() {
-		return postulation;
-	}
-
-	public void setPostulation(Postulation postulation) {
-		this.postulation = postulation;
-	}
-
-	public Place getPlace() {
-		return place;
-	}
-
-	public void setPlace(Place place) {
-		this.place = place;
 	}
 
 	public Set<Phase> getPhases() {
@@ -160,7 +161,7 @@ public class Convocatory {
 	public String toString() {
 		return "Convocatory [id=" + id + ", name=" + name + ", description=" + description + ", numberBeneficiaries="
 				+ numberBeneficiaries + ", offerer=" + offerer + ", convocatoryType=" + convocatoryType
-				+ ", convocatoryState=" + convocatoryState + ", resultDate=" + resultDate + ", phases=" + phases
-				+ ", place=" + place + ", postulation=" + postulation + "]";
+				+ ", convocatoryState=" + convocatoryState + ", resultDate=" + resultDate + ", phases=" + phases + "]";
+				//+ ", place=" + place + ", postulation=" + postulation + "]";
 	}
 }

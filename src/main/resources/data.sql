@@ -343,3 +343,23 @@ insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (6, 6);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (7, 6);
+
+-------------INSERTING PLACES --------
+
+insert into scb.plaza (mail_solicitante, id_convocatoria, id_estado)
+values ('solicitanteApproved3@artsoft.com', 3, 1);
+
+------------INSERTING POSTULATIONS-----------
+
+insert into scb.postulacion (fecha_postulacion, mail_solicitante, id_convocatoria)
+values ('2017-11-11', 'solicitanteApproved3@artsoft.com', 1);
+
+insert into scb.postulacion (fecha_postulacion, mail_solicitante, id_convocatoria)
+values ('2017-11-11', 'solicitanteApproved2@artsoft.com', 3);
+
+insert into scb.postulacion (fecha_postulacion, mail_solicitante, id_convocatoria)
+values ('2017-11-11', 'solicitanteApproved2@artsoft.com', 1);
+
+insert into scb.postulacion (fecha_postulacion, mail_solicitante, id_convocatoria)
+values ('2017-11-11', 'solicitanteApproved3@artsoft.com', 2);
+

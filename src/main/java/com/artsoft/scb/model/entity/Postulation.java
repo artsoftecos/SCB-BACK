@@ -1,6 +1,7 @@
 package com.artsoft.scb.model.entity;
 
 import java.sql.Timestamp;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,10 +9,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "Postulacion")
@@ -21,17 +26,19 @@ public class Postulation {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "mail_solicitante", nullable = false)
 	private Applicant applicant;
 	
-	@JsonBackReference(value = "convocatory-postulation")
+	@JsonBackReference(value = "postulation-convocatory")
 	@OneToOne
 	@JoinColumn(name = "id_convocatoria", nullable = false)
 	private Convocatory convocatory;
 
+	@Temporal(TemporalType.DATE)
+	@JsonFormat(shape = JsonFormat.Shape.STRING, locale = "es-ES", timezone = "America/Bogota")
 	@Column(name = "Fecha_Postulacion", nullable = false)
-	private Timestamp postulationDate;
+	private Date postulationDate;
 
 	public int getId() {
 		return id;
@@ -57,11 +64,11 @@ public class Postulation {
 		this.convocatory = convocatory;
 	}
 
-	public Timestamp getPostulationDate() {
+	public Date getPostulationDate() {
 		return postulationDate;
 	}
 
-	public void setPostulationDate(Timestamp postulationDate) {
+	public void setPostulationDate(Date postulationDate) {
 		this.postulationDate = postulationDate;
 	}
 	

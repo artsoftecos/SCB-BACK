@@ -22,6 +22,8 @@ import com.artsoft.scb.model.entity.ConvocatoryState;
 import com.artsoft.scb.model.entity.ConvocatoryType;
 import com.artsoft.scb.model.entity.Offerer;
 import com.artsoft.scb.model.entity.Phase;
+import com.artsoft.scb.model.entity.Place;
+import com.artsoft.scb.model.entity.Postulation;
 
 
 @Service
@@ -41,6 +43,12 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 	
 	@Autowired
 	private PhaseService phaseService;
+	
+	@Autowired 
+	private PlaceService placeService;
+	
+	@Autowired
+	private PostulationService postulationService;
 	
 	
 	private final int ID_CREADA = 1;
@@ -197,6 +205,76 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		}
 		return convocatoriesToReturn;
 	}
+	/**
+	 * 
+	 * @param mailApplicant Mail del solicitante
+	 * @return Listado de convocatorias a las que ha aplicado un solicitante pero no ha sido aprobado 
+	 */
+	public List<Convocatory> getConvocatoriesOfApplicant(String mailApplicant){
+		List<Place> placesOfApplicant = placeService.getPlaceByEmail(mailApplicant);
+		List<Postulation> postulationsOfApplicant = postulationService.getPostulationsByEmail(mailApplicant);
+		List<Convocatory> convocatories = new ArrayList<Convocatory>();
+		for (int i = 0; i < postulationsOfApplicant.size(); i++) {
+			try {
+				convocatories.add(getById(postulationsOfApplicant.get(i).getConvocatory().getId()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		if(placesOfApplicant.isEmpty()){			
+			return convocatories;
+		}else{
+			for (int i = 0; i < placesOfApplicant.size(); i++) {
+				for (int j = 0; j < convocatories.size(); j++) {
+					if (placesOfApplicant.get(i).getConvocatory().getId() == convocatories.get(j).getId()) {
+						convocatories.remove(j);
+					}
+					
+				}
+			}
+		}
+		return convocatories;
+	}
 	
+	public List<Convocatory> getConvocatoriesOfApplicantWithPlaces(String mailApplicant){
+		List<Place> placesOfApplicant = placeService.getPlaceByEmail(mailApplicant);
+		List<Convocatory> convocatories = new ArrayList<Convocatory>();
+		for (int i = 0; i < placesOfApplicant.size(); i++) {
+			try {
+				convocatories.add(getById(placesOfApplicant.get(i).getConvocatory().getId()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return convocatories;
+	}
+	
+	public List<Convocatory> getNotAppliedConvocatories(String mailApplicant){
+		List<Place> placesOfApplicant = placeService.getPlaceByEmail(mailApplicant);
+		List<Postulation> postulationsOfApplicant = postulationService.getPostulationsByEmail(mailApplicant);
+		List<Convocatory> convocatories = getAllConvocatories();
+		if(placesOfApplicant.isEmpty() && postulationsOfApplicant.isEmpty()){
+			return convocatories;
+		}
+		for (int i = 0; i < placesOfApplicant.size(); i++) {
+			for (int j = 0; j < convocatories.size(); j++) {
+				if (placesOfApplicant.get(i).getConvocatory().getId() == convocatories.get(j).getId()) {
+					convocatories.remove(j);
+				}
+				
+			}
+		}
+		
+		for (int i = 0; i < postulationsOfApplicant.size(); i++) {
+			for (int j = 0; j < convocatories.size(); j++) {
+				if (postulationsOfApplicant.get(i).getConvocatory().getId() == convocatories.get(j).getId()) {
+					convocatories.remove(j);
+				}
+				
+			}
+		}
+		
+		return convocatories;
+	}
 	
 }

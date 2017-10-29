@@ -18,11 +18,11 @@ public class Place {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
-	@OneToOne
-	@JoinColumn(name = "mail_solicitante", nullable = false)
+	@ManyToOne
+	@JoinColumn(name = "mail_solicitante", nullable = false, unique = false)
 	private Applicant applicant;
 	
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "id_convocatoria", nullable = false)
 	private Convocatory convocatory;
 	
