@@ -52,6 +52,10 @@ insert into scb.usuario (email, enabled, password) values ('SolicitanteApproved3
 insert into scb.usuario (email, enabled, password) values ('SolicitanteApproved4@artsoft.com', 1, '$2a$10$2tkTPQBzX5eyud2uAwDPtOws3KV.IGR/Adka/MkN4Mbo/u6GP5fwa');
 insert into scb.usuario (email, enabled, password) values ('SolicitanteApproved5@artsoft.com', 1, '$2a$10$2tkTPQBzX5eyud2uAwDPtOws3KV.IGR/Adka/MkN4Mbo/u6GP5fwa');
 
+insert into scb.tipo_usuario (rol, email) values ('ROLE_APPLICANT', 'SolicitanteApproved2@artsoft.com');
+insert into scb.tipo_usuario (rol, email) values ('ROLE_APPLICANT', 'SolicitanteApproved3@artsoft.com');
+insert into scb.tipo_usuario (rol, email) values ('ROLE_APPLICANT', 'SolicitanteApproved4@artsoft.com');
+insert into scb.tipo_usuario (rol, email) values ('ROLE_APPLICANT', 'SolicitanteApproved5@artsoft.com');
 
 insert into scb.solicitante (correo, fecha_registro, numero_documento, primer_apellido, primer_nombre, segundo_apellido, segunda_nombre, id_tipo_documento, id_usuario)
 values ('solicitanteApproved2@artsoft.com', '2017-09-02 12:31:51', '1014207335', 'Quintero', 'Pineros', 'Miguel', 'Angel', 1, 'solicitanteApproved2@artsoft.com');
@@ -222,6 +226,10 @@ values ('Becas para estudios en españa 3', 'Estudios en España 3', 3, '2017-09
 
 insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
 values ('Becas para estudios en españa 4', 'Estudios en España 3', 4, '2017-09-01', 1, 4, 'OffererApproved@artsoft.com');
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en españa 5', 'Estudios en España 5', 4, '2017-09-01', 1, 4, 'OffererApproved@artsoft.com');
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en españa 6', 'Estudios en España 6', 4, '2017-09-01', 1, 4, 'OffererApproved@artsoft.com');
 
 -----INSERTING PHASE-----------------
 
@@ -348,6 +356,10 @@ values (7, 6);
 
 insert into scb.plaza (mail_solicitante, id_convocatoria, id_estado)
 values ('solicitanteApproved3@artsoft.com', 3, 1);
+insert into scb.plaza (mail_solicitante, id_convocatoria, id_estado)
+values ('solicitanteApproved3@artsoft.com', 5, 2);
+insert into scb.plaza (mail_solicitante, id_convocatoria, id_estado)
+values ('solicitanteApproved3@artsoft.com', 6, 3);
 
 ------------INSERTING POSTULATIONS-----------
 

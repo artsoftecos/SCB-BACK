@@ -236,9 +236,9 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		return convocatories;
 	}
 	
-	public List<Convocatory> getConvocatoriesOfApplicantWithPlaces(String mailApplicant){
+	public List<Place> getConvocatoriesOfApplicantWithPlaces(String mailApplicant){
 		List<Place> placesOfApplicant = placeService.getPlaceByEmail(mailApplicant);
-		List<Convocatory> convocatories = new ArrayList<Convocatory>();
+		/*List<Convocatory> convocatories = new ArrayList<Convocatory>();
 		for (int i = 0; i < placesOfApplicant.size(); i++) {
 			try {
 				convocatories.add(getById(placesOfApplicant.get(i).getConvocatory().getId()));
@@ -246,7 +246,8 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 				e.printStackTrace();
 			}
 		}
-		return convocatories;
+		return convocatories;*/
+		return placesOfApplicant;
 	}
 	
 	public List<Convocatory> getNotAppliedConvocatories(String mailApplicant){

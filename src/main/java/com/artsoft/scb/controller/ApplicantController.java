@@ -19,6 +19,7 @@ import com.artsoft.scb.model.bll.ConvocatoryService;
 import com.artsoft.scb.model.dao.ConvocatoryRepository;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.Convocatory;
+import com.artsoft.scb.model.entity.Place;
 
 @EnableWebMvc
 @RestController
@@ -78,7 +79,7 @@ public class ApplicantController {
 	 */
 	@GetMapping(path = "/places/{mail:.+}")
 	public ResponseEntity<?> getPlaces(@PathVariable("mail") String mailApplicant){
-		List<Convocatory> convocatory;
+		List<Place> convocatory;
 		try {
 			convocatory  = convocatoryService.getConvocatoriesOfApplicantWithPlaces(mailApplicant);
 		} catch (Exception ex) {

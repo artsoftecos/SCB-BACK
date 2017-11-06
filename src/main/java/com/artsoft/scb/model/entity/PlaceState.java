@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "EstadoPlaza")
 public class PlaceState {
@@ -23,6 +25,7 @@ public class PlaceState {
 	@Column(name = "Nombre", nullable = false, length = 20)
 	private String name;
 	
+	@JsonBackReference(value = "places-statePlaces")
 	@OneToMany(mappedBy = "placeState")
 	private Set<Place> places = new HashSet<Place>();
 
