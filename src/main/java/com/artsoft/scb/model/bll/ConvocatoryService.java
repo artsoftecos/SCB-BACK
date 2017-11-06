@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.bll;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -255,7 +256,7 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 		List<Postulation> postulationsOfApplicant = postulationService.getPostulationsByEmail(mailApplicant);
 		List<Convocatory> convocatories = getAllConvocatories();
 		if(placesOfApplicant.isEmpty() && postulationsOfApplicant.isEmpty()){
-			return convocatories;
+			return getConvocatoriesWithPhases(convocatories);
 		}
 		for (int i = 0; i < placesOfApplicant.size(); i++) {
 			for (int j = 0; j < convocatories.size(); j++) {
@@ -275,7 +276,45 @@ public class ConvocatoryService extends ExceptionService implements IConvocatory
 			}
 		}
 		
-		return convocatories;
+		return getConvocatoriesWithPhases(convocatories);
 	}
 	
+	
+	private List<Convocatory> getConvocatoriesWithPhases(List<Convocatory> convocatories){
+		Date fechaHoy = new Date(System.currentTimeMillis());
+		List<Convocatory> convocatoriesTemp = new ArrayList<Convocatory>();
+		List<Convocatory> convocatoriesToReturn = new ArrayList<Convocatory>();
+		convocatoriesTemp = convocatories;
+		boolean devolverConvocatoria;
+		for (int i = 0; i < convocatoriesTemp.size(); i++) {
+			devolverConvocatoria = true;
+			Convocatory convTemp = convocatoriesTemp.get(i);
+			List<Phase> phasesTemp = new ArrayList<Phase>();
+			phasesTemp.addAll(convTemp.getPhases());
+			int indiceFechaMenor = 0;
+			
+			if(phasesTemp.isEmpty()){
+				devolverConvocatoria = false;
+			}else{
+				for (int j = 1; j < phasesTemp.size(); j++) {
+					if(phasesTemp.get(j).getStartDate().getTime() < phasesTemp.get(indiceFechaMenor).getStartDate().getTime()){
+						indiceFechaMenor = j;
+					}
+				}
+				
+				if(phasesTemp.get(indiceFechaMenor).getEndDate().before(fechaHoy) && fechaHoy.after(phasesTemp.get(indiceFechaMenor).getStartDate())){
+					devolverConvocatoria = false;
+				}
+			}
+			
+			
+			if(devolverConvocatoria == true){
+				convocatoriesToReturn.add(convTemp);
+				devolverConvocatoria = false;
+			}
+				
+		}
+		
+		return convocatoriesToReturn;
+	}
 }
