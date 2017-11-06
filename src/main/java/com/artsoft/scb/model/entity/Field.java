@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,13 +42,9 @@ public class Field {
 	@Column(name = "SeleccionMultiple", nullable = false, length = 60)
 	private boolean multipleSelection;
 	
-	@Column(name = "idTipoCampo", length = 60)
-	private Long type;
-	
-	@ManyToOne()
-	@Autowired(required = false)
-	@JoinColumn(name = "idCampoTipoCampo", insertable=false, nullable = true)
-	private FieldType fieldType = new FieldType();
+	@ManyToOne
+    @JoinColumn(name = "IdFieldType")
+	private FieldType fieldType;
 	
 	@Autowired(required = false)
 	@OneToOne(mappedBy = "field", cascade = CascadeType.ALL)
@@ -123,13 +120,5 @@ public class Field {
 
 	public void setValidation(Validation validation) {
 		this.validation = validation;
-	}
-
-	public Long getType() {
-		return type;
-	}
-
-	public void setType(Long type) {
-		this.type = type;
 	}
 }
