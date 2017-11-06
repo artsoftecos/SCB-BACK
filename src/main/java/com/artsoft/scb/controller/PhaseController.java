@@ -19,7 +19,7 @@ import com.artsoft.scb.model.bll.PhaseService;
 import com.artsoft.scb.model.entity.Phase;
 
 @RestController
-@PreAuthorize("hasRole('ROLE_OFFERER')")
+@PreAuthorize("hasAnyRole('ROLE_OFFERER','ROLE_APPLICANT')")
 @RequestMapping(path = "/phase")
 public class PhaseController {
 

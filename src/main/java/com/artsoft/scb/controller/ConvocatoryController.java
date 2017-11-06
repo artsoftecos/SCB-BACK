@@ -20,7 +20,7 @@ import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.ConvocatoryState;
 
 @RestController
-@PreAuthorize("hasRole('ROLE_OFFERER')")
+@PreAuthorize("hasAnyRole('ROLE_OFFERER','ROLE_APPLICANT')")
 @RequestMapping(path = "/convocatory")
 public class ConvocatoryController {
 	
