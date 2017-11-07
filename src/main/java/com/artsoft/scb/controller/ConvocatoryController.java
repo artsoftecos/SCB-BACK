@@ -130,5 +130,6 @@ public class ConvocatoryController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
 	}
+	
 }
 

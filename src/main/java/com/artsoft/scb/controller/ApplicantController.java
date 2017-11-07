@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.artsoft.scb.model.bll.ApplicantService;
 import com.artsoft.scb.model.bll.ConvocatoryService;
+import com.artsoft.scb.model.bll.PlaceService;
 import com.artsoft.scb.model.dao.ConvocatoryRepository;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.Convocatory;
@@ -31,6 +33,9 @@ public class ApplicantController {
 	
 	@Autowired
 	private ConvocatoryService convocatoryService;
+	
+	@Autowired
+	private PlaceService placeService;
 		
 	@PostMapping()
 	public ResponseEntity<?> createApplicant(@RequestBody Applicant applicant) {
@@ -97,5 +102,28 @@ public class ApplicantController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(convocatory);
+	}
+	
+	@PostMapping(path = "/acceptConvocatory/{idConvocatory}/{mailApplicant:.+}")
+	public ResponseEntity<?> acceptPlace(@PathVariable("idConvocatory") int idConvocatory, @PathVariable("mailApplicant") String mailApplicant){
+		JSONObject response = new JSONObject();
+		try {
+			placeService.acceptPlace(idConvocatory, mailApplicant);
+			response.put("Response", "La plaza ha sido aceptada");
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+	}
+	
+	@PostMapping(path = "/rejectPlace")
+	public ResponseEntity<?> rejectPlace(@RequestParam("email") String mailApplicant, @RequestParam("idConvocatory") int idConvocatory, @RequestParam("rejectionCause") String rejectionCause){
+		JSONObject response = new JSONObject();
+		try {
+			response.put("Datos", mailApplicant + idConvocatory + rejectionCause);
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 }
