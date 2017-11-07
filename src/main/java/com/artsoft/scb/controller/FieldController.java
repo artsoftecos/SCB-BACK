@@ -2,6 +2,7 @@ package com.artsoft.scb.controller;
 
 import java.util.List;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,14 +25,14 @@ public class FieldController {
 	
 	@PostMapping(path = "/create")
 	public ResponseEntity<?> createField(@RequestBody Field field) {
-		
+		JSONObject response = new JSONObject();
 		try {
 			fieldService.createField(field);
+			response.put("Response", "Campo creado");
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
-		
-		return ResponseEntity.status(HttpStatus.OK).body("Field Created!");
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
 	@PostMapping(path = "/update")
