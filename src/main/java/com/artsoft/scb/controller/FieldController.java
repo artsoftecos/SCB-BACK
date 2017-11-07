@@ -49,19 +49,20 @@ public class FieldController {
 	
 	@PostMapping(path = "/delete/{idField}")
 	public ResponseEntity<?> deleteField(@PathVariable("idField") int idField) {
-		
+		JSONObject response = new JSONObject();
 		try {
 //			if(!fieldService.exists(String.valueOf(idField)))
 //				return ResponseEntity.status(HttpStatus.NO_CONTENT).body("El campo no existe!");
 			fieldService.deleteField(idField);
+			response.put("Response", "Field Deleted!");
 		} catch (IllegalArgumentException ie)	{
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Field does not exist!");
 		}
 		 catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
-		
-		return ResponseEntity.status(HttpStatus.OK).body("Field Deleted!");
+
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
 	@GetMapping(path = "/getByPhase/{idPhase}")
