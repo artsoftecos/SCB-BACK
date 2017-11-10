@@ -211,6 +211,7 @@ insert into scb.estado_plaza (nombre) values ('Rechazada');
 insert into scb.estado_solicitante_por_fase (nombre) values ('Aprobado');
 insert into scb.estado_solicitante_por_fase (nombre) values ('Pendiente');
 insert into scb.estado_solicitante_por_fase (nombre) values ('Rechazado');
+insert into scb.estado_solicitante_por_fase (nombre) values ('PendienteRegistroDatos');
 
 ---- INSERTING CONVOCATORY----
 
