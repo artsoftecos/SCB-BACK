@@ -11,5 +11,6 @@ import com.artsoft.scb.model.entity.Place;
 public interface PlaceRepository extends CrudRepository<Place, Integer> {
 	List<Place> findByApplicant(Applicant applicant);
 	Place findByConvocatory(Convocatory convocatory);
+	Place findById(int idPlace);
 
 }

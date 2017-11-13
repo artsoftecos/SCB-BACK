@@ -9,6 +9,7 @@ import com.artsoft.scb.model.dao.ApplicantRepository;
 import com.artsoft.scb.model.dao.ConvocatoryRepository;
 import com.artsoft.scb.model.dao.PlaceRepository;
 import com.artsoft.scb.model.dao.PlaceStateRepository;
+import com.artsoft.scb.model.dao.RejectPlaceStructure;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Place;
@@ -38,19 +39,9 @@ public class PlaceService extends ExceptionService {
 		return placeRepository.findByApplicant(applicant);
 	}
 	
-	public boolean acceptPlace(int idConvocatory, String mailApplicant) throws Exception{
-		validateMail(mailApplicant);
-		validateConvocatory(idConvocatory);
-		Applicant applicant = applicantRepository.findByEmail(mailApplicant);
-		List<Place> places = placeRepository.findByApplicant(applicant);
-		Place placeToEdit = new Place();
-		for (int i = 0; i < places.size(); i++) {
-			if(places.get(i).getConvocatory().getId() == idConvocatory){
-				placeToEdit = placeRepository.findByConvocatory(places.get(i).getConvocatory());
-				break;
-			}
-			
-		}
+	public boolean acceptPlace(int idPlace) throws Exception{
+		validatePlace(idPlace);
+		Place placeToEdit = placeRepository.findById(idPlace);		
 		PlaceState placeState = placeStateRepository.findById(ID_ACEPTADA);
 		placeToEdit.setPlaceState(placeState);
 		
@@ -63,20 +54,28 @@ public class PlaceService extends ExceptionService {
 		return true;
 	}
 	
-	private void validateMail(String mail) throws Exception{
-		Applicant applicantFound = applicantRepository.findByEmail(mail);
+	public boolean rejectPlace(RejectPlaceStructure rejectPlaceStructure) throws Exception{
+		validatePlace(rejectPlaceStructure.getIdPlace());
+		Place placeToEdit = placeRepository.findById(rejectPlaceStructure.getIdPlace());
+		PlaceState placeState = placeStateRepository.findById(ID_RECHAZADA);
+		placeToEdit.setPlaceState(placeState);
+		placeToEdit.setRejectionCause(rejectPlaceStructure.getRejectCause());
 		
-		if(applicantFound == null){
-			throwException("email", "No existe un solicitante asociado a ese email");
+		Place placeSaved = placeRepository.save(placeToEdit);
+		
+		if(placeSaved == null){
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private void validatePlace(int idPlace) throws Exception{
+		Place placeFound = placeRepository.findById(idPlace);
+		
+		if(placeFound == null){
+			throwException("idPlace", "No existe una plaza asociada ese ID");
 		}
 	}
 	
-	private void validateConvocatory(int idConvocatory) throws Exception{
-		Convocatory convocatoryFound = convocatoryRepository.findById(idConvocatory);
-		
-		if(convocatoryFound == null){
-			throwException("id", "No existe una convocatoria asociada a ese id");
-		}
-	}
-
 }

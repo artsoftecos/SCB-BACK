@@ -19,6 +19,7 @@ import com.artsoft.scb.model.bll.ApplicantService;
 import com.artsoft.scb.model.bll.ConvocatoryService;
 import com.artsoft.scb.model.bll.PlaceService;
 import com.artsoft.scb.model.dao.ConvocatoryRepository;
+import com.artsoft.scb.model.dao.RejectPlaceStructure;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Place;
@@ -104,11 +105,11 @@ public class ApplicantController {
 		return ResponseEntity.status(HttpStatus.OK).body(convocatory);
 	}
 	
-	@PostMapping(path = "/acceptConvocatory/{idConvocatory}/{mailApplicant:.+}")
-	public ResponseEntity<?> acceptPlace(@PathVariable("idConvocatory") int idConvocatory, @PathVariable("mailApplicant") String mailApplicant){
+	@PostMapping(path = "/acceptConvocatory/{idPlace}")
+	public ResponseEntity<?> acceptPlace(@PathVariable("idPlace") int idPlace){
 		JSONObject response = new JSONObject();
 		try {
-			placeService.acceptPlace(idConvocatory, mailApplicant);
+			placeService.acceptPlace(idPlace);
 			response.put("Response", "La plaza ha sido aceptada");
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
@@ -117,10 +118,11 @@ public class ApplicantController {
 	}
 	
 	@PostMapping(path = "/rejectPlace")
-	public ResponseEntity<?> rejectPlace(@RequestParam("email") String mailApplicant, @RequestParam("idConvocatory") int idConvocatory, @RequestParam("rejectionCause") String rejectionCause){
+	public ResponseEntity<?> rejectPlace(@RequestBody RejectPlaceStructure rejectPlaceStructure){
 		JSONObject response = new JSONObject();
 		try {
-			response.put("Datos", mailApplicant + idConvocatory + rejectionCause);
+			placeService.rejectPlace(rejectPlaceStructure);
+			response.put("Response", "La plaza ha sido rechazada");
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
