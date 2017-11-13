@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.artsoft.scb.model.bll.interfaces.IFieldService;
+import com.artsoft.scb.model.bll.interfaces.IValidationService;
 import com.artsoft.scb.model.entity.Field;
+import com.artsoft.scb.model.entity.Validation;
 
 @RestController
 @RequestMapping(path = "/field")
@@ -22,12 +24,16 @@ public class FieldController {
 	
 	@Autowired
 	private IFieldService fieldService;
+
+	@Autowired
+	private IValidationService validationService;
 	
 	@PostMapping(path = "/create")
 	public ResponseEntity<?> createField(@RequestBody Field field) {
 		JSONObject response = new JSONObject();
 		try {
 			fieldService.createField(field);
+			validationService.linkField(field.getValidation(), field);
 			response.put("Response", "Campo creado");
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
