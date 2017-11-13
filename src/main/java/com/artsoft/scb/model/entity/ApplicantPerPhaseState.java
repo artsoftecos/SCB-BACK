@@ -19,7 +19,7 @@ public class ApplicantPerPhaseState {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
-	@Column(name = "Nombre", nullable = false, length = 20)
+	@Column(name = "Nombre", nullable = false, length = 50)
 	private String name;
 	
 	@OneToMany(mappedBy = "applicantPerPhaseState")

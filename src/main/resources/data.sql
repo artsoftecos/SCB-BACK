@@ -211,6 +211,7 @@ insert into scb.estado_plaza (nombre) values ('Rechazada');
 insert into scb.estado_solicitante_por_fase (nombre) values ('Aprobado');
 insert into scb.estado_solicitante_por_fase (nombre) values ('Pendiente');
 insert into scb.estado_solicitante_por_fase (nombre) values ('Rechazado');
+insert into scb.estado_solicitante_por_fase (nombre) values ('PendienteRegistroDatos');
 
 ---- INSERTING CONVOCATORY----
 
@@ -296,6 +297,8 @@ insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
 values ('solicitanteRejected@artsoft.com', 2,  6);
 insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
 values ('solicitanteApproved4@artsoft.com', 2,  1);
+/*insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteApproved3@artsoft.com', 4,  1);*/
 -------------Field types-----------------------
 insert into scb.tipo_campo (nombre) --1
 values ('Texto corto');
