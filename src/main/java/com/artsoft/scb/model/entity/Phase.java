@@ -3,6 +3,8 @@ package com.artsoft.scb.model.entity;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -60,8 +63,8 @@ public class Phase {
 	@JoinColumn(name = "IdConvocatoria")
 	private Convocatory convocatory;
 	
-	@OneToOne(mappedBy = "phase")
-	private ApplicantPerPhase applicantPerPhase;
+	@OneToMany(mappedBy = "phase")
+	private Set<ApplicantPerPhase> applicantPerPhase = new HashSet<ApplicantPerPhase>();
 
 	
 	public Date getEndApprovalDate() {
@@ -78,14 +81,6 @@ public class Phase {
 
 	public void setStartApprovalDate(Date startApprovalDate) {
 		this.startApprovalDate = startApprovalDate;
-	}
-
-	public ApplicantPerPhase getApplicantPerPhase() {
-		return applicantPerPhase;
-	}
-
-	public void setApplicantPerPhase(ApplicantPerPhase applicantPerPhase) {
-		this.applicantPerPhase = applicantPerPhase;
 	}
 
 	public int getId() {
@@ -134,6 +129,14 @@ public class Phase {
 
 	public void setConvocatory(Convocatory convocatory) {
 		this.convocatory = convocatory;
+	}
+
+	public Set<ApplicantPerPhase> getApplicantPerPhase() {
+		return applicantPerPhase;
+	}
+
+	public void setApplicantPerPhase(Set<ApplicantPerPhase> applicantPerPhase) {
+		this.applicantPerPhase = applicantPerPhase;
 	}
 	
 	

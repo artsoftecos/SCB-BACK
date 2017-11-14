@@ -2,6 +2,9 @@ package com.artsoft.scb.model.bll;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -11,12 +14,16 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
+import org.joda.time.DateTime;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.artsoft.scb.model.bll.interfaces.IPhaseService;
+import com.artsoft.scb.model.dao.ApplicantRepository;
 import com.artsoft.scb.model.dao.ConvocatoryRepository;
 import com.artsoft.scb.model.dao.PhaseRepository;
+import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.ApplicantPerPhase;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Phase;
@@ -31,6 +38,9 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 	
 	@Autowired
 	private ApplicantPerPhaseService applicantPerPhaseService;
+	
+	@Autowired
+	private ApplicantRepository applicantRepository;
 	
 	@Override
 	public boolean createPhase(Phase phase) throws Exception {
@@ -189,4 +199,74 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		return phasesToReturn;
 	}
 	
+	public Phase getCurrentPhaseForConvocatoryAndApplicant(int idConvocatory, String mailApplicant) throws Exception {
+		
+		String state= null;
+		//1. Para esa convocatoria obtiene la fase actual por las fechas de Inicio de fase a Fecha finalizacion de aprobacion de oferente
+		Convocatory convocatory =  convocatoryRepository.findById(idConvocatory);
+		List<Phase> listPhasesConvocatory = phaseRepository.findByConvocatory(convocatory);
+		if (listPhasesConvocatory.size() == 0){
+			throwException("summary", "No hay fases en esta convocatoria");			
+		}
+		
+		Phase currentPhase = getCurrentPhaseByInitDateAndFinishApprovedOfferer(listPhasesConvocatory);
+		if (currentPhase == null){
+			//	1.1 Si no hay fase actual: la convocatoria ya cerro, devuelve fase null.
+			//throwException("summary", "No hay fase actual en esta convocatoria");
+			return null;
+		}
+		
+		//2 Si hay fase actual:
+		//2. obteniendo por el aplicante el solicitante-fase.
+		ApplicantPerPhase applicantPerPhase = getApplicantByPhase(currentPhase, mailApplicant);
+		//      1.2.1. Si nada en solicitante-fase: no ha aplicado a esta conv. Se retorna la fase 1 y estado: PendienteRegistroDatos.
+		if (applicantPerPhase == null){
+			state = "PendienteRegistroDatos";
+			return currentPhase;
+		}
+
+		//      1.2.2. Si hay algun registro en solicitante-fase:
+		//      	1.2.2.1. * No tiene registro de solicitante-fase pára esta fase: es porque fue rechazado de una fase anterior. Se retorna la fase actual y estado: RechazadoFaseAnterior.
+		//			1.2.2.2. * Hay registro solicitante-fase para esta fase: Es porque el usuario sigue estando activo en esta fase. Se retorna la fase y el estado que tiene en solicitante-fase.
+		
+		return new Phase();
+	}
+	
+	private Phase getCurrentPhaseByInitDateAndFinishApprovedOfferer(List<Phase> listPhasesConvocatory) throws ParseException{
+		
+		for (Phase phase: listPhasesConvocatory) {
+			DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd");
+			java.util.Date startDate = inputFormatter.parse(phase.getStartDate().toString());
+			java.util.Date finishApprovalDate = inputFormatter.parse(phase.getEndApprovalDate().toString());
+			java.util.Date today = inputFormatter.parse(DateTime.now().toString());
+			
+			if(today.getTime() >= startDate.getTime() || today.getTime() <= finishApprovalDate.getTime()){
+				// esta en el rango
+				return phase;
+			}
+		}
+		return null;				
+	}
+	
+	private ApplicantPerPhase getApplicantByPhase(Phase currentPhase, String mailApplicant) throws JSONException {
+		Applicant applicant = applicantRepository.findByEmail(mailApplicant);
+		if (applicant == null){
+			throwException("summary", "No se encontro al usuario.");	
+		}
+		
+		List<ApplicantPerPhase> applicantsPerPhase = (List<ApplicantPerPhase>) currentPhase.getApplicantPerPhase();
+		/*if (applicantsPerPhase.size() == 0) {
+			return null;
+		}*/
+		
+		//Ojo mirar si un mismo usuario en 2 fases me lo trajo 2 veces
+		for (ApplicantPerPhase applicantPerPhase: applicantsPerPhase) {
+			if (applicantPerPhase.getApplicant().getEmail() == applicant.getEmail()){
+				return applicantPerPhase;
+			}
+		}		
+		return null;
+	}
+	
 }
+

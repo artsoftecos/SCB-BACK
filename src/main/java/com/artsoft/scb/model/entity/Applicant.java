@@ -85,8 +85,8 @@ public class Applicant {
 	private Set<ApplicantDocument> applicantDocuments = new HashSet<ApplicantDocument>();
 	
 	
-	@OneToOne(mappedBy = "applicant")
-	private ApplicantPerPhase applicantPerPhase;
+	@OneToMany(mappedBy = "applicant")
+	private Set<ApplicantPerPhase> applicantPerPhase = new HashSet<ApplicantPerPhase>();
 	
 	@JsonBackReference(value = "applicant-place")
 	@OneToMany(mappedBy = "applicant")
@@ -111,14 +111,6 @@ public class Applicant {
 
 	public void setPlaces(Set<Place> places) {
 		this.places = places;
-	}
-
-	public ApplicantPerPhase getApplicantPerPhase() {
-		return applicantPerPhase;
-	}
-
-	public void setApplicantPerPhase(ApplicantPerPhase applicantPerPhase) {
-		this.applicantPerPhase = applicantPerPhase;
 	}
 
 	public String getEmail() {
@@ -231,6 +223,14 @@ public class Applicant {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	private Set<ApplicantPerPhase> getApplicantPerPhase() {
+		return applicantPerPhase;
+	}
+
+	private void setApplicantPerPhase(Set<ApplicantPerPhase> applicantPerPhase) {
+		this.applicantPerPhase = applicantPerPhase;
 	}
 }
 
