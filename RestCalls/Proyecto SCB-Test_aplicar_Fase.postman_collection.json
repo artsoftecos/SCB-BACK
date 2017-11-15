@@ -1,0 +1,415 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Proyecto SCB copy copy",
+		"_postman_id": "f516726b-ed7c-a516-8348-6eec78415215",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Crear solicitante",
+			"request": {
+				"url": "http://localhost:8080/applicant",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic MTAxNDIwNzMzNjpwYXNzd29yZA==",
+						"description": "",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"documentNumber\": \"1014207335\",\n\t\"documentType\": {\n\t\t\"id\" : 1\n\t},\n\t\"email\" : \"walteralonso20@yahoo.com\",\n\t\"firstName\": \"Walter\",\n\t\"secondName\": \"Javier\",\n\t\"firstLastName\": \"Alonso\",\n\t\"secondLastName\": \"Roa\",\n\t\"password\": \"artsoft\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Oferente - Crear oferente",
+			"request": {
+				"url": "http://localhost:8080/offerer",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\t\"email\": \"walonsoeddtfeee@psl.com.co\",\r\n\t\"nit\" : \"1014207339fd5ee\",\r\n\t\"name\": \"walter\",\r\n\t\"address\": \"direccion\",\r\n\t\"telephone\": \"4300012\",\r\n\t\"legalRepresentative\": \"Yo\",\r\n\t\"password\": \"password\"\r\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "applicantDocument - Upload document",
+			"request": {
+				"url": "http://localhost:8080/applicantDocument",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic d2FsdGVyYWxvbnNvMjBAeWFob28uY29tOmFydHNvZnQ=",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"description": "",
+							"type": "file",
+							"src": "Soy pdf.pdf",
+							"value": ""
+						},
+						{
+							"key": "email",
+							"value": "walteralonso20@yahoo.com",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "Cedulas3",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": "upload document"
+			},
+			"response": []
+		},
+		{
+			"name": "applicantDocument - Get documents of applicant",
+			"request": {
+				"url": {
+					"raw": "http://localhost:8080/applicantDocument?email=walteralonso20@yahoo.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"applicantDocument"
+					],
+					"query": [
+						{
+							"key": "email",
+							"value": "walteralonso20@yahoo.com",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "trae los documentos de un aplicante"
+			},
+			"response": []
+		},
+		{
+			"name": "applicantDocument - Get document",
+			"request": {
+				"url": "http://localhost:8080/applicantDocument/1",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "obtiene un documento segun el id"
+			},
+			"response": []
+		},
+		{
+			"name": "applicantDocument - Delete document",
+			"request": {
+				"url": "http://localhost:8080/applicantDocument/2",
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "Borra documento segun id de la bd y lo borra en  s3 tambn"
+			},
+			"response": []
+		},
+		{
+			"name": "Document type - Get all document types",
+			"request": {
+				"url": "http://localhost:8080/documentType/",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "Obtiene todos lo tipos de documento"
+			},
+			"response": []
+		},
+		{
+			"name": "- applicant - aprobar registro token",
+			"request": {
+				"url": "http://localhost:8080/applicant/welcome/[B@469dc4ba",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "recibe el token por parametro y lo aprueba"
+			},
+			"response": []
+		},
+		{
+			"name": "Oferente - Get Oferents",
+			"request": {
+				"url": "http://localhost:8080/offerer",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "obtiene los oferentes"
+			},
+			"response": []
+		},
+		{
+			"name": "Oferente - Get Pending offerers",
+			"request": {
+				"url": "http://localhost:8080/offerer/pending",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW5AYXJ0c29mdC5jb206YXJ0c29mdA==",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Oferente - Get approved offerers",
+			"request": {
+				"url": "http://localhost:8080/offerer/approved",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW5AYXJ0c29mdC5jb206YXJ0c29mdA==",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Oferente - Get rejected offerers",
+			"request": {
+				"url": "http://localhost:8080/offerer/rejected",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic YWRtaW5AYXJ0c29mdC5jb206YXJ0c29mdA==",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "ConvocatoryType - Get all convocatoryTypes",
+			"request": {
+				"url": "http://localhost:8080/convocatoryType",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic T2ZmZXJlckFwcHJvdmVkQGFydHNvZnQuY29tOmFydHNvZnQ=",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": "trae los tipos de convocatoria"
+			},
+			"response": []
+		},
+		{
+			"name": "Aplicar fase - aplicar a fase activa",
+			"request": {
+				"url": "http://localhost:8080/phase/getCurrentPhase/7/solicitanteAplicarTest@artsoft.com",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic c29saWNpdGFudGVBcGxpY2FyVGVzdEBhcnRzb2Z0LmNvbTphcnRzb2Z0",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "convocatoria con fase disponible para aplicar."
+			},
+			"response": []
+		},
+		{
+			"name": "Aplicar fase - ya aplico y esta pendiente",
+			"request": {
+				"url": "http://localhost:8080/phase/getCurrentPhase/8/solicitanteAplicarTest@artsoft.com",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic c29saWNpdGFudGVBcGxpY2FyVGVzdEBhcnRzb2Z0LmNvbTphcnRzb2Z0",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "ya aplico a la fase y esta en estado pendiente"
+			},
+			"response": []
+		},
+		{
+			"name": "Aplicar fase - ya aplico y ya lo aprobaron a la fase",
+			"request": {
+				"url": "http://localhost:8080/phase/getCurrentPhase/9/solicitanteAplicarTest@artsoft.com",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic c29saWNpdGFudGVBcGxpY2FyVGVzdEBhcnRzb2Z0LmNvbTphcnRzb2Z0",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "ya fue aprobado en ese fase."
+			},
+			"response": []
+		},
+		{
+			"name": "Aplicar fase - ya aplico y lo rechazaron",
+			"request": {
+				"url": "http://localhost:8080/phase/getCurrentPhase/10/solicitanteAplicarTest@artsoft.com",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic c29saWNpdGFudGVBcGxpY2FyVGVzdEBhcnRzb2Z0LmNvbTphcnRzb2Z0",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "lo rechazaron en esta fase"
+			},
+			"response": []
+		},
+		{
+			"name": "Aplicar fase - ya habia sido rechazado en otra fase",
+			"request": {
+				"url": "http://localhost:8080/phase/getCurrentPhase/11/solicitanteAplicarTest@artsoft.com",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic c29saWNpdGFudGVBcGxpY2FyVGVzdEBhcnRzb2Z0LmNvbTphcnRzb2Z0",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "ya lo habian rechazado en otra fase."
+			},
+			"response": []
+		},
+		{
+			"name": "Aplicar fase - ya expiro el ciclo de esa convocatoria",
+			"request": {
+				"url": "http://localhost:8080/phase/getCurrentPhase/12/solicitanteAplicarTest@artsoft.com",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic c29saWNpdGFudGVBcGxpY2FyVGVzdEBhcnRzb2Z0LmNvbTphcnRzb2Z0",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": "Ya expiro la convocatoria."
+			},
+			"response": []
+		}
+	]
+}

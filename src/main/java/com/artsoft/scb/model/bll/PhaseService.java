@@ -201,51 +201,34 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 	}
 	
 	public StatePhaseAndAplicant getCurrentPhaseForConvocatoryAndApplicant(int idConvocatory, String mailApplicant) throws Exception {
-		/*
-		  
-		 1. obtener la convocatoria por el id.
-2. tener las fases para es convocatoria.
-3. mire la fase actual.
-4. si es nulo: retiorne fase=null y estado=null.
-		 
-		 */
-		
+				
 		StatePhaseAndAplicant statePhaseAndAplicant = new StatePhaseAndAplicant();
 		statePhaseAndAplicant.setPhase(null);
 		statePhaseAndAplicant.setState(null);
 		
-		//1. Para esa convocatoria obtiene la fase actual por las fechas de Inicio de fase a Fecha finalizacion de aprobacion de oferente
 		Convocatory convocatory =  convocatoryRepository.findById(idConvocatory);
 		List<Phase> listPhasesConvocatory = phaseRepository.findByConvocatory(convocatory);
 		if (listPhasesConvocatory.size() == 0){
 			throwException("summary", "No hay fases en esta convocatoria");			
 		}
 		
+		//1. Para esa convocatoria obtiene la fase actual por las fechas de Inicio de fase a Fecha finalizacion de aprobacion de oferente
 		Phase currentPhase = getCurrentPhaseByInitDateAndFinishApprovedOfferer(listPhasesConvocatory);
 		if (currentPhase == null){
 			//null phase and state
 			return statePhaseAndAplicant;
 		}
 		
-		/*
-		
-		5. si tiene valor fase actual:
-	5.1 En el solicitante-fase para la fase actual tiene algo: retiorne fase actual y retorne el estado.
-		
-		*/
 		statePhaseAndAplicant.setPhase(currentPhase);
+		
+		//para la fase actual, consulte si ya aplico y retorne el estado actual.
 		ApplicantPerPhase applicantPerPhase = getApplicantByPhase(currentPhase, mailApplicant);
 		if (applicantPerPhase != null) {
 			statePhaseAndAplicant.setState(applicantPerPhase.getApplicantPerPhaseState().getName());			
 			return statePhaseAndAplicant;
 		}
 		
-		/*
-		 5.1 para todas las fases tiene algo en solicitante-fase?
-		5.1.1. No: retorna la fase 1 y estado: PendienteRegistroDatos.
-		5.1.2. Si: //seria que lo rechazaron o quedo pendiente en otra fase no la actual.
-		//aca retorne de una: Se retorna la fase actual y estado RechazadoFaseAnterior
-		 */
+		//No esta en la fase actual, pueden ser 2 cosas: nunca a aplicado o lo rechazaron de fase anterior.
 		List<ApplicantPerPhase> list = getApplicantPerPhaseInAllPhases(listPhasesConvocatory, mailApplicant);
 		if (list.isEmpty()){
 			statePhaseAndAplicant.setState("PendienteRegistroDatos");			
@@ -256,16 +239,13 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		return statePhaseAndAplicant;
 	}
 	
-	private Phase getCurrentPhaseByInitDateAndFinishApprovedOfferer(List<Phase> listPhasesConvocatory) throws ParseException{
-		
+	private Phase getCurrentPhaseByInitDateAndFinishApprovedOfferer(List<Phase> listPhasesConvocatory) throws ParseException{		
 		for (Phase phase: listPhasesConvocatory) {
 			DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
 			java.util.Date startDate = inputFormatter.parse(phase.getStartDate().toString());
 			java.util.Date finishApprovalDate = inputFormatter.parse(phase.getEndApprovalDate().toString());
-			java.util.Date today = inputFormatter.parse(DateTime.now().toString());
-			
+			java.util.Date today = inputFormatter.parse(DateTime.now().toString());			
 			if(today.getTime() >= startDate.getTime() && today.getTime() <= finishApprovalDate.getTime()){
-				// esta en el rango
 				return phase;
 			}
 		}
@@ -278,21 +258,9 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 			throwException("summary", "No se encontro al usuario.");	
 		}
 		
-		//List<ApplicantPerPhase> applicantsPerPhase = new ArrayList<ApplicantPerPhase>(currentPhase.getApplicantPerPhase());
 		ApplicantPerPhase applicantPerPhase = applicantPerPhaseService.getApplicantPerPhaseByApplicantAndPhase(applicant, currentPhase);
 		
-		return applicantPerPhase;
-		/*if (applicantsPerPhase.size() == 0) {
-			return null;
-		}*/
-		
-		//Ojo mirar si un mismo usuario en 2 fases me lo trajo 2 veces
-		/*for (ApplicantPerPhase applicantPerPhase: applicantsPerPhase) {
-			if (applicantPerPhase.getApplicant().getEmail() == applicant.getEmail()){
-				return applicantPerPhase;
-			}
-		}		
-		return null;*/
+		return applicantPerPhase;		
 	}
 	
 	private List<ApplicantPerPhase> getApplicantPerPhaseInAllPhases(List<Phase> listPhases, String mailApplicant){
