@@ -200,6 +200,15 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 	}
 	
 	public Phase getCurrentPhaseForConvocatoryAndApplicant(int idConvocatory, String mailApplicant) throws Exception {
+		/*
+		  
+		 1. obtener la convocatoria por el id.
+2. tener las fases para es convocatoria.
+3. mire la fase actual.
+4. si es nulo: retiorne fase=null y estado=null.
+		 
+		 */
+		
 		
 		String state= null;
 		//1. Para esa convocatoria obtiene la fase actual por las fechas de Inicio de fase a Fecha finalizacion de aprobacion de oferente
@@ -216,20 +225,32 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 			return null;
 		}
 		
-		//2 Si hay fase actual:
-		//2. obteniendo por el aplicante el solicitante-fase.
+		/*
+		
+		5. si tiene valor fase actual:
+	5.1 En el solicitante-fase para la fase actual tiene algo: retiorne fase actual y retorne el estado.
+		
+		*/
 		ApplicantPerPhase applicantPerPhase = getApplicantByPhase(currentPhase, mailApplicant);
-		//      1.2.1. Si nada en solicitante-fase: no ha aplicado a esta conv. Se retorna la fase 1 y estado: PendienteRegistroDatos.
-		if (applicantPerPhase == null){
+		if (applicantPerPhase != null) {
+			state = applicantPerPhase.getApplicantPerPhaseState().getName();
+			return currentPhase;
+		}
+		
+		/*
+		 5.1 para todas las fases tiene algo en solicitante-fase?
+		5.1.1. No: retorna la fase 1 y estado: PendienteRegistroDatos.
+		5.1.2. Si: //seria que lo rechazaron o quedo pendiente en otra fase no la actual.
+		//aca retorne de una: Se retorna la fase actual y estado RechazadoFaseAnterior
+		 */
+		List<ApplicantPerPhase> list = getApplicantPerPhaseInAllPhases(listPhasesConvocatory, mailApplicant);
+		if (list.isEmpty()){
 			state = "PendienteRegistroDatos";
 			return currentPhase;
 		}
-
-		//      1.2.2. Si hay algun registro en solicitante-fase:
-		//      	1.2.2.1. * No tiene registro de solicitante-fase pára esta fase: es porque fue rechazado de una fase anterior. Se retorna la fase actual y estado: RechazadoFaseAnterior.
-		//			1.2.2.2. * Hay registro solicitante-fase para esta fase: Es porque el usuario sigue estando activo en esta fase. Se retorna la fase y el estado que tiene en solicitante-fase.
 		
-		return new Phase();
+		state = "RechazadoFaseAnterior";
+		return currentPhase;
 	}
 	
 	private Phase getCurrentPhaseByInitDateAndFinishApprovedOfferer(List<Phase> listPhasesConvocatory) throws ParseException{
@@ -266,6 +287,17 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 			}
 		}		
 		return null;
+	}
+	
+	private List<ApplicantPerPhase> getApplicantPerPhaseInAllPhases(List<Phase> listPhases, String mailApplicant){
+		List<ApplicantPerPhase> list = new ArrayList<ApplicantPerPhase>();
+		Applicant applicant = applicantRepository.findByEmail(mailApplicant);
+		
+		for (Phase phase: listPhases) {
+			ApplicantPerPhase applicantPerPhase = applicantPerPhaseService.getApplicantPerPhaseByApplicantAndPhase(applicant, phase);
+			list.add(applicantPerPhase);
+		}	
+		return list;
 	}
 	
 }

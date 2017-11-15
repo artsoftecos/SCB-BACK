@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import com.artsoft.scb.model.bll.interfaces.IApplicantPerPhaseService;
 import com.artsoft.scb.model.dao.ApplicantPerPhaseRepository;
 import com.artsoft.scb.model.dao.ApplicantPerPhaseStateRepository;
+import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.ApplicantPerPhase;
 import com.artsoft.scb.model.entity.ApplicantPerPhaseState;
+import com.artsoft.scb.model.entity.Phase;
 
 @Service
 public class ApplicantPerPhaseService extends ExceptionService implements IApplicantPerPhaseService{
@@ -25,5 +27,10 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 		ApplicantPerPhaseState apPerPhaseState = applicantPerPhaseStateRepository.getById(idState);
 		List<ApplicantPerPhase> applicantsPerPhases = applicantPerPhaseRepository.getByApplicantPerPhaseState(apPerPhaseState);
 		return applicantsPerPhases;
+	}
+	
+	public ApplicantPerPhase getApplicantPerPhaseByApplicantAndPhase(Applicant applicant, Phase phase){
+		ApplicantPerPhase apPerPhase = applicantPerPhaseRepository.getByApplicantAndPhase(applicant, phase);
+		return apPerPhase;
 	}
 }
