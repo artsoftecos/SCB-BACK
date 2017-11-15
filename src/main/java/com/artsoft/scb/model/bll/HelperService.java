@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
@@ -105,5 +109,4 @@ public class HelperService {
         
 		return json.toString();
 	}	
-	
 }

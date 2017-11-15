@@ -22,6 +22,7 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 	@Autowired
 	private ApplicantPerPhaseStateRepository applicantPerPhaseStateRepository;
 	
+	private int STATE_REJECTED =3;
 	
 	public List<ApplicantPerPhase> getApplicantPerPhaseByState(int idState){
 		ApplicantPerPhaseState apPerPhaseState = applicantPerPhaseStateRepository.getById(idState);
@@ -32,5 +33,11 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 	public ApplicantPerPhase getApplicantPerPhaseByApplicantAndPhase(Applicant applicant, Phase phase){
 		ApplicantPerPhase apPerPhase = applicantPerPhaseRepository.getByApplicantAndPhase(applicant, phase);
 		return apPerPhase;
+	}
+	
+	public void rejectApplicantPerPhase(ApplicantPerPhase applicantPerPhase){		
+		ApplicantPerPhaseState state = applicantPerPhaseStateRepository.getById(STATE_REJECTED);
+		applicantPerPhase.setApplicantPerPhaseState(state);
+		applicantPerPhaseRepository.save(applicantPerPhase);		
 	}
 }

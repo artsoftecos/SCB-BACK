@@ -20,11 +20,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.artsoft.scb.model.bll.interfaces.IPhaseService;
+import com.artsoft.scb.model.dao.ApplicantPerPhaseStateRepository;
 import com.artsoft.scb.model.dao.ApplicantRepository;
 import com.artsoft.scb.model.dao.ConvocatoryRepository;
 import com.artsoft.scb.model.dao.PhaseRepository;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.ApplicantPerPhase;
+import com.artsoft.scb.model.entity.ApplicantPerPhaseState;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Phase;
 import com.artsoft.scb.model.entity.StatePhaseAndAplicant;
@@ -33,7 +35,7 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 
 	@Autowired
 	private PhaseRepository phaseRepository;
-	
+		
 	@Autowired
 	private ConvocatoryRepository convocatoryRepository;
 	
@@ -224,7 +226,16 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		//para la fase actual, consulte si ya aplico y retorne el estado actual.
 		ApplicantPerPhase applicantPerPhase = getApplicantByPhase(currentPhase, mailApplicant);
 		if (applicantPerPhase != null) {
-			statePhaseAndAplicant.setState(applicantPerPhase.getApplicantPerPhaseState().getName());			
+			String currentState = applicantPerPhase.getApplicantPerPhaseState().getName();
+			DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");			
+			java.util.Date today = inputFormatter.parse(DateTime.now().toString());
+			java.util.Date endDate = inputFormatter.parse(currentPhase.getEndDate().toString());			
+			if (currentState.equals("PendienteRegistroDatos") && today.getTime() >  endDate.getTime())
+			{		
+				applicantPerPhaseService.rejectApplicantPerPhase(applicantPerPhase);				
+				currentState = "Rechazado";				
+			}
+			statePhaseAndAplicant.setState(currentState);			
 			return statePhaseAndAplicant;
 		}
 		
