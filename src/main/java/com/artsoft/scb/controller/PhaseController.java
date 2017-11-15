@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artsoft.scb.model.bll.PhaseService;
 import com.artsoft.scb.model.entity.Phase;
+import com.artsoft.scb.model.entity.StatePhaseAndAplicant;
 
 @RestController
 @PreAuthorize("hasAnyRole('ROLE_OFFERER','ROLE_APPLICANT')")
@@ -93,16 +94,16 @@ public class PhaseController {
 		return ResponseEntity.status(HttpStatus.OK).body(phase);
 	}
 	
-	@GetMapping(path = "/getCurrentPhase/{idConvocatory}/{mailApplicant}")
-	public ResponseEntity<?> getCurrentPhase(@PathVariable("idConvocatory") int idConvocatory, @PathVariable("idConvocatory") String mailApplicant){
-		Phase phase;
+	@GetMapping(path = "/getCurrentPhase/{idConvocatory}/{mailApplicant:.+}")
+	public ResponseEntity<?> getCurrentPhase(@PathVariable("idConvocatory") int idConvocatory, @PathVariable("mailApplicant") String mailApplicant){
+		StatePhaseAndAplicant statePhaseAndAplicant;
 		try {
-			phase = phaseService.getCurrentPhaseForConvocatoryAndApplicant(idConvocatory, mailApplicant);
+			statePhaseAndAplicant = phaseService.getCurrentPhaseForConvocatoryAndApplicant(idConvocatory, mailApplicant);
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
 		
-		return ResponseEntity.status(HttpStatus.OK).body(phase);
+		return ResponseEntity.status(HttpStatus.OK).body(statePhaseAndAplicant);
 	}
 }
 

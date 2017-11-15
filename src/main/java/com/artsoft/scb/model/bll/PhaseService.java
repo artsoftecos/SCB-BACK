@@ -27,6 +27,7 @@ import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.ApplicantPerPhase;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Phase;
+import com.artsoft.scb.model.entity.StatePhaseAndAplicant;
 @Service
 public class PhaseService extends ExceptionService implements IPhaseService {
 
@@ -199,7 +200,7 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		return phasesToReturn;
 	}
 	
-	public Phase getCurrentPhaseForConvocatoryAndApplicant(int idConvocatory, String mailApplicant) throws Exception {
+	public StatePhaseAndAplicant getCurrentPhaseForConvocatoryAndApplicant(int idConvocatory, String mailApplicant) throws Exception {
 		/*
 		  
 		 1. obtener la convocatoria por el id.
@@ -209,8 +210,10 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		 
 		 */
 		
+		StatePhaseAndAplicant statePhaseAndAplicant = new StatePhaseAndAplicant();
+		statePhaseAndAplicant.setPhase(null);
+		statePhaseAndAplicant.setState(null);
 		
-		String state= null;
 		//1. Para esa convocatoria obtiene la fase actual por las fechas de Inicio de fase a Fecha finalizacion de aprobacion de oferente
 		Convocatory convocatory =  convocatoryRepository.findById(idConvocatory);
 		List<Phase> listPhasesConvocatory = phaseRepository.findByConvocatory(convocatory);
@@ -220,9 +223,8 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		
 		Phase currentPhase = getCurrentPhaseByInitDateAndFinishApprovedOfferer(listPhasesConvocatory);
 		if (currentPhase == null){
-			//	1.1 Si no hay fase actual: la convocatoria ya cerro, devuelve fase null.
-			//throwException("summary", "No hay fase actual en esta convocatoria");
-			return null;
+			//null phase and state
+			return statePhaseAndAplicant;
 		}
 		
 		/*
@@ -231,10 +233,11 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 	5.1 En el solicitante-fase para la fase actual tiene algo: retiorne fase actual y retorne el estado.
 		
 		*/
+		statePhaseAndAplicant.setPhase(currentPhase);
 		ApplicantPerPhase applicantPerPhase = getApplicantByPhase(currentPhase, mailApplicant);
 		if (applicantPerPhase != null) {
-			state = applicantPerPhase.getApplicantPerPhaseState().getName();
-			return currentPhase;
+			statePhaseAndAplicant.setState(applicantPerPhase.getApplicantPerPhaseState().getName());			
+			return statePhaseAndAplicant;
 		}
 		
 		/*
@@ -245,23 +248,23 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		 */
 		List<ApplicantPerPhase> list = getApplicantPerPhaseInAllPhases(listPhasesConvocatory, mailApplicant);
 		if (list.isEmpty()){
-			state = "PendienteRegistroDatos";
-			return currentPhase;
+			statePhaseAndAplicant.setState("PendienteRegistroDatos");			
+			return statePhaseAndAplicant;
 		}
 		
-		state = "RechazadoFaseAnterior";
-		return currentPhase;
+		statePhaseAndAplicant.setState("RechazadoFaseAnterior");		
+		return statePhaseAndAplicant;
 	}
 	
 	private Phase getCurrentPhaseByInitDateAndFinishApprovedOfferer(List<Phase> listPhasesConvocatory) throws ParseException{
 		
 		for (Phase phase: listPhasesConvocatory) {
-			DateFormat inputFormatter = new SimpleDateFormat("yyyy/MM/dd");
+			DateFormat inputFormatter = new SimpleDateFormat("yyyy-MM-dd");
 			java.util.Date startDate = inputFormatter.parse(phase.getStartDate().toString());
 			java.util.Date finishApprovalDate = inputFormatter.parse(phase.getEndApprovalDate().toString());
 			java.util.Date today = inputFormatter.parse(DateTime.now().toString());
 			
-			if(today.getTime() >= startDate.getTime() || today.getTime() <= finishApprovalDate.getTime()){
+			if(today.getTime() >= startDate.getTime() && today.getTime() <= finishApprovalDate.getTime()){
 				// esta en el rango
 				return phase;
 			}
@@ -275,18 +278,21 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 			throwException("summary", "No se encontro al usuario.");	
 		}
 		
-		List<ApplicantPerPhase> applicantsPerPhase = (List<ApplicantPerPhase>) currentPhase.getApplicantPerPhase();
+		//List<ApplicantPerPhase> applicantsPerPhase = new ArrayList<ApplicantPerPhase>(currentPhase.getApplicantPerPhase());
+		ApplicantPerPhase applicantPerPhase = applicantPerPhaseService.getApplicantPerPhaseByApplicantAndPhase(applicant, currentPhase);
+		
+		return applicantPerPhase;
 		/*if (applicantsPerPhase.size() == 0) {
 			return null;
 		}*/
 		
 		//Ojo mirar si un mismo usuario en 2 fases me lo trajo 2 veces
-		for (ApplicantPerPhase applicantPerPhase: applicantsPerPhase) {
+		/*for (ApplicantPerPhase applicantPerPhase: applicantsPerPhase) {
 			if (applicantPerPhase.getApplicant().getEmail() == applicant.getEmail()){
 				return applicantPerPhase;
 			}
 		}		
-		return null;
+		return null;*/
 	}
 	
 	private List<ApplicantPerPhase> getApplicantPerPhaseInAllPhases(List<Phase> listPhases, String mailApplicant){
@@ -295,7 +301,9 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		
 		for (Phase phase: listPhases) {
 			ApplicantPerPhase applicantPerPhase = applicantPerPhaseService.getApplicantPerPhaseByApplicantAndPhase(applicant, phase);
-			list.add(applicantPerPhase);
+			if (applicantPerPhase != null) {
+				list.add(applicantPerPhase);
+			}
 		}	
 		return list;
 	}
