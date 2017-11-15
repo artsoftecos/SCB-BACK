@@ -378,3 +378,98 @@ values ('2017-11-11', 'solicitanteApproved2@artsoft.com', 1);
 insert into scb.postulacion (fecha_postulacion, mail_solicitante, id_convocatoria)
 values ('2017-11-11', 'solicitanteApproved3@artsoft.com', 2);
 
+
+------ Test case aplicar -------------------
+-- insertando usuario de aplicar 
+INSERT INTO scb.usuario (email, enabled, password, token)
+SELECT * FROM (SELECT 'solicitanteAplicarTest@artsoft.com', 1, '$2a$10$2tkTPQBzX5eyud2uAwDPtOws3KV.IGR/Adka/MkN4Mbo/u6GP5fwa', null) AS tmp
+WHERE NOT EXISTS (
+    SELECT email FROM scb.usuario WHERE email = 'solicitanteAplicarTest@artsoft.com'
+) LIMIT 1;
+
+INSERT INTO scb.tipo_usuario (rol, email)
+SELECT * FROM (SELECT 'ROLE_APPLICANT', 'solicitanteAplicarTest@artsoft.com') AS tmp
+WHERE NOT EXISTS (
+    SELECT email FROM scb.tipo_usuario WHERE email = 'solicitanteAplicarTest@artsoft.com'
+) LIMIT 1;
+
+insert into scb.solicitante (correo, fecha_registro, numero_documento, primer_apellido, primer_nombre, segundo_apellido, segunda_nombre, id_tipo_documento, id_usuario)
+values ('solicitanteAplicarTest@artsoft.com', '2017-11-15 12:31:51', '1014207345', 'Alonso', 'Roa', 'Walter', 'Javier', 1, 'solicitanteApproved2@artsoft.com');
+
+-- crear convocatoria simlunado para aplicar:
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en India a aplicar', 'Test 1-1. Conv. a aplicar', 1, '2017-09-01', 1, 1, 'OffererApproved@artsoft.com');
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase Test 1-1. Insc India','2017-10-01', '2018-01-01', '2018-01-02', '2018-10-25', 'Fase Insc India', 7);
+
+---- ya aplico a su primera convocatoria: (esta pedneinte de aprobacion)
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en India pendiente', 'Test 1-2. Conv. esta pendiente', 1, '2017-09-01', 1, 1, 'OffererApproved@artsoft.com');
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase Test 1.2 - Insc India pendiente','2017-10-01', '2017-10-03', '2017-10-04', '2018-10-25', 'Fase Insc India', 8);
+
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteAplicarTest@artsoft.com', 2,  18);
+
+---- ya aplico a su primera convocatoria: (esta aprobado y ya esta pendiente datos parta la siguiente)
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en India aprobado', 'Test 1-3. Conv. esta aprobada', 1, '2017-09-01', 1, 1, 'OffererApproved@artsoft.com');
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase Test 1.3 - Insc India aprobada-ya aprobada','2017-10-01', '2017-12-31', '2018-01-01', '2018-01-02', 'Fase Insc India-ya aprob', 9);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase Test 1.3 - Insc India aprobada- pedniente reg datos.','2018-03-01', '2018-03-03', '2018-03-04', '2018-10-25', 'Fase Insc India-pend reg datos.', 9);
+
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteAplicarTest@artsoft.com', 1,  19);
+
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteAplicarTest@artsoft.com', 4,  20);
+
+---- ya aplico a su primera convocatoria: (esta rechazado)
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en India rechazado', 'Test 1-4. Conv. esta rechazada', 1, '2017-09-01', 1, 1, 'OffererApproved@artsoft.com');
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase Test 1.4 - Insc India rechazada','2017-10-01', '2017-10-03', '2017-10-04', '2018-10-25', 'Fase Insc India', 10);
+
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteAplicarTest@artsoft.com', 3,  21);
+
+---- habia aplicado con anterioridad, y lo habian rechazado.
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en India rechazado antes', 'Test 1-5. Conv. esta rechazado antes', 1, '2017-09-01', 1, 1, 'OffererApproved@artsoft.com');
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase Test 1.5 - Insc India rechazada antes','2017-10-01', '2017-10-03', '2017-10-04', '2017-10-05', 'Fase Insc India', 11);
+
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteAplicarTest@artsoft.com', 1,  22);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase Test 1.5 - Insc India rechazada antes','2017-10-06', '2017-10-08', '2017-10-10', '2017-10-12', 'Fase 2 India', 11);
+
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteAplicarTest@artsoft.com', 3,  23);
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase Test 1.5 - Insc India rechazada antes','2017-10-13', '2017-10-20', '2017-10-21', '2018-10-12', 'Fase 3 India', 11);
+
+--- habia aplicado, pero ya no esta activa la conv. (puede ser en estado pendiente) -> ya cerro la conv.
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+values ('Becas para estudios en India conv. expiro', 'Test 1-6. Conv. expiro', 1, '2017-09-01', 1, 1, 'OffererApproved@artsoft.com');
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+values ('Fase Test 1.6 - Insc India conv. expiro','2017-10-13', '2017-10-20', '2017-10-21', '2017-10-22', 'Fase 1 India', 12);
+
+insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
+values ('solicitanteAplicarTest@artsoft.com', 3,  25);
+
+-- Sincronizaciones de Jobs:
+-- 1. cuando cierra la convocatoria.
+
+
+
