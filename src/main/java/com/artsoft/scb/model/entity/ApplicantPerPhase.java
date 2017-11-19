@@ -35,6 +35,19 @@ public class ApplicantPerPhase {
 	@JsonBackReference(value = "applicantPerPhase-applicantPerPhaseState")
 	private ApplicantPerPhaseState applicantPerPhaseState;
 	
+	@Column(name = "answers")
+	private String answers;
+	
+	
+	
+	public String getAnswers() {
+		return answers;
+	}
+
+	public void setAnswers(String answers) {
+		this.answers = answers;
+	}
+
 	public ApplicantPerPhaseState getApplicantPerPhaseState() {
 		return applicantPerPhaseState;
 	}
