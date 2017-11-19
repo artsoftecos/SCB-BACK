@@ -68,4 +68,9 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 		
 		return true;
 	}
+	
+	public ApplicantPerPhase getApplicantAsociatedToAPhase(int idApplicantPerPhase){
+		ApplicantPerPhase applicantPerPhaseToReturn = applicantPerPhaseRepository.getById(idApplicantPerPhase);
+		return applicantPerPhaseToReturn;
+	}
 }
