@@ -35,6 +35,7 @@ public class FieldController {
 			fieldService.createField(field);
 			validationService.linkField(field.getValidation(), field);
 			response.put("Response", "Campo creado");
+			response.put("field_id", field.getId());
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
@@ -76,6 +77,14 @@ public class FieldController {
 		List<Field> fields;
 		try {
 			fields = fieldService.findByPhase(idPhase);
+			for (int i = 0; i < fields.size(); i++) {
+				
+				System.out.println(fields.get(i).getName());
+				System.out.println(fields.get(i).getValidation().getFieldTypeValidation());
+				fields.get(i).getValidation().setFieldTypeValidation(fields.get(i).getValidation().getFieldTypeValidation());
+				
+				System.out.println(fields.get(i).getValidation().getFieldTypeValidation().getValidationType().getName());
+			}
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
