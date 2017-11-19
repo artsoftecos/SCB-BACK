@@ -32,7 +32,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		.antMatchers("/","/login","/applicant", "/offerer", "/documentType/", "/applicant/welcome/*", "/offerer/approve/*", "/offerer/reject/*", "/applicantDocument", "/offerer/approved", "/offerer/pending", 
 				"/offerer/rejected","/convocatoryType","/convocatory/*", "/phase/*", "/convocatory/getByOffererState/**", "/convocatory/getByPendingPhases/**",
 				"/convocatory/create", "/convocatory/edit", "/convocatory/getByOfferer/**", "/convocatory/getById/**", "/convocatory/getPending/**",
-				"/phase/edit", "/phase/delete/**", "/phase/getPhasesOfConvocatory/**", "/phase/getPhases/**", "/AppPerPhase/byId/**", "/phase", "/fieldType",
+				"/phase/edit", "/phase/delete/**", "/phase/getPhasesOfConvocatory/**", "/phase/getPhases/**", "/AppPerPhase/byId/**","/AppPerPhase/asociate/**", "/phase", "/fieldType",
 				"/fieldType/Validations/**", "/field/create", "/field/getByPhase/**", "/field/delete/**", "/applicant/postulations/**","/applicant/places/**","/applicant/notAppliedConvocatories/**",
 				"/phase/getCurrentPhase/**", "/applicant/acceptConvocatory/**","/applicant/rejectPlace").permitAll()
 		.anyRequest()
