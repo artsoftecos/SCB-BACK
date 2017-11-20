@@ -24,12 +24,16 @@ import com.artsoft.scb.model.dao.ApplicantPerPhaseStateRepository;
 import com.artsoft.scb.model.dao.ApplicantRepository;
 import com.artsoft.scb.model.dao.ConvocatoryRepository;
 import com.artsoft.scb.model.dao.PhaseRepository;
+import com.artsoft.scb.model.dao.PlaceRepository;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.ApplicantPerPhase;
 import com.artsoft.scb.model.entity.ApplicantPerPhaseState;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Phase;
+import com.artsoft.scb.model.entity.Place;
+import com.artsoft.scb.model.entity.Postulation;
 import com.artsoft.scb.model.entity.StatePhaseAndAplicant;
+
 @Service
 public class PhaseService extends ExceptionService implements IPhaseService {
 
@@ -44,6 +48,12 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 	
 	@Autowired
 	private ApplicantRepository applicantRepository;
+	
+	@Autowired
+	private PostulationService postulationService;
+	
+	@Autowired
+	private PlaceService placeService;
 	
 	@Override
 	public boolean createPhase(Phase phase) throws Exception {
@@ -287,5 +297,111 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		return list;
 	}
 	
+	private boolean isFirstPhase(Phase phase){
+		Convocatory convocatory = convocatoryRepository.findById(phase.getConvocatory().getId());
+		List<Phase> phases = phaseRepository.findByConvocatory(convocatory);
+		Phase firstPhase = new Phase();
+		firstPhase = phases.get(0);
+		
+		for(int i = 1; i < phases.size() ; i++){
+			if(phases.get(i).getStartDate().before(firstPhase.getStartDate())){
+				firstPhase = phases.get(i);
+			}
+		}
+		
+		if(phase.getId() == firstPhase.getId()){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	private boolean isLastPhase(Phase phase){
+		Convocatory convocatory = convocatoryRepository.findById(phase.getConvocatory().getId());
+		List<Phase> phases = phaseRepository.findByConvocatory(convocatory);
+		Phase lastPhase = new Phase();
+		lastPhase = phases.get(0);
+		
+		for(int i = 1; i < phases.size() ; i++){
+			if(phases.get(i).getStartDate().after(lastPhase.getStartDate())){
+				lastPhase = phases.get(i);
+			}
+		}
+		
+		if(phase.getId() == lastPhase.getId()){
+			return true;
+		}
+		
+		return false;
+	}
+	
+	public void createPostulation(ApplicantPerPhase applicantPerPhase) throws Exception{
+		Phase phase = new Phase();
+		phase = applicantPerPhase.getPhase();
+		Applicant applicant = new Applicant();
+		applicant = applicantRepository.findByEmail(applicantPerPhase.getApplicant().getEmail());
+		Convocatory convocatory = new Convocatory();
+		convocatory = convocatoryRepository.findById(phase.getConvocatory().getId());
+		
+		Date today = new Date(System.currentTimeMillis());
+		
+		if(isFirstPhase(phase)){
+			Postulation postulation = new Postulation();
+			postulation.setApplicant(applicant);
+			postulation.setConvocatory(convocatory);
+			postulation.setPostulationDate(today);
+			postulationService.createPostulation(postulation);
+		}
+		
+		
+	}
+	
+	public void createPlace(ApplicantPerPhase applicantPerPhase){
+		Phase phase = new Phase();
+		phase = applicantPerPhase.getPhase();
+		Applicant applicant = new Applicant();
+		applicant = applicantRepository.findByEmail(applicantPerPhase.getApplicant().getEmail());
+		Convocatory convocatory = new Convocatory();
+		convocatory = convocatoryRepository.findById(phase.getConvocatory().getId());
+		
+		/*
+		List<Phase> phases = phaseRepository.findByConvocatory(convocatory);
+		List<Phase> phasesSorted = new ArrayList<Phase>();
+		phasesSorted = sortList(phases);
+		
+		int nextPhase;
+		
+		for (int i = 0; i < phasesSorted.size(); i++) {
+			if(phase.getId() == phasesSorted.get(i).getId()){
+				nextPhase = i + 1;
+				break;
+			}
+		} 
+		*/
+		
+		
+		if(isLastPhase(phase)){
+			Place place = new Place();
+			place.setApplicant(applicant);
+			place.setConvocatory(convocatory);
+			placeService.createPlace(place);
+		}
+	}
+	
+	public List<Phase> sortList(List<Phase> phasesToSort){
+		Phase phaseAux = new Phase();
+		List<Phase> phasesSorted = new ArrayList<Phase>();
+		phasesSorted = phasesToSort;
+		for (int i = 0; i < phasesSorted.size(); i++) {
+			for (int j = 1; j < phasesSorted.size() - i; j++) {
+				if(phasesSorted.get(j - 1).getStartDate().after(phasesSorted.get(j).getStartDate())){
+					phaseAux = phasesSorted.get(j - 1);
+					phasesSorted.add(j - 1, phasesSorted.get(j));
+					phasesSorted.add(j, phaseAux);
+				}				
+			}
+		}
+		return phasesSorted;
+	}
 }
 

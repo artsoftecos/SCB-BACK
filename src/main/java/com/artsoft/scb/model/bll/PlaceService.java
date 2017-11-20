@@ -34,6 +34,14 @@ public class PlaceService extends ExceptionService {
 	private final int ID_ACEPTADA = 2;
 	private final int ID_RECHAZADA = 3;
 	
+	public void createPlace(Place place){
+		PlaceState placeState = placeStateRepository.findById(ID_PENDIENTE);
+		place.setPlaceState(placeState);
+		
+		placeRepository.save(place);
+	}
+	
+	
 	public List<Place> getPlaceByEmail(String applicantEmail){
 		Applicant applicant = applicantRepository.findByEmail(applicantEmail);
 		return placeRepository.findByApplicant(applicant);
