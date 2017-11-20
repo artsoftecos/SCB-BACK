@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +24,7 @@ public class Validation {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
 	
-	@OneToOne
+	@OneToOne(cascade= {CascadeType.REMOVE},orphanRemoval=true)
 	@Autowired(required = false)
 	@JsonBackReference(value = "validation-field")
 	@JoinColumn(name = "idField")
