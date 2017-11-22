@@ -30,7 +30,7 @@ public class Validation {
 	@JoinColumn(name = "idField")
 	private Field field;
 	
-	@JsonBackReference(value = "validation-fieldTypeValidation")
+	//@JsonBackReference(value = "validation-fieldTypeValidation")
 	@Autowired(required = false)
 	@ManyToOne()
 	@JoinColumn(name ="idTipoValidacionCampo")
