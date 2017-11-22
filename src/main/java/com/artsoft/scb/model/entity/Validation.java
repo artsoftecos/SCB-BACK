@@ -27,7 +27,7 @@ public class Validation {
 	@OneToOne(cascade= {CascadeType.REMOVE},orphanRemoval=true)
 	@Autowired(required = false)
 	@JsonBackReference(value = "validation-field")
-	@JoinColumn(name = "idField")
+	@JoinColumn(name = "idField", nullable = true)
 	private Field field;
 	
 	//@JsonBackReference(value = "validation-fieldTypeValidation")

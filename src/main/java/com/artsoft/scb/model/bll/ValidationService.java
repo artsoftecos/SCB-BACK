@@ -16,10 +16,12 @@ public class ValidationService extends ExceptionService implements IValidationSe
 	
 	@Override
 	public boolean linkField(Validation validation, Field field) throws Exception {
+		if(validation != null){
 		validation.setField(field);
 		Validation validationSaved = validationRepository.save(validation);
 		if (validationSaved == null) {
 			return false;			
+		}
 		}
 		return true;
 	}
