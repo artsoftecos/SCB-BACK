@@ -18,4 +18,5 @@ public interface IFieldService {
 	
 	public Boolean exists(String id) throws Exception;
 
+	boolean editField(Field field) throws Exception;
 }
