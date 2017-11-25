@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.artsoft.scb.model.bll.interfaces.IFieldService;
 import com.artsoft.scb.model.dao.FieldRespository;
+import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Field;
 
 @Service
@@ -52,7 +53,20 @@ public class FieldService implements IFieldService {
 		return fiedlRepo.exists(id);
 	}
 
-	
+	@Override
+	public boolean editField(Field field) throws Exception {
+		Field fieldToEdit = fiedlRepo.findById(field.getId());
+		fieldToEdit.setName(field.getName());
+//		fieldToEdit.setDescription(convocatory.getDescription());
+//		fieldToEdit.setNumberBeneficiaries(convocatory.getNumberBeneficiaries());
+//		fieldToEdit.setConvocatoryType(convocatory.getConvocatoryType());
+//		fieldToEdit.setResultDate(convocatory.getResultDate());
+		Field fieldSaved = fiedlRepo.save(fieldToEdit);
+		if(fieldSaved == null){
+			return false;
+		}
+		return true;
+	}
 	
 
 }
