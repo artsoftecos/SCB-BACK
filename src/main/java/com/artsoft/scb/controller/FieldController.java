@@ -35,6 +35,7 @@ public class FieldController {
 			fieldService.createField(field);
 			validationService.linkField(field.getValidation(), field);
 			response.put("Response", "Campo creado");
+			response.put("field_id", field.getId());
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}

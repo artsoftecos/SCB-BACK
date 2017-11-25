@@ -41,5 +41,16 @@ public class ApplicantPerPhaseController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
+	
+	@GetMapping(path = "/getAsociation/{id}")
+	public ResponseEntity<?> getByAsociationId(@PathVariable("id") int idAsociation){
+		ApplicantPerPhase applicantPerPhase = null;
+		try {
+			applicantPerPhase = applicantPerPhaseService.getApplicantAsociatedToAPhase(idAsociation);
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(applicantPerPhase);
+	}
 
 }

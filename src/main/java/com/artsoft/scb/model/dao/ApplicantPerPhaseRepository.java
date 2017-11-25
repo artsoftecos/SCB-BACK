@@ -12,4 +12,5 @@ import com.artsoft.scb.model.entity.Phase;
 public interface ApplicantPerPhaseRepository extends CrudRepository<ApplicantPerPhase, Integer> {
 	List<ApplicantPerPhase> getByApplicantPerPhaseState (ApplicantPerPhaseState applicantPerPhaseState);
 	ApplicantPerPhase getByApplicantAndPhase (Applicant applicant, Phase phase);
+	ApplicantPerPhase getById(int id);
 }

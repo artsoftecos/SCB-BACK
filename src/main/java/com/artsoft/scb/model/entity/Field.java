@@ -47,7 +47,7 @@ public class Field {
 	private FieldType fieldType;
 	
 	@Autowired(required = false)
-	@OneToOne(mappedBy = "field", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "field", cascade = {CascadeType.ALL,CascadeType.REMOVE},orphanRemoval=true)
 	private Validation validation;
 	
 	public int getId() {

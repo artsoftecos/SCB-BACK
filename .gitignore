@@ -9,6 +9,7 @@ target/SCB-Back-1.war
 .project
 .settings
 .springBeans
+.tern-project
 
 ### IntelliJ IDEA ###
 .idea

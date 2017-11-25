@@ -30,9 +30,14 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 	@Autowired
 	private PhaseRepository phaseRepository;
 	
+	@Autowired
+	private PhaseService phaseService;
+	
 	private final int STATE_REJECTED = 3;
 	
 	private final int STATE_PENDING = 2;
+	
+	private final int STATE_APPROVED = 1;
 	
 	public List<ApplicantPerPhase> getApplicantPerPhaseByState(int idState){
 		ApplicantPerPhaseState apPerPhaseState = applicantPerPhaseStateRepository.getById(idState);
@@ -51,7 +56,7 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 		applicantPerPhaseRepository.save(applicantPerPhase);		
 	}
 	
-	public boolean asociateApplicantToAPhase(ApplicantPerPhase applicantPerPhase){
+	public boolean asociateApplicantToAPhase(ApplicantPerPhase applicantPerPhase) throws Exception{
 		Applicant applicantToAsociate = applicantRepository.findByEmail(applicantPerPhase.getApplicant().getEmail());
 		Phase phaseToAsociate = phaseRepository.findById(applicantPerPhase.getPhase().getId());
 		ApplicantPerPhaseState applicantPerPhaseState = applicantPerPhaseStateRepository.getById(STATE_PENDING);
@@ -60,12 +65,32 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 		applicantPerPhase.setApplicant(applicantToAsociate);
 		applicantPerPhase.setPhase(phaseToAsociate);
 		applicantPerPhase.setApplicantPerPhaseState(applicantPerPhaseState);
-		
+		phaseService.createPostulation(applicantPerPhase);
 		ApplicantPerPhase applicantPerPhaseToSave = applicantPerPhaseRepository.save(applicantPerPhase);
 		if(applicantPerPhaseToSave == null){
 			return false;
 		}
 		
 		return true;
+	}
+	
+	public ApplicantPerPhase getApplicantAsociatedToAPhase(int idApplicantPerPhase){
+		ApplicantPerPhase applicantPerPhaseToReturn = applicantPerPhaseRepository.getById(idApplicantPerPhase);
+		return applicantPerPhaseToReturn;
+	}
+	
+	public void rejectAplicantFromAPhase(int id){
+		ApplicantPerPhaseState state = applicantPerPhaseStateRepository.getById(STATE_REJECTED);
+		ApplicantPerPhase applicantPerPhase = applicantPerPhaseRepository.getById(id);
+		applicantPerPhase.setApplicantPerPhaseState(state);
+		applicantPerPhaseRepository.save(applicantPerPhase);
+	}
+	
+	public void acceptAplicantFromAPhase(int id){
+		ApplicantPerPhaseState state = applicantPerPhaseStateRepository.getById(STATE_APPROVED);
+		ApplicantPerPhase applicantPerPhase = applicantPerPhaseRepository.getById(id);
+		applicantPerPhase.setApplicantPerPhaseState(state);
+		applicantPerPhaseRepository.save(applicantPerPhase);
+		phaseService.createPlace(applicantPerPhase);
 	}
 }

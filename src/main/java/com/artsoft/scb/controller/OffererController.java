@@ -15,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.artsoft.scb.model.bll.ApplicantPerPhaseService;
 import com.artsoft.scb.model.bll.OffererService;
+import com.artsoft.scb.model.bll.PhaseService;
 import com.artsoft.scb.model.entity.Offerer;
 
 @RestController
@@ -24,6 +26,9 @@ public class OffererController {
 	
 	@Autowired
 	private OffererService offererService;
+	
+	@Autowired
+	private ApplicantPerPhaseService applicantPerPhaseService;
 	
 	@PostMapping
 	public ResponseEntity<?> createOferent(@RequestBody Offerer oferent) {
@@ -127,6 +132,38 @@ public class OffererController {
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(oferents);
 
+	}
+	
+	@PostMapping("/approvePhase/{id}")
+	public ResponseEntity<?> approveApplicantInAPhase(@PathVariable int id){
+		JSONObject response = new JSONObject();
+		
+		try {
+			applicantPerPhaseService.acceptAplicantFromAPhase(id);
+			response.put("Response", "Solicitante aprobado");
+		}			
+		catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());	
+		}
+		
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+	}
+	
+	@PostMapping("/rejectPhase/{id}")
+	public ResponseEntity<?> rejectApplicantInAPhase(@PathVariable int id){
+		JSONObject response = new JSONObject();
+		
+		try {
+			applicantPerPhaseService.rejectAplicantFromAPhase(id);
+			response.put("Response", "Solicitante rechazado");
+		}			
+		catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());	
+		}
+		
+		
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 }
 
