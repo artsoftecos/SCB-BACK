@@ -44,7 +44,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 		
-	@GetMapping(path = "/getByOfferer/{mailOfferer}")
+	@GetMapping(path = "/getByOfferer/{mailOfferer:.+}")
 	public ResponseEntity<?> getByOfferer(@PathVariable("mailOfferer") String mailOfferer) {
 		JSONObject response = new JSONObject();
 		try {
@@ -81,7 +81,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping(path = "/getByPendingPhases/{mailOfferer}")
+	@GetMapping(path = "/getByPendingPhases/{mailOfferer:.+}")
 	public ResponseEntity<?> getByPendingPhases(@PathVariable("mailOfferer") String mailOfferer) {
 		List<Convocatory> convocatories = new ArrayList<Convocatory>();
 		try {
@@ -93,7 +93,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
 	}
 	
-	@GetMapping(path = "/getByOffererState/{mailOfferer}/{state}")
+	@GetMapping(path = "/getByOffererState/{mailOfferer:.+}/{state}")
 	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer, @PathVariable("state") int state) {
 		List<Convocatory> convocatories;		
 		try {
@@ -118,7 +118,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping(path = "/getPending/{mailOfferer}")
+	@GetMapping(path = "/getPending/{mailOfferer:.+}")
 	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer) {
 
 		List<Convocatory> convocatories;
