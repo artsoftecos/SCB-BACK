@@ -6,6 +6,9 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -335,7 +338,29 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		return false;
 	}
 	
-	public void createPostulation(ApplicantPerPhase applicantPerPhase) throws Exception{
+	public void managePhaseApplication(ApplicantPerPhase applicantPerPhase) throws Exception{
+		Phase phase = new Phase();
+		phase = applicantPerPhase.getPhase();
+		
+		if(isFirstPhase(phase)){
+			createPostulation(applicantPerPhase);
+		}
+	}
+	
+	public void manageApprovedPhases(ApplicantPerPhase applicantPerPhase) throws Exception{
+		Phase phase = new Phase();
+		phase = applicantPerPhase.getPhase();
+		
+		Applicant applicant = new Applicant();
+		applicant = applicantRepository.findByEmail(applicantPerPhase.getApplicant().getEmail());
+		
+		if(isLastPhase(phase)){
+			createPlace(applicantPerPhase);
+		}else {
+			asociateApplicantToNextPhase(phase, applicant);
+		}
+	}
+	private void createPostulation(ApplicantPerPhase applicantPerPhase) throws Exception{
 		Phase phase = new Phase();
 		phase = applicantPerPhase.getPhase();
 		Applicant applicant = new Applicant();
@@ -345,48 +370,52 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		
 		Date today = new Date(System.currentTimeMillis());
 		
-		if(isFirstPhase(phase)){
-			Postulation postulation = new Postulation();
-			postulation.setApplicant(applicant);
-			postulation.setConvocatory(convocatory);
-			postulation.setPostulationDate(today);
-			postulationService.createPostulation(postulation);
-		}
-		
-		
+		Postulation postulation = new Postulation();
+		postulation.setApplicant(applicant);
+		postulation.setConvocatory(convocatory);
+		postulation.setPostulationDate(today);
+		postulationService.createPostulation(postulation);		
 	}
 	
-	public void createPlace(ApplicantPerPhase applicantPerPhase){
+	private void createPlace(ApplicantPerPhase applicantPerPhase){
 		Phase phase = new Phase();
 		phase = applicantPerPhase.getPhase();
 		Applicant applicant = new Applicant();
 		applicant = applicantRepository.findByEmail(applicantPerPhase.getApplicant().getEmail());
 		Convocatory convocatory = new Convocatory();
 		convocatory = convocatoryRepository.findById(phase.getConvocatory().getId());
+	
+		Place place = new Place();
+		place.setApplicant(applicant);
+		place.setConvocatory(convocatory);
+		placeService.createPlace(place);
 		
-		/*
-		List<Phase> phases = phaseRepository.findByConvocatory(convocatory);
-		List<Phase> phasesSorted = new ArrayList<Phase>();
-		phasesSorted = sortList(phases);
+	}
+	
+	private void asociateApplicantToNextPhase(Phase phase, Applicant applicant) throws Exception{
+		Convocatory convocatory = new Convocatory();
+		convocatory = convocatoryRepository.findById(phase.getConvocatory().getId());
 		
-		int nextPhase;
+		List<Phase> phasesSorted = new ArrayList<Phase>(convocatory.getPhases());
+		
+		//List<Phase> phasesSorted = new ArrayList<Phase>();
+		
+		Collections.sort(phasesSorted);
+		int nextPhaseIndex = 0;
 		
 		for (int i = 0; i < phasesSorted.size(); i++) {
-			if(phase.getId() == phasesSorted.get(i).getId()){
-				nextPhase = i + 1;
-				break;
+			if(phasesSorted.get(i).getId() == phase.getId()){
+				nextPhaseIndex = i+1;
 			}
-		} 
-		*/
-		
-		
-		if(isLastPhase(phase)){
-			Place place = new Place();
-			place.setApplicant(applicant);
-			place.setConvocatory(convocatory);
-			placeService.createPlace(place);
 		}
+		
+		ApplicantPerPhase applicantPerPhase = new ApplicantPerPhase();
+		applicantPerPhase.setApplicant(applicant);
+		applicantPerPhase.setPhase(phasesSorted.get(nextPhaseIndex));
+		applicantPerPhaseService.asociateApplicantToAPhase(applicantPerPhase);
+		
 	}
+	
 	
 	public List<Phase> sortList(List<Phase> phasesToSort){
 		Phase phaseAux = new Phase();

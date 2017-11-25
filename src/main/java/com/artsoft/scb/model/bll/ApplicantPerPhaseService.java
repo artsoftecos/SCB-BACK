@@ -65,7 +65,7 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 		applicantPerPhase.setApplicant(applicantToAsociate);
 		applicantPerPhase.setPhase(phaseToAsociate);
 		applicantPerPhase.setApplicantPerPhaseState(applicantPerPhaseState);
-		phaseService.createPostulation(applicantPerPhase);
+		phaseService.managePhaseApplication(applicantPerPhase);
 		ApplicantPerPhase applicantPerPhaseToSave = applicantPerPhaseRepository.save(applicantPerPhase);
 		if(applicantPerPhaseToSave == null){
 			return false;
@@ -86,11 +86,11 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 		applicantPerPhaseRepository.save(applicantPerPhase);
 	}
 	
-	public void acceptAplicantFromAPhase(int id){
+	public void acceptAplicantFromAPhase(int id) throws Exception{
 		ApplicantPerPhaseState state = applicantPerPhaseStateRepository.getById(STATE_APPROVED);
 		ApplicantPerPhase applicantPerPhase = applicantPerPhaseRepository.getById(id);
 		applicantPerPhase.setApplicantPerPhaseState(state);
 		applicantPerPhaseRepository.save(applicantPerPhase);
-		phaseService.createPlace(applicantPerPhase);
+		phaseService.manageApprovedPhases(applicantPerPhase);
 	}
 }
