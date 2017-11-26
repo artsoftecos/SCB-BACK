@@ -292,9 +292,9 @@ values ('Fase 4 Conv 4','2017-10-01', '2017-10-03', '2017-10-15', '2017-10-25', 
 
 ----------INSERTING APPLICANTS PER PHASE------
 insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
-values ('solicitanteApproved@artsoft.com', 1,  2);
+values ('solicitanteApproved@artsoft.com', 1,  8);
 insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
-values ('solicitanteRejected@artsoft.com', 2,  6);
+values ('solicitanteRejected@artsoft.com', 2,  8);
 insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
 values ('solicitanteApproved4@artsoft.com', 2,  1);
 /*insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)

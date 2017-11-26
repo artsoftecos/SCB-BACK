@@ -39,6 +39,13 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 	
 	private final int STATE_APPROVED = 1;
 	
+	public List<ApplicantPerPhase> getApplicantsPerPhase(int idPhase){
+		Phase phase = phaseRepository.findById(idPhase);
+		List<ApplicantPerPhase> applicantsPerPhases = applicantPerPhaseRepository.getByPhase(phase);
+		return applicantsPerPhases;
+	}
+	
+	
 	public List<ApplicantPerPhase> getApplicantPerPhaseByState(int idState){
 		ApplicantPerPhaseState apPerPhaseState = applicantPerPhaseStateRepository.getById(idState);
 		List<ApplicantPerPhase> applicantsPerPhases = applicantPerPhaseRepository.getByApplicantPerPhaseState(apPerPhaseState);
