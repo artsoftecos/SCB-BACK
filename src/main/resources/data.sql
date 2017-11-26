@@ -331,11 +331,13 @@ values ('', 'Expresion regular');
 
 ------ Field type validations -----------
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
-values (1,3);
+values (1,1);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
-values (1,5);
+values (1,2);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
-values (2,3);
+values (2,1);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (2,2);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (3,4);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
@@ -351,9 +353,11 @@ values (5, 2);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (5, 3);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (5,5);
+/*insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (6, 6);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
-values (7, 6);
+values (7, 6);*/
 
 -------------INSERTING PLACES --------
 
