@@ -1,5 +1,8 @@
 package com.artsoft.scb.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -154,6 +159,26 @@ public class ConvocatoryController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+	}
+	
+	@GetMapping("/downloadDocument/{idConvocatory}/{idPhase}/{email:.+}/{name}")
+	@PreAuthorize("hasRole('ROLE_APPLICANT')")
+	public ResponseEntity<?> getDocument(@PathVariable("name")String name, @PathVariable("idConvocatory")String idConvocatory,
+			@PathVariable("idPhase")String idPhase,	@PathVariable("email")String email,	
+			HttpServletRequest request) throws FileNotFoundException {
+		File document = null;
+		try {			
+			document = convocatoryDocumentService.getDocument(name,email,idConvocatory,idPhase, request);
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		
+		HttpHeaders respHeaders = new HttpHeaders();
+		respHeaders.setContentDispositionFormData("attachment", document.getName());
+
+		InputStreamResource isr = new InputStreamResource(new FileInputStream(document));
+		return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
 	}
 }
 

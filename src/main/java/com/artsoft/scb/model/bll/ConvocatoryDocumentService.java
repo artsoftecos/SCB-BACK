@@ -75,17 +75,11 @@ public class ConvocatoryDocumentService extends ExceptionService {
 		return documents;
 	}*/
 	
-	/*public File getDocument(Long id, HttpServletRequest request) throws Exception {
-		ApplicantDocument applicantDocument = getApplicantDocument(id);
-		
-		if (applicantDocument == null) {
-			throwException("Response", "No se encontro el documento.");
-		}
-		
-		File file = documentService.get(applicantDocument.getFileName(), 
-				applicantDocument.getApplicant().getEmail(), request);
+	public File getDocument(String documentName, String email, String idConvocatory, String idPhase, HttpServletRequest request) throws Exception {		
+		email = idConvocatory+"/"+idPhase+"/" + email;		
+		File file = documentService.get(documentName, email, request);
 		return file;
-	}*/
+	}
 
 	/*private void saveDocument(String fileName, String name, String email, String path) {		
 		//TODO: aca q la fase_soliciatnte.. update? no nada devuelva el valor

@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 				"/phase/edit", "/phase/delete/**", "/phase/getPhasesOfConvocatory/**", "/phase/getPhases/**", "/AppPerPhase/byId/**", "/phase", "/fieldType",
 				"/fieldType/Validations/**", "/field/create", "/field/edit","/field/getByPhase/**", "/field/delete/**", "/applicant/postulations/**","/applicant/places/**","/applicant/notAppliedConvocatories/**",
 				"/phase/getCurrentPhase/**", "/applicant/acceptConvocatory/**","/applicant/rejectPlace",
-				"/convocatory/upload").permitAll()
+				"/convocatory/upload", "/convocatory/downloadDocument").permitAll()
 		.anyRequest()
 			.fullyAuthenticated()
 		.and()
