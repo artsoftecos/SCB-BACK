@@ -331,11 +331,13 @@ values ('', 'Expresion regular');
 
 ------ Field type validations -----------
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
-values (1,3);
+values (1,1);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
-values (1,5);
+values (1,2);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
-values (2,3);
+values (2,1);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (2,2);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (3,4);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
@@ -350,6 +352,8 @@ insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (5, 2);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (5, 3);
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+values (5,5);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (6, 6);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
@@ -522,6 +526,60 @@ values ('solicitanteAplicarTest@artsoft.com', 1,  28);
 insert into scb.solicitante_por_fase (mail_solicitante, id_estado, id_fase)
 values ('solicitanteAplicarTest@artsoft.com', 4,  29);
 
+---Datos completos
+insert into scb.convocatoria (descripcion, nombre, numero_beneficiarios, fecha_publicacion_resultados, id_estado, id_tipo, mail_oferente)
+VALUES ('Convocatoria con todos los campos', 'Convocatoria con Campos', '10', '2017-12-26', '1', '2', 'OffererApproved@artsoft.com');
+
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+VALUES ('Fase de Prueba', '2017-12-01', '2017-12-05', '2017-12-06', '2017-12-10', 'Fase Prueba 1', 15);
+insert into scb.fase (descripcion, fecha_inicio, fecha_finalizacion, fecha_inicio_aprobacion, fecha_cierre_aprobacion, nombre,  id_convocatoria)
+VALUES ('Fase de Prueba', '2017-12-11', '2017-12-20', '2017-12-15', '2017-12-19', 'Fase Prueba 2', 15);
+
+insert into scb.campo(id,id_fase,seleccion_multiple,nombre,obligatorio,orden,valor,id_field_type) 
+VALUES(34, 31, b'0', 'TC - Ma', b'0', 0, '', 1),
+    (35, 31, b'0', 'TC Me ', b'0', 1, '', 1),
+    (36, 31, b'0', 'TL Ma 5', b'0', 2, '', 2),
+    (37, 31, b'0', 'TL Me 10', b'0', 3, '', 2),
+    (38, 31, b'0', 'Arc PDF', b'0', 4, '', 3),
+    (39, 31, b'0', 'Fecha May', b'0', 5, '', 4),
+    (40, 31, b'0', 'Fec Men', b'0', 6, '', 4),
+    (41, 31, b'0', 'Fecha Entre', b'0', 7, '', 4),
+    (42, 31, b'0', 'Num Ma', b'0', 8, '', 5),
+    (43, 31, b'0', 'Me 10', b'0', 9, '', 5),
+    (44, 31, b'0', 'Num ENtre', b'0', 10, '', 5),
+    (45, 31, b'0', 'Celular', b'0', 11, '', 5),
+    (46, 31, b'0', 'Correo', b'0', 12, '', 6);
+
+
+/*INSERT INTO `campo` (`id`, `id_fase`, `seleccion_multiple`, `nombre`, `obligatorio`, `orden`, `valor`, `id_field_type`) VALUES
+    (34, 31, b'0', 'TC - Ma', b'0', 0, '', 1),
+    (35, 31, b'0', 'TC Me ', b'0', 1, '', 1),
+    (36, 31, b'0', 'TL Ma 5', b'0', 2, '', 2),
+    (37, 31, b'0', 'TL Me 10', b'0', 3, '', 2),
+    (38, 31, b'0', 'Arc PDF', b'0', 4, '', 3),
+    (39, 31, b'0', 'Fecha May', b'0', 5, '', 4),
+    (40, 31, b'0', 'Fec Men', b'0', 6, '', 4),
+    (41, 31, b'0', 'Fecha Entre', b'0', 7, '', 4),
+    (42, 31, b'0', 'Num Ma', b'0', 8, '', 5),
+    (43, 31, b'0', 'Me 10', b'0', 9, '', 5),
+    (44, 31, b'0', 'Num ENtre', b'0', 10, '', 5),
+    (45, 31, b'0', 'Celular', b'0', 11, '', 5),
+    (46, 31, b'0', 'Correo', b'0', 12, '', 6);*/
+insert into scb.validacion(id,mensaje_error,valor,id_field,id_tipo_validacion_campo) 
+VALUES
+    (34, 'TC Ma 5', '5', 34, 1),
+    (35, 'TC Me 10', '10', 35, 2),
+    (36, 'TL Ma 5 ', '5', 36, 3),
+    (37, 'TL Me 10', '10', 37, 4),
+    (38, 'Arc PDf', 'pdf', 38, 5),
+    (39, 'Fecha Ma 26-10', '2017-11-26', 39, 6),
+    (40, 'Fecha Me 26-10', '2017-11-26', 40, 7),
+    (41, 'Entre 26 y 30', '2017-11-26|2017-11-30', 41, 8),
+    (42, 'Ma 5', '5', 42, 9),
+    (43, 'Men 10', '10', 43, 10),
+    (44, 'Entre 5 y 10', '5|10', 44, 11),
+    (45, 'Celular', NULL, 45, 12),
+    (46, 'Debe ser correo', NULL, 46, 13);
 -- Sincronizaciones de Jobs:
 -- 1. cuando cierra la convocatoria.
 
