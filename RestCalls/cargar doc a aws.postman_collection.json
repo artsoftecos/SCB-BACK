@@ -1,0 +1,79 @@
+{
+	"variables": [],
+	"info": {
+		"name": "cargar doc a aws",
+		"_postman_id": "4e21a2d2-025c-6b94-a6b3-ea629613729b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Aplicar a Convocatoria - Download document",
+			"request": {
+				"url": "http://localhost:8080/convocatory/downloadDocument/1/45/solicitanteApproved3@artsoft.com/teoo.pdf",
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic c29saWNpdGFudGVBcHByb3ZlZDNAYXJ0c29mdC5jb206YXJ0c29mdA==",
+						"description": ""
+					}
+				],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Aplicar a Convocatory - upload document",
+			"request": {
+				"url": "http://localhost:8080/convocatory/upload",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic c29saWNpdGFudGVBcHByb3ZlZDNAYXJ0c29mdC5jb206YXJ0c29mdA==",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"value": "",
+							"description": "",
+							"type": "file"
+						},
+						{
+							"key": "email",
+							"value": "solicitanteApproved3@artsoft.com",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "name",
+							"value": "teoo",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "idConvocatory",
+							"value": "1",
+							"description": "",
+							"type": "text"
+						},
+						{
+							"key": "idPhase",
+							"value": "45",
+							"description": "",
+							"type": "text"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

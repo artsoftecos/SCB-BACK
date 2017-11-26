@@ -1,5 +1,6 @@
 package com.artsoft.scb.model.bll;
 
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.text.DateFormat;
@@ -20,6 +21,7 @@ import javax.validation.Validator;
 import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.artsoft.scb.model.bll.interfaces.IPhaseService;
@@ -57,6 +59,27 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 	
 	@Autowired
 	private PlaceService placeService;
+	
+	@Autowired
+	private HelperService helperService;
+	
+	@Value("${Email.SubjectResultPhase}")
+	private String subjectResultPhase;
+	
+	@Value("${Email.PhaseApprovedEmail}")
+	private String pathPhaseApprovedEmail;
+	
+	@Value("${Email.PhaseRejectedEmail}")
+	private String pathPhaseRejectedEmail;
+	
+	@Value("${Email.PlaceAcceptedEmail}")
+	private String pahtPlaceAcceptedEmail;
+	
+	@Value("${Email.SubjectDecision}")
+	private String subjectDecision;
+	
+	@Autowired
+	private MessageService messageService;
 	
 	@Override
 	public boolean createPhase(Phase phase) throws Exception {
@@ -353,9 +376,13 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		
 		Applicant applicant = new Applicant();
 		applicant = applicantRepository.findByEmail(applicantPerPhase.getApplicant().getEmail());
+		Convocatory convocatory = new Convocatory();
+		convocatory = convocatoryRepository.findById(phase.getConvocatory().getId());
 		
 		if(isLastPhase(phase)){
 			createPlace(applicantPerPhase);
+			sendPlaceCreatedEmail(applicant.getFirstName(), convocatory.getName(), applicant.getEmail());
+			
 		}else {
 			asociateApplicantToNextPhase(phase, applicant);
 		}
@@ -413,24 +440,57 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		applicantPerPhase.setApplicant(applicant);
 		applicantPerPhase.setPhase(phasesSorted.get(nextPhaseIndex));
 		applicantPerPhaseService.asociateApplicantToAPhase(applicantPerPhase);
+		sendApprovedEmail(applicant.getFirstName(), phasesSorted.get(nextPhaseIndex - 1).getName(), convocatory.getName(), phasesSorted.get(nextPhaseIndex).getName(), applicant.getEmail());
 		
 	}
 	
 	
-	public List<Phase> sortList(List<Phase> phasesToSort){
-		Phase phaseAux = new Phase();
-		List<Phase> phasesSorted = new ArrayList<Phase>();
-		phasesSorted = phasesToSort;
-		for (int i = 0; i < phasesSorted.size(); i++) {
-			for (int j = 1; j < phasesSorted.size() - i; j++) {
-				if(phasesSorted.get(j - 1).getStartDate().after(phasesSorted.get(j).getStartDate())){
-					phaseAux = phasesSorted.get(j - 1);
-					phasesSorted.add(j - 1, phasesSorted.get(j));
-					phasesSorted.add(j, phaseAux);
-				}				
-			}
-		}
-		return phasesSorted;
+	private void sendApprovedEmail(String applicantName, String phaseName, String convName, String netxPhaseName, String mailApplicant) throws Exception{
+		Hashtable<String, String>  parameters = new Hashtable<String, String>();
+		
+		parameters.put("[NAME]", applicantName);
+		parameters.put("[PHASE_NAME]", phaseName);
+		parameters.put("[CONV_NAME]", convName);
+		parameters.put("[NEXT_PHASE_NAME]", netxPhaseName);
+		
+		String bodyEmailToSend = helperService.getEmail(pathPhaseApprovedEmail, parameters);
+		List<String> destinies = new ArrayList<String>();
+		destinies.add(mailApplicant);		
+		
+		messageService.sendMessage(bodyEmailToSend, destinies, subjectResultPhase);
+	
+		
+	}
+	
+	public void sendRejectedEmail(String applicantName, String phaseName, String convName, String mailApplicant) throws Exception{
+		Hashtable<String, String>  parameters = new Hashtable<String, String>();
+		
+		parameters.put("[NAME]", applicantName);
+		parameters.put("[PHASE_NAME]", phaseName);
+		parameters.put("[CONV_NAME]", convName);
+				
+		String bodyEmailToSend = helperService.getEmail(pathPhaseRejectedEmail, parameters);
+		List<String> destinies = new ArrayList<String>();
+		destinies.add(mailApplicant);		
+		
+		messageService.sendMessage(bodyEmailToSend, destinies, subjectResultPhase);
+	
+		
+	}
+	
+	public void sendPlaceCreatedEmail(String applicantName, String convName, String mailApplicant) throws Exception{
+		Hashtable<String, String>  parameters = new Hashtable<String, String>();
+		
+		parameters.put("[NAME]", applicantName);
+		parameters.put("[CONV_NAME]", convName);
+				
+		String bodyEmailToSend = helperService.getEmail(pahtPlaceAcceptedEmail, parameters);
+		List<String> destinies = new ArrayList<String>();
+		destinies.add(mailApplicant);		
+		
+		messageService.sendMessage(bodyEmailToSend, destinies, subjectDecision);
+	
+		
 	}
 }
 

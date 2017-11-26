@@ -9,10 +9,12 @@ import com.artsoft.scb.model.bll.interfaces.IApplicantPerPhaseService;
 import com.artsoft.scb.model.dao.ApplicantPerPhaseRepository;
 import com.artsoft.scb.model.dao.ApplicantPerPhaseStateRepository;
 import com.artsoft.scb.model.dao.ApplicantRepository;
+import com.artsoft.scb.model.dao.ConvocatoryRepository;
 import com.artsoft.scb.model.dao.PhaseRepository;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.ApplicantPerPhase;
 import com.artsoft.scb.model.entity.ApplicantPerPhaseState;
+import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Phase;
 
 @Service
@@ -32,6 +34,9 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 	
 	@Autowired
 	private PhaseService phaseService;
+	
+	@Autowired
+	private ConvocatoryRepository convocatoryRepository;
 	
 	private final int STATE_REJECTED = 3;
 	
@@ -86,11 +91,17 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 		return applicantPerPhaseToReturn;
 	}
 	
-	public void rejectAplicantFromAPhase(int id){
+	public void rejectAplicantFromAPhase(int id) throws Exception{
 		ApplicantPerPhaseState state = applicantPerPhaseStateRepository.getById(STATE_REJECTED);
 		ApplicantPerPhase applicantPerPhase = applicantPerPhaseRepository.getById(id);
 		applicantPerPhase.setApplicantPerPhaseState(state);
+		Applicant applicant = applicantRepository.findByEmail(applicantPerPhase.getApplicant().getEmail());
+		Phase phase = phaseRepository.findById(applicantPerPhase.getPhase().getId());
+		Convocatory convocatory = convocatoryRepository.findById(phase.getConvocatory().getId());
+		
+		
 		applicantPerPhaseRepository.save(applicantPerPhase);
+		phaseService.sendRejectedEmail(applicant.getEmail(), phase.getName(), convocatory.getName(), applicantPerPhase.getApplicant().getEmail());
 	}
 	
 	public void acceptAplicantFromAPhase(int id) throws Exception{
