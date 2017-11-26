@@ -354,10 +354,10 @@ insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (5, 3);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (5,5);
-/*insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
+insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
 values (6, 6);
 insert into scb.validacion_tipo_campo (id_tipo_campo, id_tipo_validacion)
-values (7, 6);*/
+values (7, 6);
 
 -------------INSERTING PLACES --------
 
