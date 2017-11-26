@@ -18,28 +18,26 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class ApplicantPerPhase {
 	@Id
 	@Column(name = "Id")
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id;
-	
+
 	@OneToOne
 	@JoinColumn(name = "mail_solicitante", nullable = false)
 	private Applicant applicant;
-	
+
 	@OneToOne
 	@JsonBackReference(value = "applicantPerPhase-phase")
 	@JoinColumn(name = "id_fase", nullable = false)
 	private Phase phase;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "idEstado")
 	@JsonBackReference(value = "applicantPerPhase-applicantPerPhaseState")
 	private ApplicantPerPhaseState applicantPerPhaseState;
-	
-	@Column(name = "answers")
+
+	@Column(name = "answers", columnDefinition = "TEXT")
 	private String answers;
-	
-	
-	
+
 	public String getAnswers() {
 		return answers;
 	}
@@ -79,8 +77,5 @@ public class ApplicantPerPhase {
 	public void setPhase(Phase phase) {
 		this.phase = phase;
 	}
-	
-	
-	
 
 }
