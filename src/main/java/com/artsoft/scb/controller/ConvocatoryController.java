@@ -3,6 +3,8 @@ package com.artsoft.scb.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,8 +15,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.artsoft.scb.model.bll.ApplicantDocumentService;
+import com.artsoft.scb.model.bll.ConvocatoryDocumentService;
 import com.artsoft.scb.model.bll.ConvocatoryService;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.ConvocatoryState;
@@ -27,6 +33,9 @@ public class ConvocatoryController {
 	/**
 	 * crea la convocatoria
 	 */
+	
+	@Autowired
+	private ConvocatoryDocumentService convocatoryDocumentService;
 	
 	@Autowired
 	private ConvocatoryService convocatoryService;
@@ -131,5 +140,20 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
 	}
 	
+	@PostMapping(path = "/upload")
+	@PreAuthorize("hasRole('ROLE_APPLICANT')")	
+	public ResponseEntity<?> uploadDocument(@RequestPart("file")MultipartFile file, 
+			@RequestPart("email")String email, @RequestPart("name")String name,@RequestPart("idConvocatory")String idConvocatory
+			, @RequestPart("idPhase")String idPhase, HttpServletRequest request) {
+		JSONObject response = new JSONObject();
+		try {			
+			convocatoryDocumentService.uploadDocument(file, name, email, idConvocatory, idPhase, request);			
+			response.put("Response", "Documento almacenado");
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+	}
 }
 
