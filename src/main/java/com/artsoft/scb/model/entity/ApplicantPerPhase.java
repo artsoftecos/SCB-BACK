@@ -22,7 +22,6 @@ public class ApplicantPerPhase {
 	private int id;
 	
 	@OneToOne
-	@JsonBackReference(value = "applicantPerPhase-applicant")
 	@JoinColumn(name = "mail_solicitante", nullable = false)
 	private Applicant applicant;
 	

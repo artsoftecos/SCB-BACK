@@ -13,4 +13,5 @@ public interface ApplicantPerPhaseRepository extends CrudRepository<ApplicantPer
 	List<ApplicantPerPhase> getByApplicantPerPhaseState (ApplicantPerPhaseState applicantPerPhaseState);
 	ApplicantPerPhase getByApplicantAndPhase (Applicant applicant, Phase phase);
 	ApplicantPerPhase getById(int id);
+	List<ApplicantPerPhase> getByPhase(Phase phase);
 }

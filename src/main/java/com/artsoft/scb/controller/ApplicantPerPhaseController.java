@@ -22,6 +22,13 @@ public class ApplicantPerPhaseController {
 	
 	@Autowired
 	private ApplicantPerPhaseService applicantPerPhaseService;
+
+	@GetMapping(path = "/applicantsPerPhase/{id}")
+	public ResponseEntity<?> getApplicantsPerPhase(@PathVariable("id") int id){
+		List<ApplicantPerPhase> applicantsPerPhase = applicantPerPhaseService.getApplicantsPerPhase(id);
+		return ResponseEntity.status(HttpStatus.OK).body(applicantsPerPhase);
+		
+	}
 	
 	@GetMapping(path = "/byId/{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") int id){

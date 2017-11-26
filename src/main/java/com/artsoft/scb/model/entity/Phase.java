@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
 @Table(name = "Fase")
-public class Phase {
+public class Phase implements Comparable<Phase> {
 	
 	@Id
 	@Column(name = "Id")
@@ -137,6 +137,19 @@ public class Phase {
 
 	public void setApplicantPerPhase(Set<ApplicantPerPhase> applicantPerPhase) {
 		this.applicantPerPhase = applicantPerPhase;
+	}
+
+	@Override
+	public int compareTo(Phase p) {
+		if(startDate.before(p.getStartDate())){
+			return -1;
+		}
+		
+		if(startDate.after(p.getStartDate())){
+			return 1;
+		}
+		
+		return 0;
 	}
 	
 	

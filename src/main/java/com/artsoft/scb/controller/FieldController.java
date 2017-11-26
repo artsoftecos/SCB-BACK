@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.artsoft.scb.model.bll.interfaces.IFieldService;
 import com.artsoft.scb.model.bll.interfaces.IValidationService;
+import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.Field;
 import com.artsoft.scb.model.entity.Validation;
 
@@ -42,16 +43,18 @@ public class FieldController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@PostMapping(path = "/update")
-	public ResponseEntity<?> updateField(@RequestBody Field field) {
-		
+
+	@PostMapping(path = "/edit")
+	public ResponseEntity<?> editField(@RequestBody Field field){
+		JSONObject response = new JSONObject();
 		try {
-			fieldService.createField(field);
+			fieldService.editField(field);
+			response.put("Response", "Campo editado con éxito");
+			
 		} catch (Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
 		}
-		
-		return ResponseEntity.status(HttpStatus.OK).body("Field Updated!");
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
 	@PostMapping(path = "/delete/{idField}")

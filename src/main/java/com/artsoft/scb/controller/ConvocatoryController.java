@@ -1,10 +1,17 @@
 package com.artsoft.scb.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,8 +20,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.artsoft.scb.model.bll.ApplicantDocumentService;
+import com.artsoft.scb.model.bll.ConvocatoryDocumentService;
 import com.artsoft.scb.model.bll.ConvocatoryService;
 import com.artsoft.scb.model.entity.Convocatory;
 import com.artsoft.scb.model.entity.ConvocatoryState;
@@ -27,6 +38,9 @@ public class ConvocatoryController {
 	/**
 	 * crea la convocatoria
 	 */
+	
+	@Autowired
+	private ConvocatoryDocumentService convocatoryDocumentService;
 	
 	@Autowired
 	private ConvocatoryService convocatoryService;
@@ -44,7 +58,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 		
-	@GetMapping(path = "/getByOfferer/{mailOfferer}")
+	@GetMapping(path = "/getByOfferer/{mailOfferer:.+}")
 	public ResponseEntity<?> getByOfferer(@PathVariable("mailOfferer") String mailOfferer) {
 		JSONObject response = new JSONObject();
 		try {
@@ -81,7 +95,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping(path = "/getByPendingPhases/{mailOfferer}")
+	@GetMapping(path = "/getByPendingPhases/{mailOfferer:.+}")
 	public ResponseEntity<?> getByPendingPhases(@PathVariable("mailOfferer") String mailOfferer) {
 		List<Convocatory> convocatories = new ArrayList<Convocatory>();
 		try {
@@ -93,7 +107,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
 	}
 	
-	@GetMapping(path = "/getByOffererState/{mailOfferer}/{state}")
+	@GetMapping(path = "/getByOffererState/{mailOfferer:.+}/{state}")
 	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer, @PathVariable("state") int state) {
 		List<Convocatory> convocatories;		
 		try {
@@ -118,7 +132,7 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping(path = "/getPending/{mailOfferer}")
+	@GetMapping(path = "/getPending/{mailOfferer:.+}")
 	public ResponseEntity<?> getByOffererState(@PathVariable("mailOfferer") String mailOfferer) {
 
 		List<Convocatory> convocatories;
@@ -131,5 +145,40 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(convocatories);
 	}
 	
+	@PostMapping(path = "/upload")
+	@PreAuthorize("hasRole('ROLE_APPLICANT')")	
+	public ResponseEntity<?> uploadDocument(@RequestPart("file")MultipartFile file, 
+			@RequestPart("email")String email, @RequestPart("name")String name,@RequestPart("idConvocatory")String idConvocatory
+			, @RequestPart("idPhase")String idPhase, HttpServletRequest request) {
+		JSONObject response = new JSONObject();
+		try {			
+			convocatoryDocumentService.uploadDocument(file, name, email, idConvocatory, idPhase, request);			
+			response.put("Response", "Documento almacenado");
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
+	}
+	
+	@GetMapping("/downloadDocument/{idConvocatory}/{idPhase}/{email:.+}/{name}")
+	@PreAuthorize("hasRole('ROLE_APPLICANT')")
+	public ResponseEntity<?> getDocument(@PathVariable("name")String name, @PathVariable("idConvocatory")String idConvocatory,
+			@PathVariable("idPhase")String idPhase,	@PathVariable("email")String email,	
+			HttpServletRequest request) throws FileNotFoundException {
+		File document = null;
+		try {			
+			document = convocatoryDocumentService.getDocument(name,email,idConvocatory,idPhase, request);
+		}
+		catch(Exception ex){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+		}
+		
+		HttpHeaders respHeaders = new HttpHeaders();
+		respHeaders.setContentDispositionFormData("attachment", document.getName());
+
+		InputStreamResource isr = new InputStreamResource(new FileInputStream(document));
+		return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
+	}
 }
 
