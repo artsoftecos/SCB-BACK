@@ -101,7 +101,7 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 		
 		
 		applicantPerPhaseRepository.save(applicantPerPhase);
-//		phaseService.sendRejectedEmail(applicant.getEmail(), phase.getName(), convocatory.getName(), applicantPerPhase.getApplicant().getEmail());
+		phaseService.sendRejectedEmail(applicant.getEmail(), phase.getName(), convocatory.getName(), applicantPerPhase.getApplicant().getEmail());
 	}
 	
 	public void acceptAplicantFromAPhase(int id) throws Exception{
@@ -109,6 +109,6 @@ public class ApplicantPerPhaseService extends ExceptionService implements IAppli
 		ApplicantPerPhase applicantPerPhase = applicantPerPhaseRepository.getById(id);
 		applicantPerPhase.setApplicantPerPhaseState(state);
 		applicantPerPhaseRepository.save(applicantPerPhase);
-//		phaseService.manageApprovedPhases(applicantPerPhase);
+		phaseService.manageApprovedPhases(applicantPerPhase);
 	}
 }
