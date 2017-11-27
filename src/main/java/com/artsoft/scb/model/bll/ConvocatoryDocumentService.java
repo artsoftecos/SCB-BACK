@@ -17,8 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.artsoft.scb.model.bll.interfaces.IDocumentService;
 import com.artsoft.scb.model.dao.ApplicantDocumentRepository;
 import com.artsoft.scb.model.dao.ApplicantRepository;
+import com.artsoft.scb.model.dao.ConvocatoryRepository;
+import com.artsoft.scb.model.dao.PhaseRepository;
 import com.artsoft.scb.model.entity.Applicant;
 import com.artsoft.scb.model.entity.ApplicantDocument;
+import com.artsoft.scb.model.entity.Phase;
 
 @Service
 public class ConvocatoryDocumentService extends ExceptionService {
@@ -40,17 +43,21 @@ public class ConvocatoryDocumentService extends ExceptionService {
 	@Autowired
 	private ApplicantRepository applicantRepository;
 	
+	@Autowired
+	private PhaseRepository phaseRepository;
+	
 	public ConvocatoryDocumentService(@Value("${ConvocatoryDocument.FolderName}") String folderName, IDocumentService documentService) {
 		this.documentService = documentService;
 		this.documentService.setDomainName(folderName);
 	}
 	
-	public void uploadDocument(MultipartFile file, String name, String email, String idConvocatory, String idPhase, HttpServletRequest request) 
+	public void uploadDocument(MultipartFile file, String name, String email, String idPhase, HttpServletRequest request) 
 			throws Exception {		
-		validateDocument(file, email, name, idConvocatory, idPhase);
-		
+		validateDocument(file, email, name, idPhase);
+		Phase phase = phaseRepository.findById(Integer.parseInt(idPhase));
+		String idConvocatory = String.valueOf(phase.getConvocatory().getId());
 		String extension = FilenameUtils.getExtension(file.getOriginalFilename());
-		String fileName = name + "."+ extension;		
+		String fileName = name;		
 		
 		File temp = getConvertedFile(file);
 		email = idConvocatory+"/"+idPhase+"/" + email;
@@ -75,7 +82,9 @@ public class ConvocatoryDocumentService extends ExceptionService {
 		return documents;
 	}*/
 	
-	public File getDocument(String documentName, String email, String idConvocatory, String idPhase, HttpServletRequest request) throws Exception {		
+	public File getDocument(String documentName, String email, String idPhase, HttpServletRequest request) throws Exception {
+		Phase phase = phaseRepository.findById(Integer.parseInt(idPhase));
+		String idConvocatory = String.valueOf(phase.getConvocatory().getId());
 		email = idConvocatory+"/"+idPhase+"/" + email;		
 		File file = documentService.get(documentName, email, request);
 		return file;
@@ -106,17 +115,13 @@ public class ConvocatoryDocumentService extends ExceptionService {
 	    return temp;
 	}
 	
-	private void validateDocument(MultipartFile file, String email, String fileName, String idConvocatory, String idPhase) throws Exception {
+	private void validateDocument(MultipartFile file, String email, String fileName, String idPhase) throws Exception {
 		if (file == null) {
 			throwException("Response", "El archivo es requerido.");
 		}
 		
 		if (fileName == null || fileName.isEmpty()) {
 			throwException("Response", "El nombre es requerido.");
-		}
-		
-		if (idConvocatory == null || idConvocatory.isEmpty()) {
-			throwException("Response", "El idConvocatory es requerido.");
 		}
 		
 		if (idPhase == null || idPhase.isEmpty()) {
