@@ -82,7 +82,9 @@ public class ConvocatoryDocumentService extends ExceptionService {
 		return documents;
 	}*/
 	
-	public File getDocument(String documentName, String email, String idConvocatory, String idPhase, HttpServletRequest request) throws Exception {		
+	public File getDocument(String documentName, String email, String idPhase, HttpServletRequest request) throws Exception {
+		Phase phase = phaseRepository.findById(Integer.parseInt(idPhase));
+		String idConvocatory = String.valueOf(phase.getConvocatory().getId());
 		email = idConvocatory+"/"+idPhase+"/" + email;		
 		File file = documentService.get(documentName, email, request);
 		return file;

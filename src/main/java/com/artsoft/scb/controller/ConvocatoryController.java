@@ -161,14 +161,14 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping("/downloadDocument/{idConvocatory}/{idPhase}/{email:.+}/{name}")
+	@GetMapping("/downloadDocument/{idPhase}/{email:.+}/{name}")
 	@PreAuthorize("hasRole('ROLE_APPLICANT')")
-	public ResponseEntity<?> getDocument(@PathVariable("name")String name, @PathVariable("idConvocatory")String idConvocatory,
+	public ResponseEntity<?> getDocument(@PathVariable("name")String name,
 			@PathVariable("idPhase")String idPhase,	@PathVariable("email")String email,	
 			HttpServletRequest request) throws FileNotFoundException {
 		File document = null;
 		try {			
-			document = convocatoryDocumentService.getDocument(name,email,idConvocatory,idPhase, request);
+			document = convocatoryDocumentService.getDocument(name,email,idPhase, request);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			

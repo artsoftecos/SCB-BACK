@@ -40,7 +40,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						"/field/create", "/field/edit", "/field/getByPhase/**", "/field/delete/**",
 						"/applicant/postulations/**", "/applicant/places/**", "/applicant/notAppliedConvocatories/**",
 						"/phase/getCurrentPhase/**", "/applicant/acceptConvocatory/**", "/applicant/rejectPlace",
-						"/AppPerPhase/applicantsPerPhase/**", "/convocatory/upload", "/convocatory/downloadDocument",
+						"/AppPerPhase/applicantsPerPhase/**", "/convocatory/upload", "/convocatory/downloadDocument/**",
 						"/offerer/rejectPhase/**", "/offerer/approvePhase/**", "/AppPerPhase/getAsociation/**")
 				.permitAll().anyRequest().fullyAuthenticated().and().httpBasic().and().csrf().disable();
 	}
