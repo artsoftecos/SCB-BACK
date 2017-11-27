@@ -148,11 +148,11 @@ public class ConvocatoryController {
 	@PostMapping(path = "/upload")
 	@PreAuthorize("hasRole('ROLE_APPLICANT')")	
 	public ResponseEntity<?> uploadDocument(@RequestPart("file")MultipartFile file, 
-			@RequestPart("email")String email, @RequestPart("name")String name,@RequestPart("idConvocatory")String idConvocatory
+			@RequestPart("email")String email, @RequestPart("name")String name
 			, @RequestPart("idPhase")String idPhase, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {			
-			convocatoryDocumentService.uploadDocument(file, name, email, idConvocatory, idPhase, request);			
+			convocatoryDocumentService.uploadDocument(file, name, email, idPhase, request);			
 			response.put("Response", "Documento almacenado");
 		}
 		catch(Exception ex){
