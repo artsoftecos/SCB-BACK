@@ -30,9 +30,9 @@ public class ApplicantPerPhase {
 	@JoinColumn(name = "id_fase", nullable = false)
 	private Phase phase;
 
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name = "idEstado")
-	@JsonBackReference(value = "applicantPerPhase-applicantPerPhaseState")
+//	@JsonBackReference(value = "applicantPerPhase-applicantPerPhaseState")
 	private ApplicantPerPhaseState applicantPerPhaseState;
 
 	@Column(name = "answers", columnDefinition = "TEXT")
