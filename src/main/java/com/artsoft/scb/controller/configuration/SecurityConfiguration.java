@@ -36,11 +36,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 						"/convocatory/create", "/convocatory/edit", "/convocatory/getByOfferer/**",
 						"/convocatory/getById/**", "/convocatory/getPending/**", "/phase/edit", "/phase/delete/**",
 						"/phase/getPhasesOfConvocatory/**", "/phase/getPhases/**", "/AppPerPhase/byId/**",
-						"/AppPerPhase/asociate/**", "/phase", "/fieldType", "/fieldType/Validations/**",
-						"/field/create", "/field/edit", "/field/getByPhase/**", "/field/delete/**",
-						"/applicant/postulations/**", "/applicant/places/**", "/applicant/notAppliedConvocatories/**",
-						"/phase/getCurrentPhase/**", "/applicant/acceptConvocatory/**", "/applicant/rejectPlace",
-						"/AppPerPhase/applicantsPerPhase/**", "/convocatory/upload", "/convocatory/downloadDocument")
+						"/AppPerPhase/getAsociation/**", "/AppPerPhase/asociate/**", "/phase", "/fieldType",
+						"/fieldType/Validations/**", "/field/create", "/field/edit", "/field/getByPhase/**",
+						"/field/delete/**", "/applicant/postulations/**", "/applicant/places/**",
+						"/applicant/notAppliedConvocatories/**", "/phase/getCurrentPhase/**",
+						"/applicant/acceptConvocatory/**", "/applicant/rejectPlace",
+						"/AppPerPhase/applicantsPerPhase/**", "/convocatory/upload", "/convocatory/downloadDocument/**")
 				.permitAll().anyRequest().fullyAuthenticated().and().httpBasic().and().csrf().disable();
 	}
 
