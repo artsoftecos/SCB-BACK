@@ -238,6 +238,29 @@ public class PhaseService extends ExceptionService implements IPhaseService {
 		return phasesToReturn;
 	}
 	
+	public StatePhaseAndAplicant getCurrentPhaseForConvocatory(int idConvocatory) throws Exception {
+		
+		StatePhaseAndAplicant statePhaseAndAplicant = new StatePhaseAndAplicant();
+		statePhaseAndAplicant.setPhase(null);
+		statePhaseAndAplicant.setState(null);
+		
+		Convocatory convocatory =  convocatoryRepository.findById(idConvocatory);
+		List<Phase> listPhasesConvocatory = phaseRepository.findByConvocatory(convocatory);
+		if (listPhasesConvocatory.size() == 0){
+			throwException("summary", "No hay fases en esta convocatoria");			
+		}
+		
+		//1. Para esa convocatoria obtiene la fase actual por las fechas de Inicio de fase a Fecha finalizacion de aprobacion de oferente
+		Phase currentPhase = getCurrentPhaseByInitDateAndFinishApprovedOfferer(listPhasesConvocatory);
+		if (currentPhase == null){
+			//null phase and state
+			return statePhaseAndAplicant;
+		}
+		
+		statePhaseAndAplicant.setPhase(currentPhase);	
+		return statePhaseAndAplicant;
+	}
+	
 	public StatePhaseAndAplicant getCurrentPhaseForConvocatoryAndApplicant(int idConvocatory, String mailApplicant) throws Exception {
 				
 		StatePhaseAndAplicant statePhaseAndAplicant = new StatePhaseAndAplicant();

@@ -105,5 +105,19 @@ public class PhaseController {
 		
 		return ResponseEntity.status(HttpStatus.OK).body(statePhaseAndAplicant);
 	}
+	
+	
+	@GetMapping(path = "/getCurrentPhaseByConvocatory/{idConvocatory}")
+	public ResponseEntity<?> getCurrentPhase(@PathVariable("idConvocatory") int idConvocatory){
+		StatePhaseAndAplicant statePhaseAndAplicant;
+		try {
+			statePhaseAndAplicant = phaseService.getCurrentPhaseForConvocatory(idConvocatory);
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+		}
+		
+		return ResponseEntity.status(HttpStatus.OK).body(statePhaseAndAplicant);
+	}
+	
 }
 
