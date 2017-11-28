@@ -55,13 +55,18 @@ public class DocumentService extends ExceptionService implements IDocumentServic
 		this.domainName = domainName;
 	}
 	
-	public void upload(File file, String fileName, String folderName, HttpServletRequest request) throws AmazonServiceException, AmazonClientException, InterruptedException {
+	public void upload(File file, String fileName, String folderName, HttpServletRequest request) throws AmazonServiceException, AmazonClientException, InterruptedException, Exception {
 		String pathfile = folderName + "/"+ fileName;
 		PutObjectRequest putRequest = new PutObjectRequest(domainName, pathfile, file);
-		Upload upload = tx.upload(putRequest);
-		if (!this.isFileStorageAsync) {
-			upload.waitForUploadResult();			
-		} 	
+try{
+	Upload upload = tx.upload(putRequest);
+	if (!this.isFileStorageAsync) {
+		upload.waitForUploadResult();			
+	} 	
+}catch (Exception e) {
+	throwException("Response", e.toString());
+}
+		
 	}
 	
 	

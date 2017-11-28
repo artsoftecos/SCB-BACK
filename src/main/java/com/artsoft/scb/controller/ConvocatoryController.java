@@ -3,16 +3,20 @@ package com.artsoft.scb.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -148,11 +152,11 @@ public class ConvocatoryController {
 	@PostMapping(path = "/upload")
 	@PreAuthorize("hasRole('ROLE_APPLICANT')")	
 	public ResponseEntity<?> uploadDocument(@RequestPart("file")MultipartFile file, 
-			@RequestPart("email")String email, @RequestPart("name")String name,@RequestPart("idConvocatory")String idConvocatory
+			@RequestPart("email")String email, @RequestPart("name")String name
 			, @RequestPart("idPhase")String idPhase, HttpServletRequest request) {
 		JSONObject response = new JSONObject();
 		try {			
-			convocatoryDocumentService.uploadDocument(file, name, email, idConvocatory, idPhase, request);			
+			convocatoryDocumentService.uploadDocument(file, name, email, idPhase, request);			
 			response.put("Response", "Documento almacenado");
 		}
 		catch(Exception ex){
@@ -161,24 +165,39 @@ public class ConvocatoryController {
 		return ResponseEntity.status(HttpStatus.OK).body(response.toString());
 	}
 	
-	@GetMapping("/downloadDocument/{idConvocatory}/{idPhase}/{email:.+}/{name}")
+	@GetMapping("/downloadDocument/{idPhase}/{email:.+}/{name}")
 	@PreAuthorize("hasRole('ROLE_APPLICANT')")
-	public ResponseEntity<?> getDocument(@PathVariable("name")String name, @PathVariable("idConvocatory")String idConvocatory,
+	public void getDocument(@PathVariable("name")String name,
 			@PathVariable("idPhase")String idPhase,	@PathVariable("email")String email,	
-			HttpServletRequest request) throws FileNotFoundException {
+			HttpServletRequest request, HttpServletResponse response) throws IOException {
 		File document = null;
 		try {			
-			document = convocatoryDocumentService.getDocument(name,email,idConvocatory,idPhase, request);
+			document = convocatoryDocumentService.getDocument(name,email,idPhase, request);
 		}
 		catch(Exception ex){
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
+			return;
+			//return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());			
 		}
-		
-		HttpHeaders respHeaders = new HttpHeaders();
-		respHeaders.setContentDispositionFormData("attachment", document.getName());
+				
+		response.addHeader("Content-Disposition", "attachment; filename="+document.getName());
+	    response.setContentType(Files.probeContentType(document.toPath()));
+	    response.setContentLengthLong(document.length());
 
-		InputStreamResource isr = new InputStreamResource(new FileInputStream(document));
-		return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);
+	    FileInputStream fis = new FileInputStream(document);
+	    int c; 
+	    while((c = fis.read()) > -1) {
+	        response.getOutputStream().write(c);    
+	    }
+
+	    response.flushBuffer();
+
+	    fis.close();
+		
+		/*HttpHeaders respHeaders = new HttpHeaders();
+		respHeaders.setContentDispositionFormData("attachment", document.getName());
+		
+		
+		return new ResponseEntity<InputStreamResource>(isr, respHeaders, HttpStatus.OK);*/
 	}
 }
 
